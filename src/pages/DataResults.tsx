@@ -4,9 +4,6 @@ import {
   ResponsiveContainer, BarChart, Bar, XAxis, YAxis, CartesianGrid,
   Tooltip, Legend, Cell,
 } from 'recharts'
-// Task 8 will use these — imported now to avoid a second edit round
-// @ts-ignore – unused until Task 8 adds the scatter section
-import type { ScatterChart as _ScatterChart, Scatter as _Scatter } from 'recharts'
 import { products, axes, type ProductKey, type AxisKey } from '../data/products'
 
 const productKeys = Object.keys(products) as ProductKey[]
