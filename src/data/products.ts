@@ -82,7 +82,7 @@ export const products: Record<ProductKey, ProductData> = {
     details: {
       safety: 'Pending — bacterial colony count after 24h exposure',
       chemistry: 'Pending — pH measurement and additive detection',
-      performance: 'Absorption capacity: 8.0 g/g (rank 4 of 7)',
+      performance: 'Absorption capacity: 8.0 g/g (rank 4–5 of 7, tied with ob Tampon)',
       environment: 'Pending — mass loss after 14 days, CO₂e per use',
     },
   },
@@ -96,7 +96,7 @@ export const products: Record<ProductKey, ProductData> = {
     details: {
       safety: 'Pending — bacterial colony count after 24h exposure',
       chemistry: 'Pending — pH measurement and additive detection',
-      performance: 'Absorption capacity: 8.0 g/g (rank 4 of 7)',
+      performance: 'Absorption capacity: 8.0 g/g (rank 4–5 of 7, tied with Ria Tampon)',
       environment: 'Pending — mass loss after 14 days, CO₂e per use',
     },
   },
@@ -110,7 +110,7 @@ export const products: Record<ProductKey, ProductData> = {
     details: {
       safety: 'Pending — bacterial colony count after 24h exposure',
       chemistry: 'Pending — pH measurement and additive detection',
-      performance: 'Absorption capacity: 7.8 g/g (rank 5 of 7)',
+      performance: 'Absorption capacity: 7.8 g/g (rank 6 of 7)',
       environment: 'Pending — mass loss after 14 days, CO₂e per use',
     },
   },
@@ -124,7 +124,7 @@ export const products: Record<ProductKey, ProductData> = {
     details: {
       safety: 'Pending — bacterial colony count after 24h exposure',
       chemistry: 'Pending — pH measurement and additive detection',
-      performance: 'Absorption capacity: 2.5 g/g (rank 6 of 7). Reusable — low capacity by design.',
+      performance: 'Absorption capacity: 2.5 g/g (rank 7 of 7). Reusable — low capacity by design.',
       environment: 'Pending — expected to score highest due to reusable lifecycle',
     },
   },
