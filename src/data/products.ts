@@ -146,6 +146,7 @@ export const productTypeLabels: Record<ProductType, string> = {
   tampon:     'Tampon',
 }
 
-export const galleryImages: string[] = Array.from({ length: 17 }, (_, i) =>
-  `/pictures/lab-${String(i + 1).padStart(2, '0')}.jpg`
+const galleryOrder = [7, 2, 14, 5, 11, 1, 16, 9, 3, 13, 6, 17, 4, 10, 15, 8, 12]
+export const galleryImages: string[] = galleryOrder.map(
+  n => `/pictures/lab-${String(n).padStart(2, '0')}.jpg`
 )
