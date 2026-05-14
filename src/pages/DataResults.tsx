@@ -3,6 +3,7 @@ import {
   RadarChart, Radar, PolarGrid, PolarAngleAxis, PolarRadiusAxis,
   ResponsiveContainer, BarChart, Bar, XAxis, YAxis, CartesianGrid,
   Tooltip, Legend, Cell,
+  ScatterChart, Scatter,
 } from 'recharts'
 import { products, axes, type ProductKey, type AxisKey } from '../data/products'
 
@@ -32,10 +33,23 @@ function Stats({ axisKey }: { axisKey: AxisKey }) {
   )
 }
 
+function pearsonR(xs: number[], ys: number[]): number {
+  const n = xs.length
+  if (n < 2) return 0
+  const mx = xs.reduce((a, b) => a + b, 0) / n
+  const my = ys.reduce((a, b) => a + b, 0) / n
+  const num = xs.reduce((s, x, i) => s + (x - mx) * (ys[i] - my), 0)
+  const dx = Math.sqrt(xs.reduce((s, x) => s + (x - mx) ** 2, 0))
+  const dy = Math.sqrt(ys.reduce((s, y) => s + (y - my) ** 2, 0))
+  return dx === 0 || dy === 0 ? 0 : num / (dx * dy)
+}
+
 export default function DataResults() {
   const [sortAxis, setSortAxis] = useState<AxisKey>('performance')
   const [sortDir, setSortDir] = useState<'asc' | 'desc'>('desc')
   const [visibleProducts, setVisibleProducts] = useState<Set<ProductKey>>(new Set(productKeys))
+  const [xAxis, setXAxis] = useState<AxisKey>('performance')
+  const [yAxis, setYAxis] = useState<AxisKey>('environment')
 
   function toggleProduct(k: ProductKey) {
     setVisibleProducts(prev => {
@@ -226,6 +240,117 @@ export default function DataResults() {
             ))}
           </tbody>
         </table>
+      </div>
+
+      {/* Correlation scatter */}
+      <div className="border border-slate-100 rounded-2xl p-6 mt-10">
+        <h2 className="font-semibold text-slate-900 mb-1">Correlation Explorer</h2>
+        <p className="text-sm text-slate-400 mb-6">
+          Select two axes to visualise their relationship across all products.
+          Each dot is one product. Only products with data on both axes are shown.
+        </p>
+
+        <div className="flex gap-6 mb-6 flex-wrap">
+          {(['x', 'y'] as const).map(axis => (
+            <div key={axis}>
+              <label className="text-xs font-semibold text-slate-500 uppercase tracking-wider block mb-2">
+                {axis.toUpperCase()} Axis
+              </label>
+              <div className="flex gap-2 flex-wrap">
+                {axes.map(a => {
+                  const hasData = productKeys.some(k => products[k].scores[a.key] !== null)
+                  const selected = axis === 'x' ? xAxis === a.key : yAxis === a.key
+                  return (
+                    <button
+                      key={a.key}
+                      disabled={!hasData}
+                      onClick={() => axis === 'x' ? setXAxis(a.key) : setYAxis(a.key)}
+                      className={`px-3 py-1.5 rounded-lg text-sm border transition-colors ${
+                        selected
+                          ? 'bg-rose-500 text-white border-rose-500'
+                          : hasData
+                            ? 'border-slate-200 text-slate-600 hover:border-rose-200'
+                            : 'border-slate-100 text-slate-300 cursor-not-allowed'
+                      }`}
+                    >
+                      {a.label}
+                    </button>
+                  )
+                })}
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {(() => {
+          const scatterData = productKeys
+            .filter(k => products[k].scores[xAxis] !== null && products[k].scores[yAxis] !== null)
+            .map(k => ({
+              x: products[k].scores[xAxis]!,
+              y: products[k].scores[yAxis]!,
+              name: products[k].label,
+              color: products[k].color,
+            }))
+
+          if (scatterData.length < 2) {
+            return (
+              <div className="h-64 flex items-center justify-center text-slate-400 text-sm">
+                Not enough data yet — select axes with collected data
+              </div>
+            )
+          }
+
+          const r = pearsonR(scatterData.map(d => d.x), scatterData.map(d => d.y))
+
+          return (
+            <>
+              <ResponsiveContainer width="100%" height={300}>
+                <ScatterChart margin={{ top: 10, right: 20, bottom: 20, left: 0 }}>
+                  <CartesianGrid strokeDasharray="3 3" stroke="#f1f5f9" />
+                  <XAxis
+                    type="number"
+                    dataKey="x"
+                    domain={[0, 10]}
+                    name={axes.find(a => a.key === xAxis)?.label}
+                    tick={{ fontSize: 11, fill: '#94a3b8' }}
+                    label={{ value: axes.find(a => a.key === xAxis)?.label, position: 'insideBottom', offset: -10, fontSize: 12, fill: '#64748b' }}
+                  />
+                  <YAxis
+                    type="number"
+                    dataKey="y"
+                    domain={[0, 10]}
+                    name={axes.find(a => a.key === yAxis)?.label}
+                    tick={{ fontSize: 11, fill: '#94a3b8' }}
+                    label={{ value: axes.find(a => a.key === yAxis)?.label, angle: -90, position: 'insideLeft', offset: 10, fontSize: 12, fill: '#64748b' }}
+                  />
+                  <Tooltip
+                    content={({ payload }) => {
+                      if (!payload?.length) return null
+                      const d = payload[0].payload as { name: string; x: number; y: number }
+                      return (
+                        <div className="bg-white border border-slate-100 rounded-lg p-3 text-sm shadow">
+                          <p className="font-semibold text-slate-800 mb-1">{d.name}</p>
+                          <p className="text-slate-500">{axes.find(a => a.key === xAxis)?.label}: {d.x.toFixed(1)}</p>
+                          <p className="text-slate-500">{axes.find(a => a.key === yAxis)?.label}: {d.y.toFixed(1)}</p>
+                        </div>
+                      )
+                    }}
+                  />
+                  <Scatter
+                    data={scatterData}
+                    shape={(props: { cx?: number; cy?: number; payload?: { color: string } }) => (
+                      <circle cx={props.cx} cy={props.cy} r={7} fill={props.payload?.color ?? '#e11d48'} fillOpacity={0.85} stroke="white" strokeWidth={1.5} />
+                    )}
+                  />
+                </ScatterChart>
+              </ResponsiveContainer>
+              <p className="text-xs text-slate-400 mt-3">
+                Pearson r = <strong className="text-slate-600">{r.toFixed(3)}</strong>
+                {' · '}{scatterData.length} products with data on both axes
+              </p>
+            </>
+          )
+        })()}
       </div>
     </div>
   )
