@@ -1,14 +1,14 @@
-import { NavLink } from 'react-router-dom'
+import { NavLink } from "react-router-dom";
 
 const links = [
-  { to: '/',               label: 'Home' },
-  { to: '/methodology',    label: 'Methodology' },
-  { to: '/sciences',       label: 'Our Research' },
-  { to: '/data',           label: 'Data & Results' },
-  { to: '/recommend',      label: 'Recommendation Tool' },
-  { to: '/conclusions',    label: 'Conclusions' },
-  { to: '/about',          label: 'About Us' },
-]
+  { to: "/", label: "Home" },
+  { to: "/methodology", label: "MethodologyAA" },
+  { to: "/sciences", label: "Our Research" },
+  { to: "/data", label: "Data & Results" },
+  { to: "/recommend", label: "Recommendation Tool" },
+  { to: "/conclusions", label: "Conclusions" },
+  { to: "/about", label: "About Us" },
+];
 
 export default function Navbar() {
   return (
@@ -19,12 +19,12 @@ export default function Navbar() {
             <li key={to}>
               <NavLink
                 to={to}
-                end={to === '/'}
+                end={to === "/"}
                 className={({ isActive }) =>
                   `px-3 py-1.5 rounded-md text-sm font-medium transition-colors ${
                     isActive
-                      ? 'bg-rose-50 text-rose-600'
-                      : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50'
+                      ? "bg-rose-50 text-rose-600"
+                      : "text-slate-600 hover:text-slate-900 hover:bg-slate-50"
                   }`
                 }
               >
@@ -35,5 +35,5 @@ export default function Navbar() {
         </ul>
       </nav>
     </header>
-  )
+  );
 }
