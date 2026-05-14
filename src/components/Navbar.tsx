@@ -3,18 +3,17 @@ import { NavLink } from 'react-router-dom'
 const links = [
   { to: '/',               label: 'Home' },
   { to: '/methodology',    label: 'Methodology' },
+  { to: '/sciences',       label: 'Our Research' },
   { to: '/data',           label: 'Data & Results' },
-  { to: '/recommend',      label: 'Find My Product' },
+  { to: '/recommend',      label: 'Recommendation Tool' },
   { to: '/conclusions',    label: 'Conclusions' },
+  { to: '/about',          label: 'About Us' },
 ]
 
 export default function Navbar() {
   return (
     <header className="sticky top-0 z-50 bg-white/90 backdrop-blur border-b border-slate-100">
-      <nav className="max-w-5xl mx-auto px-6 h-14 flex items-center justify-between">
-        <span className="font-semibold text-rose-500 tracking-tight">
-          MenstrualProduct<span className="text-slate-800">Study</span>
-        </span>
+      <nav className="max-w-5xl mx-auto px-6 h-14 flex items-center justify-center">
         <ul className="flex gap-1">
           {links.map(({ to, label }) => (
             <li key={to}>

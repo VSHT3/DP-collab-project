@@ -1,9 +1,7 @@
 - [ ] 5 tlacitok
 - [ ] home with out brand, pad, and reccomendation + info for our thing
-- [ ] bio page
+- [ ] sciences page + nav link
 - [ ] photos
-- [ ] fyz page
-- [ ] nav dropdown for sciences
 - [ ] Our Four Research Axes -- in home, with links to each science
 - [ ] Home -- big question "Wanna find the most suitable pad for yourself?" yes --> find my product + price
 - [ ] + maybe prices for pads (incl. in data + decision graph)
@@ -12,3 +10,4 @@
 - [ ] Page for product info, brands used, price, type, + info about the product
 - [ ] Conceptual optimal product
 - [ ] Home -- include RQ
+- [ ] explain types of products
