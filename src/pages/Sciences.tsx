@@ -71,11 +71,12 @@ const subjects = [
 
 export default function Sciences() {
   return (
-    <div className="max-w-5xl mx-auto px-6 py-16">
+    <div className="px-8 lg:px-16 py-16">
+      <div className="max-w-7xl mx-auto">
       <div className="mb-12">
-        <span className="text-xs font-semibold tracking-widest text-rose-500 uppercase">Sciences & Methodology</span>
-        <h1 className="text-3xl font-bold text-slate-900 mt-2 mb-3">How We Tested</h1>
-        <p className="text-slate-600 max-w-2xl">
+        <span className="text-sm font-semibold tracking-widest text-rose-500 uppercase">Sciences & Methodology</span>
+        <h1 className="text-4xl font-bold text-slate-950 mt-2 mb-3">How We Tested</h1>
+        <p className="text-lg text-slate-700 max-w-3xl">
           Each axis represents an independent subject investigation. Products tested:
           Always Platinum, Ria Ultra Pad, Ria Tampon, o.b. Tampon, Naturella Pad,
           Jessa Cotton Pad, Jessa Cloth Pad.
@@ -84,11 +85,11 @@ export default function Sciences() {
 
       <div className="space-y-8">
         {subjects.map(({ emoji, label, rq, methodology, metric, status, details }) => (
-          <div key={label} className="border border-slate-200 rounded-2xl p-7 shadow-sm hover:-translate-y-0.5 hover:shadow-md transition-all duration-200">
+          <div key={label} className="border border-slate-200 rounded-2xl p-8 shadow-sm hover:-translate-y-0.5 hover:shadow-md transition-all duration-200">
             <div className="flex items-start justify-between mb-4">
               <div className="flex items-center gap-3">
                 <span className="text-2xl">{emoji}</span>
-                <h2 className="text-lg font-semibold text-slate-900">{label}</h2>
+                <h2 className="text-xl font-bold text-slate-950">{label}</h2>
               </div>
               <span className={`text-xs font-semibold px-2.5 py-1 rounded-full ${
                 status === 'collected'
@@ -99,24 +100,25 @@ export default function Sciences() {
               </span>
             </div>
 
-            <p className="text-sm text-rose-500 font-medium mb-4 italic">{rq}</p>
+            <p className="text-base text-rose-500 font-medium mb-4 italic">{rq}</p>
 
-            <h3 className="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2">Procedure</h3>
-            <ol className="list-decimal list-inside space-y-1 text-sm text-slate-600 mb-4">
+            <h3 className="text-sm font-bold text-slate-700 uppercase tracking-wider mb-2">Procedure</h3>
+            <ol className="list-decimal list-inside space-y-1.5 text-base text-slate-700 mb-4">
               {methodology.map((step, i) => (
                 <li key={i}>{step}</li>
               ))}
             </ol>
 
             <div className="bg-slate-50 rounded-lg px-4 py-2 inline-block mb-4">
-              <span className="text-xs font-semibold text-slate-500 uppercase tracking-wider">Key metric: </span>
-              <span className="text-sm text-slate-700">{metric}</span>
+              <span className="text-sm font-bold text-slate-700 uppercase tracking-wider">Key metric: </span>
+              <span className="text-base text-slate-800">{metric}</span>
             </div>
 
-            <p className="text-sm text-slate-600 leading-relaxed border-t border-slate-100 pt-4">{details}</p>
+            <p className="text-base text-slate-700 leading-relaxed border-t border-slate-200 pt-4">{details}</p>
           </div>
         ))}
       </div>
     </div>
+  </div>
   )
 }

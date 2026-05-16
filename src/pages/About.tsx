@@ -8,15 +8,16 @@ const team = [
 
 export default function About() {
   return (
-    <div className="max-w-5xl mx-auto px-6 py-16">
+    <div className="px-8 lg:px-16 py-16">
+      <div className="max-w-7xl mx-auto">
       <div className="mb-12">
-        <span className="text-xs font-semibold tracking-widest text-rose-500 uppercase">
+        <span className="text-sm font-semibold tracking-widest text-rose-500 uppercase">
           About
         </span>
-        <h1 className="text-3xl font-bold text-slate-900 mt-2 mb-3">
+        <h1 className="text-4xl font-bold text-slate-950 mt-2 mb-3">
           About Us
         </h1>
-        <p className="text-slate-600 max-w-2xl">
+        <p className="text-lg text-slate-700 max-w-3xl">
           Five IB Diploma students from five disciplines, collaborating across
           subject boundaries to investigate a real-world health and
           sustainability challenge.
@@ -35,17 +36,17 @@ export default function About() {
                   .join("")}
               </span>
             </div>
-            <h3 className="font-semibold text-slate-900 mb-1">{name}</h3>
-            <p className="text-sm text-rose-500">{subject}</p>
+            <h3 className="text-lg font-bold text-slate-950 mb-1">{name}</h3>
+            <p className="text-base text-rose-500 font-medium">{subject}</p>
           </div>
         ))}
       </div>
 
       <div className="bg-rose-50 rounded-2xl p-8">
-        <h2 className="text-xl font-semibold text-slate-900 mb-3">
+        <h2 className="text-xl font-bold text-slate-950 mb-3">
           About This Project
         </h2>
-        <p className="text-slate-600 leading-relaxed">
+        <p className="text-base text-slate-700 leading-relaxed">
           This IB Collaborative Science project investigates menstrual products
           across Biology, Chemistry, Physics, and Environmental Science. Seven
           branded products from three manufacturers were tested in a controlled
@@ -54,5 +55,6 @@ export default function About() {
         </p>
       </div>
     </div>
+  </div>
   );
 }

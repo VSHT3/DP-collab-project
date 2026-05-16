@@ -19,40 +19,20 @@ function fmtRate(v: number | null): string {
 
 function Stats({ axisKey }: { axisKey: AxisKey }) {
   const values = productKeys.map(k => products[k].scores[axisKey]).filter((v): v is number => v !== null)
-  if (values.length === 0) return <span className="text-slate-400 text-xs">no data</span>
+  if (values.length === 0) return <span className="text-slate-500 text-sm">no data</span>
   const mean = values.reduce((a, b) => a + b, 0) / values.length
   const min = Math.min(...values)
   const max = Math.max(...values)
   const std = Math.sqrt(values.reduce((s, v) => s + (v - mean) ** 2, 0) / values.length)
   return (
-    <div className="text-xs space-y-0.5">
+    <div className="text-sm space-y-0.5">
       <div className="flex gap-3">
-        <span className="text-slate-500">mean</span><span className="font-medium text-slate-800">{mean.toFixed(2)}</span>
-        <span className="text-slate-500">min</span><span className="font-medium text-slate-800">{min.toFixed(1)}</span>
-        <span className="text-slate-500">max</span><span className="font-medium text-slate-800">{max.toFixed(1)}</span>
-        <span className="text-slate-500">σ</span><span className="font-medium text-slate-800">{std.toFixed(2)}</span>
+        <span className="text-slate-600">mean</span><span className="font-medium text-slate-900">{mean.toFixed(2)}</span>
+        <span className="text-slate-600">min</span><span className="font-medium text-slate-900">{min.toFixed(1)}</span>
+        <span className="text-slate-600">max</span><span className="font-medium text-slate-900">{max.toFixed(1)}</span>
+        <span className="text-slate-600">σ</span><span className="font-medium text-slate-900">{std.toFixed(2)}</span>
       </div>
-      <div className="text-slate-400">n = {values.length} of {productKeys.length}</div>
-    </div>
-  )
-}
-
-function StatsRate() {
-  const values = productKeys.map(k => products[k].absorptionRate).filter((v): v is number => v !== null)
-  if (values.length === 0) return <span className="text-slate-400 text-xs">no data</span>
-  const mean = values.reduce((a, b) => a + b, 0) / values.length
-  const min = Math.min(...values)
-  const max = Math.max(...values)
-  const std = Math.sqrt(values.reduce((s, v) => s + (v - mean) ** 2, 0) / values.length)
-  return (
-    <div className="text-xs space-y-0.5">
-      <div className="flex gap-3">
-        <span className="text-slate-500">mean</span><span className="font-medium text-slate-800">{mean.toFixed(2)} s</span>
-        <span className="text-slate-500">min</span><span className="font-medium text-slate-800">{min.toFixed(2)} s</span>
-        <span className="text-slate-500">max</span><span className="font-medium text-slate-800">{max.toFixed(2)} s</span>
-        <span className="text-slate-500">σ</span><span className="font-medium text-slate-800">{std.toFixed(2)}</span>
-      </div>
-      <div className="text-slate-400">n = {values.length} of {productKeys.length}</div>
+      <div className="text-slate-500">n = {values.length} of {productKeys.length}</div>
     </div>
   )
 }
@@ -71,7 +51,7 @@ function pearsonR(xs: number[], ys: number[]): number {
 export default function DataResults() {
   const [sortAxis, setSortAxis] = useState<AxisKey>('performance')
   const [sortDir, setSortDir] = useState<'asc' | 'desc'>('desc')
-  const [visibleProducts, setVisibleProducts] = useState<Set<ProductKey>>(new Set(productKeys))
+  const [visibleProducts, setVisibleProducts] = useState<Set<ProductKey>>(new Set(['naturella_pad', 'jessa_cotton']))
   const [xAxis, setXAxis] = useState<AxisKey>('performance')
   const [yAxis, setYAxis] = useState<AxisKey>('environment')
 
@@ -106,18 +86,19 @@ export default function DataResults() {
   })
 
   return (
-    <div className="max-w-5xl mx-auto px-6 py-16">
+    <div className="px-8 lg:px-16 py-16">
+      <div className="max-w-7xl mx-auto">
       <div className="mb-12">
-        <span className="text-xs font-semibold tracking-widest text-rose-500 uppercase">Data & Results</span>
-        <h1 className="text-3xl font-bold text-slate-900 mt-2 mb-3">Findings</h1>
-        <p className="text-slate-600 max-w-2xl">
+        <span className="text-sm font-semibold tracking-widest text-rose-500 uppercase">Data & Results</span>
+        <h1 className="text-4xl font-bold text-slate-950 mt-2 mb-3">Findings</h1>
+        <p className="text-lg text-slate-700 max-w-3xl">
           All scores 0–10 (higher = better). Physics data is real; other axes pending.
           Pending axes shown as — or 0 in charts.
         </p>
       </div>
 
       {/* Product toggle legend */}
-      <div className="flex flex-wrap gap-3 mb-10">
+      <div className="flex flex-wrap gap-3 mb-10 justify-center">
         {productKeys.map(k => (
           <button
             key={k}
@@ -135,14 +116,14 @@ export default function DataResults() {
       </div>
 
       {/* Radar */}
-      <div className="border border-slate-200 rounded-2xl p-6 shadow-sm mb-8">
-        <h2 className="font-semibold text-slate-900 mb-1">Overall Comparison</h2>
-        <p className="text-sm text-slate-500 mb-6">Radar chart across all four axes. Toggle products above.</p>
-        <ResponsiveContainer width="100%" height={360}>
+      <div className="border border-slate-200 rounded-2xl p-8 shadow-sm mb-8">
+        <h2 className="text-xl font-bold text-slate-950 mb-1">Overall Comparison</h2>
+        <p className="text-base text-slate-700 mb-6">Radar chart across all six axes. Toggle products above.</p>
+        <ResponsiveContainer width="100%" height={480}>
           <RadarChart data={radarData}>
-            <PolarGrid stroke="#f1f5f9" />
-            <PolarAngleAxis dataKey="axis" tick={{ fontSize: 13, fill: '#64748b' }} />
-            <PolarRadiusAxis domain={[0, 10]} tick={{ fontSize: 11, fill: '#94a3b8' }} />
+            <PolarGrid stroke="#e2e8f0" />
+            <PolarAngleAxis dataKey="axis" tick={{ fontSize: 15, fill: '#334155', fontWeight: 600 }} />
+            <PolarRadiusAxis domain={[0, 10]} tick={{ fontSize: 13, fill: '#475569' }} />
             {visibleKeys.map(k => (
               <Radar
                 key={k}
@@ -152,6 +133,7 @@ export default function DataResults() {
                 fill={products[k].color}
                 fillOpacity={0.12}
                 strokeWidth={2}
+                isAnimationActive={false}
               />
             ))}
             <Legend />
@@ -171,14 +153,14 @@ export default function DataResults() {
           const hasPending = barData.some(d => d.pending)
           return (
             <div key={key} className="border border-slate-200 rounded-2xl p-6 shadow-sm">
-              <h3 className="font-semibold text-slate-900 mb-1">{label}</h3>
-              <p className="text-xs text-slate-500 mb-1">{description}</p>
-              {hasPending && <p className="text-xs text-amber-400 mb-3">Pending axes shown as 0</p>}
-              <ResponsiveContainer width="100%" height={200}>
+              <h3 className="text-lg font-bold text-slate-950 mb-1">{label}</h3>
+              <p className="text-sm text-slate-700 mb-1">{description}</p>
+              {hasPending && <p className="text-sm text-amber-600 mb-3 font-medium">Pending axes shown as 0</p>}
+              <ResponsiveContainer width="100%" height={240}>
                 <BarChart data={barData} margin={{ top: 0, right: 0, left: -20, bottom: 40 }}>
-                  <CartesianGrid strokeDasharray="3 3" stroke="#f1f5f9" vertical={false} />
-                  <XAxis dataKey="name" tick={{ fontSize: 10, fill: '#94a3b8' }} angle={-30} textAnchor="end" />
-                  <YAxis domain={[0, 10]} tick={{ fontSize: 11, fill: '#94a3b8' }} />
+                  <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" vertical={false} />
+                  <XAxis dataKey="name" tick={{ fontSize: 11, fill: '#475569' }} angle={-30} textAnchor="end" />
+                  <YAxis domain={[0, 10]} tick={{ fontSize: 12, fill: '#475569' }} />
                   <Tooltip
                     contentStyle={{ borderRadius: 8, border: '1px solid #f1f5f9', fontSize: 13 }}
                     formatter={(v: number, _: string, entry: { payload?: { pending?: boolean } }) =>
@@ -197,51 +179,21 @@ export default function DataResults() {
         })}
       </div>
 
-      {/* Absorption rate bar chart */}
-      <div className="border border-slate-200 rounded-2xl p-6 shadow-sm mb-10">
-        <h3 className="font-semibold text-slate-900 mb-1">Absorption Rate (5 mL)</h3>
-        <p className="text-xs text-slate-500 mb-1">Time for 5 mL of simulated fluid to be fully absorbed. Lower is better.</p>
-        <ResponsiveContainer width="100%" height={220}>
-          <BarChart
-            data={productKeys.map(k => ({
-              name: products[k].label,
-              rate: products[k].absorptionRate ?? 0,
-              fill: products[k].color,
-              rank: products[k].absorptionRateRank,
-            }))}
-            margin={{ top: 0, right: 0, left: -20, bottom: 40 }}
-          >
-            <CartesianGrid strokeDasharray="3 3" stroke="#f1f5f9" vertical={false} />
-            <XAxis dataKey="name" tick={{ fontSize: 10, fill: '#94a3b8' }} angle={-30} textAnchor="end" />
-            <YAxis tick={{ fontSize: 11, fill: '#94a3b8' }} label={{ value: 'Seconds', angle: -90, position: 'insideLeft', offset: 0, fontSize: 11, fill: '#94a3b8' }} />
-            <Tooltip
-              contentStyle={{ borderRadius: 8, border: '1px solid #e2e8f0', fontSize: 13 }}
-              formatter={(v: number) => [`${v.toFixed(2)} s`, 'Absorption Rate']}
-            />
-            <Bar dataKey="rate" radius={[4, 4, 0, 0]}>
-              {productKeys.map((k, i) => (
-                <Cell key={i} fill={products[k].color} />
-              ))}
-            </Bar>
-          </BarChart>
-        </ResponsiveContainer>
-      </div>
-
       {/* Rankings table */}
       <div className="border border-slate-200 rounded-2xl overflow-hidden shadow-sm mb-10">
-        <div className="px-5 py-3 bg-slate-50 flex items-center justify-between">
-          <span className="text-xs font-semibold text-slate-600 uppercase tracking-wider">Rankings</span>
-          <span className="text-xs text-slate-500">Click axis header to sort</span>
+        <div className="px-6 py-4 bg-slate-50 flex items-center justify-between">
+          <span className="text-sm font-bold text-slate-800 uppercase tracking-wider">Rankings</span>
+          <span className="text-sm text-slate-600">Click axis header to sort</span>
         </div>
-        <table className="w-full text-sm">
+        <table className="w-full text-base">
           <thead className="bg-slate-50/50">
             <tr>
-              <th className="px-5 py-3 text-left font-semibold text-slate-500">Product</th>
+              <th className="px-6 py-4 text-left font-bold text-slate-800">Product</th>
               {axes.map(a => (
                 <th
                   key={a.key}
                   onClick={() => handleSort(a.key)}
-                  className="px-4 py-3 text-center font-semibold text-slate-600 cursor-pointer hover:text-rose-500 select-none transition-colors duration-200"
+                  className="px-5 py-4 text-center font-bold text-slate-800 cursor-pointer hover:text-rose-500 select-none transition-colors duration-200"
                 >
                   {a.label}
                   {sortAxis === a.key && (
@@ -249,28 +201,28 @@ export default function DataResults() {
                   )}
                 </th>
               ))}
-              <th className="px-4 py-3 text-center font-semibold text-slate-600">Rate (s/5 mL)</th>
-              <th className="px-4 py-3 text-center font-semibold text-slate-600">€ Price</th>
+              <th className="px-5 py-4 text-center font-bold text-slate-800">Rate (s/5 mL)</th>
+              <th className="px-5 py-4 text-center font-bold text-slate-800">€ Price</th>
             </tr>
           </thead>
           <tbody>
             {sortedKeys.map((k, i) => (
               <tr key={k} className={i % 2 === 0 ? '' : 'bg-slate-50/50'}>
-                <td className="px-5 py-3 font-medium text-slate-900">
+                <td className="px-6 py-4 font-medium text-slate-950">
                   <div className="flex items-center gap-2">
                     <span className="w-2.5 h-2.5 rounded-full flex-shrink-0" style={{ background: products[k].color }} />
                     {products[k].label}
                   </div>
                 </td>
                 {axes.map(a => (
-                  <td key={a.key} className={`px-4 py-3 text-center ${
-                    a.key === sortAxis ? 'font-semibold text-slate-900' : 'text-slate-600'
+                  <td key={a.key} className={`px-5 py-4 text-center text-base ${
+                    a.key === sortAxis ? 'font-bold text-slate-950' : 'text-slate-700'
                   }`}>
                     {fmt(products[k].scores[a.key])}
                   </td>
                 ))}
-                <td className="px-4 py-3 text-center text-slate-600">{fmtRate(products[k].absorptionRate)}</td>
-                <td className="px-4 py-3 text-center text-slate-600">{products[k].price !== null ? `€${products[k].price.toFixed(2)}` : '—'}</td>
+                <td className="px-5 py-4 text-center text-slate-700">{fmtRate(products[k].absorptionRate)}</td>
+                <td className="px-5 py-4 text-center text-slate-700">{products[k].price !== null ? `€${products[k].price.toFixed(2)}` : '—'}</td>
               </tr>
             ))}
           </tbody>
@@ -279,43 +231,39 @@ export default function DataResults() {
 
       {/* Statistical summary */}
       <div className="border border-slate-200 rounded-2xl overflow-hidden shadow-sm">
-        <div className="px-5 py-3 bg-slate-50">
-          <span className="text-xs font-semibold text-slate-600 uppercase tracking-wider">Statistical Summary</span>
+        <div className="px-6 py-4 bg-slate-50">
+          <span className="text-sm font-bold text-slate-800 uppercase tracking-wider">Statistical Summary</span>
         </div>
-        <table className="w-full text-sm">
+        <table className="w-full text-base">
           <thead className="bg-slate-50/50">
             <tr>
-              <th className="px-5 py-3 text-left font-semibold text-slate-500">Axis</th>
-              <th className="px-4 py-3 text-center font-semibold text-slate-500">Statistics</th>
+              <th className="px-6 py-4 text-left font-bold text-slate-800">Axis</th>
+              <th className="px-5 py-4 text-center font-bold text-slate-800">Statistics</th>
             </tr>
           </thead>
           <tbody>
             {axes.map(({ key, label }, i) => (
               <tr key={key} className={i % 2 === 0 ? '' : 'bg-slate-50/50'}>
-                <td className="px-5 py-3 font-medium text-slate-800">{label}</td>
+                <td className="px-6 py-4 font-medium text-slate-900">{label}</td>
                 <td className="px-4 py-3"><Stats axisKey={key} /></td>
               </tr>
             ))}
-            <tr className="bg-slate-50/50">
-              <td className="px-5 py-3 font-medium text-slate-800">Absorption Rate</td>
-              <td className="px-4 py-3"><StatsRate /></td>
-            </tr>
           </tbody>
         </table>
       </div>
 
       {/* Correlation scatter */}
-      <div className="border border-slate-200 rounded-2xl p-6 shadow-sm mt-10">
-        <h2 className="font-semibold text-slate-900 mb-1">Correlation Explorer</h2>
-        <p className="text-sm text-slate-500 mb-6">
+      <div className="border border-slate-200 rounded-2xl p-8 shadow-sm mt-10">
+        <h2 className="text-xl font-bold text-slate-950 mb-1">Correlation Explorer</h2>
+        <p className="text-base text-slate-700 mb-6">
           Select two axes to visualise their relationship across all products.
           Each dot is one product. Only products with data on both axes are shown.
         </p>
 
-        <div className="flex gap-6 mb-6 flex-wrap">
+        <div className="flex gap-8 mb-6 flex-wrap">
           {(['x', 'y'] as const).map(axis => (
             <div key={axis}>
-              <label className="text-xs font-semibold text-slate-600 uppercase tracking-wider block mb-2">
+              <label className="text-sm font-bold text-slate-800 uppercase tracking-wider block mb-2">
                 {axis.toUpperCase()} Axis
               </label>
               <div className="flex gap-2 flex-wrap">
@@ -356,7 +304,7 @@ export default function DataResults() {
 
           if (scatterData.length < 2) {
             return (
-              <div className="h-64 flex items-center justify-center text-slate-500 text-sm">
+              <div className="h-64 flex items-center justify-center text-slate-600 text-base">
                 Not enough data yet — select axes with collected data
               </div>
             )
@@ -368,32 +316,32 @@ export default function DataResults() {
             <>
               <ResponsiveContainer width="100%" height={300}>
                 <ScatterChart margin={{ top: 10, right: 20, bottom: 20, left: 0 }}>
-                  <CartesianGrid strokeDasharray="3 3" stroke="#f1f5f9" />
+                  <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" />
                   <XAxis
                     type="number"
                     dataKey="x"
                     domain={[0, 10]}
                     name={axes.find(a => a.key === xAxis)?.label}
-                    tick={{ fontSize: 11, fill: '#94a3b8' }}
-                    label={{ value: axes.find(a => a.key === xAxis)?.label, position: 'insideBottom', offset: -10, fontSize: 12, fill: '#64748b' }}
+                    tick={{ fontSize: 12, fill: '#475569' }}
+                    label={{ value: axes.find(a => a.key === xAxis)?.label, position: 'insideBottom', offset: -10, fontSize: 13, fill: '#334155' }}
                   />
                   <YAxis
                     type="number"
                     dataKey="y"
                     domain={[0, 10]}
                     name={axes.find(a => a.key === yAxis)?.label}
-                    tick={{ fontSize: 11, fill: '#94a3b8' }}
-                    label={{ value: axes.find(a => a.key === yAxis)?.label, angle: -90, position: 'insideLeft', offset: 10, fontSize: 12, fill: '#64748b' }}
+                    tick={{ fontSize: 12, fill: '#475569' }}
+                    label={{ value: axes.find(a => a.key === yAxis)?.label, angle: -90, position: 'insideLeft', offset: 10, fontSize: 13, fill: '#334155' }}
                   />
                   <Tooltip
                     content={({ payload }) => {
                       if (!payload?.length) return null
                       const d = payload[0].payload as { name: string; x: number; y: number }
                       return (
-                        <div className="bg-white border border-slate-200 rounded-lg p-3 text-sm shadow-lg">
-                          <p className="font-semibold text-slate-900 mb-1">{d.name}</p>
-                          <p className="text-slate-600">{axes.find(a => a.key === xAxis)?.label}: {d.x.toFixed(1)}</p>
-                          <p className="text-slate-600">{axes.find(a => a.key === yAxis)?.label}: {d.y.toFixed(1)}</p>
+                        <div className="bg-white border border-slate-200 rounded-lg p-3 text-base shadow-lg">
+                          <p className="font-bold text-slate-950 mb-1">{d.name}</p>
+                          <p className="text-slate-700">{axes.find(a => a.key === xAxis)?.label}: {d.x.toFixed(1)}</p>
+                          <p className="text-slate-700">{axes.find(a => a.key === yAxis)?.label}: {d.y.toFixed(1)}</p>
                         </div>
                       )
                     }}
@@ -406,8 +354,8 @@ export default function DataResults() {
                   />
                 </ScatterChart>
               </ResponsiveContainer>
-              <p className="text-xs text-slate-500 mt-3">
-                Pearson r = <strong className="text-slate-800">{r.toFixed(3)}</strong>
+              <p className="text-sm text-slate-600 mt-3">
+                Pearson r = <strong className="text-slate-900">{r.toFixed(3)}</strong>
                 {' · '}{scatterData.length} products with data on both axes
               </p>
             </>
@@ -415,5 +363,6 @@ export default function DataResults() {
         })()}
       </div>
     </div>
+  </div>
   )
 }

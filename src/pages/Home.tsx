@@ -1,48 +1,22 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { galleryImages } from "../data/products";
-
-const axes = [
-  {
-    emoji: "🧫",
-    title: "Biology",
-    desc: "Bacterial growth after exposure to simulated menstrual fluid",
-    question: "Which product is safest?",
-  },
-  {
-    emoji: "⚗️",
-    title: "Chemistry",
-    desc: "pH levels and presence of starch additives or bleaching agents",
-    question: "Which is chemically safest?",
-  },
-  {
-    emoji: "📐",
-    title: "Physics",
-    desc: "Absorbency capacity and wicking speed under controlled conditions",
-    question: "Which performs best mechanically?",
-  },
-  {
-    emoji: "🌱",
-    title: "ESS",
-    desc: "Decomposition time (14 days) and CO₂ footprint per use",
-    question: "Which is most sustainable?",
-  },
-];
+import { galleryImages, axes } from "../data/products";
 
 export default function Home() {
   const [lightbox, setLightbox] = useState<string | null>(null);
 
   return (
-    <div className="max-w-5xl mx-auto px-6 py-16">
+    <div className="px-8 lg:px-16 py-16">
+      <div className="max-w-7xl mx-auto">
       {/* Hero */}
       <div className="text-center mb-20">
-        <span className="inline-block text-xs font-semibold tracking-widest text-rose-500 uppercase mb-4">
+        <span className="inline-block text-sm font-semibold tracking-widest text-rose-500 uppercase mb-4">
           IB Collaborative Science Project
         </span>
-        <h1 className="text-4xl sm:text-5xl font-bold text-slate-900 mb-5 leading-tight">
+        <h1 className="text-5xl sm:text-6xl font-bold text-slate-950 mb-5 leading-tight">
           Comparing Menstrual Products
         </h1>
-        <p className="text-lg text-slate-600 max-w-2xl mx-auto mb-8">
+        <p className="text-xl text-slate-700 max-w-3xl mx-auto mb-8">
           A cross-disciplinary study examining organic pads, commercial pads,
           reusable cloth pads, and tampons through the lenses of Biology,
           Chemistry, Physics, and Environmental Science.
@@ -62,13 +36,25 @@ export default function Home() {
         <h2 className="text-sm font-semibold text-rose-500 uppercase tracking-widest mb-2">
           Global Issue
         </h2>
-        <p className="text-lg font-medium text-slate-900 leading-relaxed">
+        <p className="text-xl font-bold text-slate-950 leading-relaxed">
           Global women&apos;s health issues
         </p>
-        <p className="text-slate-600 mt-3 leading-relaxed">
+        <p className="text-base text-slate-700 mt-3 leading-relaxed">
           Millions of women use menstrual products daily without full knowledge of their
           chemical composition, bacterial safety, or environmental footprint. This project
           addresses that gap through rigorous cross-disciplinary laboratory analysis.
+        </p>
+      </div>
+
+      {/* Research Question */}
+      <div className="bg-amber-50 border border-amber-200 rounded-2xl p-8 mb-16">
+        <h2 className="text-sm font-semibold text-amber-600 uppercase tracking-widest mb-2">
+          Research Question
+        </h2>
+        <p className="text-xl font-bold text-slate-950 leading-relaxed">
+          Which type of menstrual product best minimizes health risks and
+          environmental impact across biological, chemical, physical, and
+          environmental dimensions?
         </p>
       </div>
 
@@ -77,7 +63,7 @@ export default function Home() {
         <h2 className="text-sm font-semibold text-rose-500 uppercase tracking-widest mb-2">
           Our Aim
         </h2>
-        <p className="text-slate-700 leading-relaxed">
+        <p className="text-base text-slate-700 leading-relaxed">
           This project aims to compare menstrual products across five scientific disciplines
           to determine which product type minimizes health and environmental risks, and to
           recommend safer options for women.
@@ -85,11 +71,11 @@ export default function Home() {
       </div>
 
       {/* CTA Banner */}
-      <div className="bg-rose-500 rounded-2xl p-10 text-center text-white">
+      <div className="bg-rose-500 rounded-2xl p-10 text-center text-white mb-16">
         <h2 className="text-2xl font-bold mb-3">
           Want the most suitable pad for yourself?
         </h2>
-        <p className="text-rose-100 mb-6 text-sm">
+        <p className="text-rose-100 mb-6 text-base">
           Set your priorities across safety, chemistry, performance, and
           environment — our tool ranks all products for you.
         </p>
@@ -101,33 +87,19 @@ export default function Home() {
         </Link>
       </div>
 
-      {/* Research Question */}
-      <div className="bg-amber-50 border border-amber-200 rounded-2xl p-8 mb-16 mt-20">
-        <h2 className="text-sm font-semibold text-amber-600 uppercase tracking-widest mb-2">
-          Research Question
-        </h2>
-        <p className="text-lg font-medium text-slate-900 leading-relaxed">
-          Which type of menstrual product best minimizes health risks and
-          environmental impact across biological, chemical, physical, and
-          environmental dimensions?
-        </p>
-      </div>
-
-      {/* Four Axes */}
-      <h2 className="text-xl font-semibold text-slate-900 mb-6">
-        Our Four Research Axes
+      {/* Six Axes */}
+      <h2 className="text-2xl font-bold text-slate-950 mb-6">
+        Our Six Evaluation Axes
       </h2>
-      <div className="grid sm:grid-cols-2 gap-4 mb-16">
-        {axes.map(({ emoji, title, desc, question }) => (
+      <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-16">
+        {axes.map(({ key, label, description }) => (
           <Link
-            key={title}
+            key={key}
             to="/sciences"
             className="border border-slate-200 rounded-xl p-6 shadow-sm hover:border-rose-300 hover:bg-rose-50/40 hover:-translate-y-0.5 hover:shadow-md transition-all duration-200 block focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-rose-500 focus-visible:ring-offset-2"
           >
-            <div className="text-2xl mb-3">{emoji}</div>
-            <h3 className="font-semibold text-slate-900 mb-1">{title}</h3>
-            <p className="text-sm text-slate-600 mb-3">{desc}</p>
-            <p className="text-sm font-medium text-rose-500">{question}</p>
+            <h3 className="text-lg font-bold text-slate-950 mb-1">{label}</h3>
+            <p className="text-base text-slate-700">{description}</p>
           </Link>
         ))}
       </div>
@@ -177,5 +149,6 @@ export default function Home() {
         </div>
       )}
     </div>
+  </div>
   );
 }
