@@ -264,6 +264,10 @@ export const axes = [
 
 export type AxisKey = (typeof axes)[number]["key"];
 
+export const mainAxes = axes.filter(a =>
+  ["safety", "chemistry", "performance", "environment"].includes(a.key),
+);
+
 export const productTypeLabels: Record<ProductType, string> = {
   organic: "Organic Pad",
   commercial: "Commercial Pad",
@@ -272,10 +276,10 @@ export const productTypeLabels: Record<ProductType, string> = {
 };
 
 const galleryOrder = [
-  7, 2, 14, 5, 11, 1, 16, 9, 3, 13, 6, 17, 4, 10, 15, 8, 12,
+  7, 2, 14, 5, 11, 1, 16, 9, 3, 13, 6, 17, 4, 10, 15, 8, 12, 18, 19, 20,
 ];
 export const galleryImages: string[] = galleryOrder.map(
-  (n) => `/pictures/lab-${String(n).padStart(2, "0")}.jpg`,
+  (n) => `/pictures/lab-${String(n).padStart(2, "0")}${n >= 18 ? ".jpeg" : ".jpg"}`,
 );
 
 export const brandCoverage = [

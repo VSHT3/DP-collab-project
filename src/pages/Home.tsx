@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { galleryImages, axes } from "../data/products";
+import { galleryImages, mainAxes } from "../data/products";
 
 export default function Home() {
   const [lightbox, setLightbox] = useState<string | null>(null);
@@ -89,10 +89,10 @@ export default function Home() {
 
       {/* Six Axes */}
       <h2 className="text-2xl font-bold text-slate-950 mb-6">
-        Our Six Evaluation Axes
+        Our Four Evaluation Axes
       </h2>
-      <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-16">
-        {axes.map(({ key, label, description }) => (
+      <div className="grid sm:grid-cols-2 xl:grid-cols-4 gap-6 mb-16">
+        {mainAxes.map(({ key, label, description }) => (
           <Link
             key={key}
             to="/sciences"

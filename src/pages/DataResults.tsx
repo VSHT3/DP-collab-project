@@ -1,9 +1,8 @@
 import { useState } from 'react'
 import {
   RadarChart, Radar, PolarGrid, PolarAngleAxis, PolarRadiusAxis,
-  ResponsiveContainer, BarChart, Bar, XAxis, YAxis, CartesianGrid,
-  Tooltip, Legend, Cell,
-  ScatterChart, Scatter,
+  ResponsiveContainer,
+  ScatterChart, Scatter, CartesianGrid, XAxis, YAxis, Tooltip, Legend,
 } from 'recharts'
 import { products, axes, type ProductKey, type AxisKey } from '../data/products'
 
@@ -74,7 +73,15 @@ export default function DataResults() {
 
   const visibleKeys = productKeys.filter(k => visibleProducts.has(k))
 
-  const radarData = axes.map(({ key, label }) => ({
+  const abstractAxes = axes.filter(a => ['safety', 'chemistry', 'environment'].includes(a.key))
+  const specificAxes = axes.filter(a => ['capacity', 'rate', 'performance'].includes(a.key))
+
+  const abstractRadarData = abstractAxes.map(({ key, label }) => ({
+    axis: label,
+    ...Object.fromEntries(visibleKeys.map(k => [k, products[k].scores[key] ?? 0])),
+  }))
+
+  const specificRadarData = specificAxes.map(({ key, label }) => ({
     axis: label,
     ...Object.fromEntries(visibleKeys.map(k => [k, products[k].scores[key] ?? 0])),
   }))
@@ -115,68 +122,61 @@ export default function DataResults() {
         ))}
       </div>
 
-      {/* Radar */}
+      {/* Radar charts — one card, two sides */}
       <div className="border border-slate-200 rounded-2xl p-8 shadow-sm mb-8">
-        <h2 className="text-xl font-bold text-slate-950 mb-1">Overall Comparison</h2>
-        <p className="text-base text-slate-700 mb-6">Radar chart across all six axes. Toggle products above.</p>
-        <ResponsiveContainer width="100%" height={480}>
-          <RadarChart data={radarData}>
-            <PolarGrid stroke="#e2e8f0" />
-            <PolarAngleAxis dataKey="axis" tick={{ fontSize: 15, fill: '#334155', fontWeight: 600 }} />
-            <PolarRadiusAxis domain={[0, 10]} tick={{ fontSize: 13, fill: '#475569' }} />
-            {visibleKeys.map(k => (
-              <Radar
-                key={k}
-                name={products[k].label}
-                dataKey={k}
-                stroke={products[k].color}
-                fill={products[k].color}
-                fillOpacity={0.12}
-                strokeWidth={2}
-                isAnimationActive={false}
-              />
-            ))}
-            <Legend />
-          </RadarChart>
-        </ResponsiveContainer>
-      </div>
-
-      {/* Per-axis bar charts */}
-      <div className="grid sm:grid-cols-2 gap-6 mb-10">
-        {axes.map(({ key, label, description }) => {
-          const barData = productKeys.map(k => ({
-            name: products[k].label,
-            score: products[k].scores[key] ?? 0,
-            fill: products[k].color,
-            pending: products[k].scores[key] === null,
-          }))
-          const hasPending = barData.some(d => d.pending)
-          return (
-            <div key={key} className="border border-slate-200 rounded-2xl p-6 shadow-sm">
-              <h3 className="text-lg font-bold text-slate-950 mb-1">{label}</h3>
-              <p className="text-sm text-slate-700 mb-1">{description}</p>
-              {hasPending && <p className="text-sm text-amber-600 mb-3 font-medium">Pending axes shown as 0</p>}
-              <ResponsiveContainer width="100%" height={240}>
-                <BarChart data={barData} margin={{ top: 0, right: 0, left: -20, bottom: 40 }}>
-                  <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" vertical={false} />
-                  <XAxis dataKey="name" tick={{ fontSize: 11, fill: '#475569' }} angle={-30} textAnchor="end" />
-                  <YAxis domain={[0, 10]} tick={{ fontSize: 12, fill: '#475569' }} />
-                  <Tooltip
-                    contentStyle={{ borderRadius: 8, border: '1px solid #f1f5f9', fontSize: 13 }}
-                    formatter={(v: number, _: string, entry: { payload?: { pending?: boolean } }) =>
-                      [entry.payload?.pending ? 'Pending' : (v as number).toFixed(1), label]
-                    }
+        <h2 className="text-xl font-bold text-slate-950 mb-1">Score Comparison</h2>
+        <p className="text-base text-slate-700 mb-6">Toggle products above to compare across both charts.</p>
+        <div className="grid grid-cols-2 gap-8">
+          {/* Left — abstract axes */}
+          <div>
+            <p className="text-sm font-semibold text-slate-700 text-center mb-2">Overall Scores</p>
+            <ResponsiveContainer width="100%" height={400}>
+              <RadarChart data={abstractRadarData}>
+                <PolarGrid stroke="#e2e8f0" />
+                <PolarAngleAxis dataKey="axis" tick={{ fontSize: 14, fill: '#334155', fontWeight: 600 }} />
+                <PolarRadiusAxis domain={[0, 10]} tick={{ fontSize: 12, fill: '#475569' }} />
+                {visibleKeys.map(k => (
+                  <Radar
+                    key={k}
+                    name={products[k].label}
+                    dataKey={k}
+                    stroke={products[k].color}
+                    fill={products[k].color}
+                    fillOpacity={0.12}
+                    strokeWidth={2}
+                    isAnimationActive={false}
                   />
-                  <Bar dataKey="score" radius={[4, 4, 0, 0]}>
-                    {barData.map((entry, i) => (
-                      <Cell key={i} fill={entry.pending ? '#e2e8f0' : entry.fill} />
-                    ))}
-                  </Bar>
-                </BarChart>
-              </ResponsiveContainer>
-            </div>
-          )
-        })}
+                ))}
+                <Legend />
+              </RadarChart>
+            </ResponsiveContainer>
+          </div>
+
+          {/* Right — specific measurements */}
+          <div>
+            <p className="text-sm font-semibold text-slate-700 text-center mb-2">Physics Measurements</p>
+            <ResponsiveContainer width="100%" height={400}>
+              <RadarChart data={specificRadarData}>
+                <PolarGrid stroke="#e2e8f0" />
+                <PolarAngleAxis dataKey="axis" tick={{ fontSize: 14, fill: '#334155', fontWeight: 600 }} />
+                <PolarRadiusAxis domain={[0, 10]} tick={{ fontSize: 12, fill: '#475569' }} />
+                {visibleKeys.map(k => (
+                  <Radar
+                    key={k}
+                    name={products[k].label}
+                    dataKey={k}
+                    stroke={products[k].color}
+                    fill={products[k].color}
+                    fillOpacity={0.12}
+                    strokeWidth={2}
+                    isAnimationActive={false}
+                  />
+                ))}
+                <Legend />
+              </RadarChart>
+            </ResponsiveContainer>
+          </div>
+        </div>
       </div>
 
       {/* Rankings table */}

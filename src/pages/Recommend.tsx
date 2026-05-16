@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
-import { products, axes, type ProductKey, type AxisKey } from '../data/products'
+import { products, mainAxes, type ProductKey, type AxisKey } from '../data/products'
 
 type Weights = Record<AxisKey, number>
 
@@ -14,12 +14,12 @@ const defaultWeights: Weights = {
 }
 
 function computeScores(weights: Weights): { key: ProductKey; score: number; hasPending: boolean }[] {
-  const totalWeight = Object.values(weights).reduce((a, b) => a + b, 0) || 1
+  const totalWeight = mainAxes.reduce((sum, a) => sum + weights[a.key], 0) || 1
   const productKeys = Object.keys(products) as ProductKey[]
   return productKeys
     .map(key => {
-      const hasPending = axes.some(a => products[key].scores[a.key] === null)
-      const score = axes.reduce((sum, axis) => {
+      const hasPending = mainAxes.some(a => products[key].scores[a.key] === null)
+      const score = mainAxes.reduce((sum, axis) => {
         return sum + (weights[axis.key] / totalWeight) * (products[key].scores[axis.key] ?? 0)
       }, 0)
       return { key, score, hasPending }
@@ -52,7 +52,7 @@ export default function Recommend() {
       <div className="border border-slate-200 rounded-2xl p-8 shadow-sm mb-8">
         <h2 className="text-xl font-bold text-slate-950 mb-6">Set Your Priorities</h2>
         <div className="space-y-6">
-          {axes.map(({ key, label, description }) => (
+          {mainAxes.map(({ key, label, description }) => (
             <div key={key}>
               <div className="flex justify-between items-baseline mb-2">
                 <div>
@@ -143,7 +143,7 @@ export default function Recommend() {
               Score Breakdown — {products[winner.key].label}
             </h3>
             <div className="space-y-3">
-              {axes.map(({ key, label }) => {
+              {mainAxes.map(({ key, label }) => {
                 const rawScore = products[winner.key].scores[key]
                 const weight = weights[key]
                 const isPending = rawScore === null
