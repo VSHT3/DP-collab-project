@@ -32,6 +32,12 @@ export interface ProductData {
     performance: string;
     environment: string;
   };
+  subMetrics: {
+    colonyCount: number | null;
+    ph: number | null;
+    massLoss: number | null;
+    co2e: number | null;
+  };
   absorptionRate: number | null;
   absorptionRateRank: number | null;
   absorptionRateTrials: [number, number, number] | null;
@@ -61,6 +67,12 @@ export const products: Record<ProductKey, ProductData> = {
       performance: "Composite of capacity (10.0) and rate (1.75): 5.88",
       environment: "Pending — mass loss after 14 days, CO₂e per use",
     },
+    subMetrics: {
+      colonyCount: null,
+      ph: null,
+      massLoss: null,
+      co2e: null,
+    },
     absorptionRate: 44.23,
     absorptionRateRank: 7,
     absorptionRateTrials: [42.27, 44.63, 45.78],
@@ -87,6 +99,12 @@ export const products: Record<ProductKey, ProductData> = {
       rate: "Absorption rate: 7.76 s/5 mL (rank 1 of 7)",
       performance: "Composite of capacity (7.1) and rate (10.0): 8.55",
       environment: "Pending — mass loss after 14 days, CO₂e per use",
+    },
+    subMetrics: {
+      colonyCount: null,
+      ph: null,
+      massLoss: null,
+      co2e: null,
     },
     absorptionRate: 7.76,
     absorptionRateRank: 1,
@@ -115,6 +133,12 @@ export const products: Record<ProductKey, ProductData> = {
       performance: "Composite of capacity (5.4) and rate (5.65): 5.53",
       environment: "Pending — mass loss after 14 days, CO₂e per use",
     },
+    subMetrics: {
+      colonyCount: null,
+      ph: null,
+      massLoss: null,
+      co2e: null,
+    },
     absorptionRate: 13.73,
     absorptionRateRank: 5,
     absorptionRateTrials: [13.35, 13.72, 14.13],
@@ -141,6 +165,12 @@ export const products: Record<ProductKey, ProductData> = {
       rate: "Absorption rate: 12.73 s/5 mL (rank 4 of 7)",
       performance: "Composite of capacity (5.0) and rate (6.10): 5.55",
       environment: "Pending — mass loss after 14 days, CO₂e per use",
+    },
+    subMetrics: {
+      colonyCount: null,
+      ph: null,
+      massLoss: null,
+      co2e: null,
     },
     absorptionRate: 12.73,
     absorptionRateRank: 4,
@@ -169,6 +199,12 @@ export const products: Record<ProductKey, ProductData> = {
       performance: "Composite of capacity (5.0) and rate (5.52): 5.26",
       environment: "Pending — mass loss after 14 days, CO₂e per use",
     },
+    subMetrics: {
+      colonyCount: null,
+      ph: null,
+      massLoss: null,
+      co2e: null,
+    },
     absorptionRate: 14.07,
     absorptionRateRank: 6,
     absorptionRateTrials: [12.77, 14.61, 14.84],
@@ -196,6 +232,12 @@ export const products: Record<ProductKey, ProductData> = {
       performance: "Composite of capacity (4.9) and rate (9.02): 6.96",
       environment: "Pending — mass loss after 14 days, CO₂e per use",
     },
+    subMetrics: {
+      colonyCount: null,
+      ph: null,
+      massLoss: null,
+      co2e: null,
+    },
     absorptionRate: 8.6,
     absorptionRateRank: 2,
     absorptionRateTrials: [10.48, 7.73, 7.60],
@@ -222,6 +264,12 @@ export const products: Record<ProductKey, ProductData> = {
       rate: "Absorption rate: 10.08 s/5 mL (rank 3 of 7)",
       performance: "Composite of capacity (1.6) and rate (7.70): 4.65",
       environment: "Pending — expected to score highest due to reusable lifecycle",
+    },
+    subMetrics: {
+      colonyCount: null,
+      ph: null,
+      massLoss: null,
+      co2e: null,
     },
     absorptionRate: 10.08,
     absorptionRateRank: 3,
@@ -267,6 +315,53 @@ export type AxisKey = (typeof axes)[number]["key"];
 export const mainAxes = axes.filter(a =>
   ["safety", "chemistry", "performance", "environment"].includes(a.key),
 );
+
+export const subMetrics = [
+  {
+    key: "colonyCount" as const,
+    label: "Colony Count",
+    description: "CFU per cm² after 24h (Biology)",
+    unit: "CFU/cm²",
+    lowerBetter: true,
+  },
+  {
+    key: "ph" as const,
+    label: "pH",
+    description: "pH neutrality measurement (Chemistry)",
+    unit: "pH",
+    lowerBetter: false,
+  },
+  {
+    key: "capacity" as const,
+    label: "Absorption Capacity",
+    description: "Fluid held per gram of dry product (Physics Exp 1)",
+    unit: "g/g",
+    lowerBetter: false,
+  },
+  {
+    key: "rate" as const,
+    label: "Absorption Rate",
+    description: "Time to absorb 5 mL (Physics Exp 2)",
+    unit: "s/5 mL",
+    lowerBetter: true,
+  },
+  {
+    key: "massLoss" as const,
+    label: "Mass Loss",
+    description: "% mass loss over 14 days (ESS)",
+    unit: "%",
+    lowerBetter: false,
+  },
+  {
+    key: "co2e" as const,
+    label: "CO₂ Footprint",
+    description: "CO₂ equivalent per use (ESS)",
+    unit: "g CO₂e",
+    lowerBetter: true,
+  },
+];
+
+export type SubMetricKey = (typeof subMetrics)[number]["key"];
 
 export const productTypeLabels: Record<ProductType, string> = {
   organic: "Organic Pad",
