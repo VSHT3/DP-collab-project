@@ -1,23 +1,23 @@
 const team = [
   { name: "Hui Ru Yang", subject: "Physics" },
-  { name: "Anna Udicova", subject: "Chemistry" },
-  { name: "Ela Sabolova", subject: "Environmental Science" },
-  { name: "Milana Golubkova", subject: "Biology" },
-  { name: "Alexander Hvezdon Stefko", subject: "Computer Science" },
+  { name: "Anna Udičová", subject: "Chemistry" },
+  { name: "Ela Sabolová", subject: "Environmental Science" },
+  { name: "Milana Golubková", subject: "Biology" },
+  { name: "Alexander Hvezdoň Štefko", subject: "Computer Science" },
 ];
 
 export default function About() {
   return (
     <div className="max-w-5xl mx-auto px-6 py-16">
       <div className="mb-12">
-        <span className="text-xs font-semibold tracking-widest text-rose-400 uppercase">
+        <span className="text-xs font-semibold tracking-widest text-rose-500 uppercase">
           About
         </span>
         <h1 className="text-3xl font-bold text-slate-900 mt-2 mb-3">
           About Us
         </h1>
-        <p className="text-slate-500 max-w-2xl">
-          Five IB Diploma students from three disciplines, collaborating across
+        <p className="text-slate-600 max-w-2xl">
+          Five IB Diploma students from five disciplines, collaborating across
           subject boundaries to investigate a real-world health and
           sustainability challenge.
         </p>
@@ -25,9 +25,9 @@ export default function About() {
 
       <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-16">
         {team.map(({ name, subject }) => (
-          <div key={name} className="border border-slate-100 rounded-2xl p-6">
+          <div key={name} className="border border-slate-200 rounded-2xl p-6 shadow-sm hover:-translate-y-0.5 hover:shadow-md transition-all duration-200">
             <div className="w-16 h-16 rounded-full bg-rose-50 flex items-center justify-center mb-4">
-              <span className="text-2xl font-bold text-rose-300">
+              <span className="text-2xl font-bold text-rose-500">
                 {name
                   .split(" ")
                   .map((w) => w[0])

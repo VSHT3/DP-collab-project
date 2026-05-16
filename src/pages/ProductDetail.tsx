@@ -30,7 +30,7 @@ export default function ProductDetail() {
 
   return (
     <div className="max-w-3xl mx-auto px-6 py-16">
-      <Link to="/products" className="text-sm text-slate-400 hover:text-rose-500 transition-colors mb-8 inline-block">
+      <Link to="/products" className="text-sm text-slate-500 hover:text-rose-500 transition-all duration-200 mb-8 inline-block">
         ← Back to Products
       </Link>
 
@@ -43,13 +43,13 @@ export default function ProductDetail() {
           <h1 className="text-3xl font-bold text-slate-900">{product.label}</h1>
           {product.price !== null
             ? <p className="text-slate-500 mt-1">€{product.price.toFixed(2)} per pack</p>
-            : <p className="text-slate-400 text-sm mt-1">Price TBD</p>
+            : <p className="text-slate-500 text-sm mt-1">Price TBD</p>
           }
         </div>
       </div>
 
       {/* Radar */}
-      <div className="border border-slate-100 rounded-2xl p-6 mb-8">
+      <div className="border border-slate-200 rounded-2xl p-6 shadow-sm mb-8">
         <h2 className="font-semibold text-slate-900 mb-1">Score Profile</h2>
         {hasAnyPendingScore && (
           <p className="text-xs text-amber-500 mb-4">Axes with no data yet are shown as 0</p>
@@ -73,14 +73,14 @@ export default function ProductDetail() {
       {/* Details per axis */}
       <div className="space-y-4">
         {axes.map(({ key, label, description }) => (
-          <div key={key} className="border border-slate-100 rounded-xl p-5">
+          <div key={key} className="border border-slate-200 rounded-xl p-5 shadow-sm">
             <div className="flex justify-between items-start mb-2">
               <div>
                 <h3 className="font-semibold text-slate-900 text-sm">{label}</h3>
                 <p className="text-xs text-slate-400">{description}</p>
               </div>
               <span className={`text-sm font-bold ml-4 flex-shrink-0 ${
-                product.scores[key] === null ? 'text-slate-300' : 'text-slate-800'
+                product.scores[key] === null ? 'text-slate-400' : 'text-slate-800'
               }`}>
                 {product.scores[key] !== null ? product.scores[key]!.toFixed(1) : '—'}
               </span>

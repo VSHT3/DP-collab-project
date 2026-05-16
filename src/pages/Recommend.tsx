@@ -35,9 +35,9 @@ export default function Recommend() {
   return (
     <div className="max-w-3xl mx-auto px-6 py-16">
       <div className="mb-10">
-        <span className="text-xs font-semibold tracking-widest text-rose-400 uppercase">Recommendation Tool</span>
+        <span className="text-xs font-semibold tracking-widest text-rose-500 uppercase">Recommendation Tool</span>
         <h1 className="text-3xl font-bold text-slate-900 mt-2 mb-3">Find Your Best Product</h1>
-        <p className="text-slate-500">
+        <p className="text-slate-600">
           Drag the sliders to reflect what matters most to you. The tool ranks all
           seven products based on our research data.
         </p>
@@ -46,7 +46,7 @@ export default function Recommend() {
         </p>
       </div>
 
-      <div className="border border-slate-100 rounded-2xl p-7 mb-8">
+      <div className="border border-slate-200 rounded-2xl p-7 shadow-sm mb-8">
         <h2 className="font-semibold text-slate-900 mb-6">Set Your Priorities</h2>
         <div className="space-y-6">
           {axes.map(({ key, label, description }) => (
@@ -54,7 +54,7 @@ export default function Recommend() {
               <div className="flex justify-between items-baseline mb-2">
                 <div>
                   <span className="text-sm font-medium text-slate-800">{label}</span>
-                  <span className="ml-2 text-xs text-slate-400">{description}</span>
+                  <span className="ml-2 text-xs text-slate-500">{description}</span>
                 </div>
                 <span className="text-sm font-semibold text-rose-500 w-4 text-right">
                   {weights[key]}
@@ -69,7 +69,7 @@ export default function Recommend() {
                   setWeights(w => ({ ...w, [key]: Number(e.target.value) }))
                   setSubmitted(false)
                 }}
-                className="w-full accent-rose-500"
+                className="w-full accent-rose-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-rose-500 focus-visible:ring-offset-2"
               />
               <div className="flex justify-between text-xs text-slate-300 mt-0.5">
                 <span>Not important</span>
@@ -81,7 +81,7 @@ export default function Recommend() {
 
         <button
           onClick={() => setSubmitted(true)}
-          className="mt-8 w-full py-3 rounded-xl bg-rose-500 text-white font-semibold text-sm hover:bg-rose-600 transition-colors"
+          className="mt-8 w-full py-3 rounded-xl bg-rose-500 text-white font-semibold text-sm hover:bg-rose-600 transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-rose-500 focus-visible:ring-offset-2"
         >
           Show My Recommendation
         </button>
@@ -108,12 +108,12 @@ export default function Recommend() {
             </p>
           )}
 
-          <div className="border border-slate-100 rounded-2xl overflow-hidden">
+          <div className="border border-slate-200 rounded-2xl overflow-hidden shadow-sm">
             <div className="px-5 py-3 bg-slate-50">
-              <span className="text-xs font-semibold text-slate-400 uppercase tracking-wider">Full Ranking</span>
+              <span className="text-xs font-semibold text-slate-600 uppercase tracking-wider">Full Ranking</span>
             </div>
             {ranked.map(({ key, score, hasPending }, i) => (
-              <div key={key} className="flex items-center justify-between px-5 py-4 border-t border-slate-50">
+              <div key={key} className="flex items-center justify-between px-5 py-4 border-t border-slate-100 hover:bg-slate-50/50 transition-colors duration-200">
                 <div className="flex items-center gap-3">
                   <span className="text-slate-300 text-sm font-semibold w-5">{i + 1}</span>
                   <span className="w-3 h-3 rounded-full" style={{ background: products[key].color }} />
@@ -129,13 +129,13 @@ export default function Recommend() {
                       style={{ width: `${(score / 10) * 100}%`, background: products[key].color }}
                     />
                   </div>
-                  <span className="text-sm text-slate-500 w-10 text-right">{score.toFixed(2)}</span>
+                  <span className="text-sm text-slate-600 w-10 text-right">{score.toFixed(2)}</span>
                 </div>
               </div>
             ))}
           </div>
 
-          <div className="border border-slate-100 rounded-2xl p-6">
+          <div className="border border-slate-200 rounded-2xl p-6 shadow-sm">
             <h3 className="font-semibold text-slate-900 mb-4">
               Score Breakdown — {products[winner.key].label}
             </h3>
@@ -148,10 +148,10 @@ export default function Recommend() {
                   <div key={key} className="flex items-center justify-between text-sm">
                     <span className="text-slate-600">{label}</span>
                     <div className="flex items-center gap-4">
-                      <span className="text-slate-400 text-xs">
+                      <span className="text-slate-500 text-xs">
                         score {isPending ? '— (pending)' : rawScore.toFixed(1)} × priority {weight}
                       </span>
-                      <span className="font-medium text-slate-800 w-12 text-right">
+                      <span className="font-medium text-slate-900 w-12 text-right">
                         {isPending ? '—' : (rawScore * weight).toFixed(1)}
                       </span>
                     </div>
@@ -162,7 +162,7 @@ export default function Recommend() {
           </div>
 
           <div className="text-center pt-2">
-            <Link to="/products" className="text-sm text-rose-500 hover:underline">
+            <Link to="/products" className="text-sm text-rose-500 hover:underline transition-colors duration-200">
               View all products →
             </Link>
           </div>

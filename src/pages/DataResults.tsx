@@ -13,9 +13,13 @@ function fmt(v: number | null): string {
   return v === null ? '—' : v.toFixed(1)
 }
 
+function fmtRate(v: number | null): string {
+  return v === null ? '—' : `${v.toFixed(2)} s`
+}
+
 function Stats({ axisKey }: { axisKey: AxisKey }) {
   const values = productKeys.map(k => products[k].scores[axisKey]).filter((v): v is number => v !== null)
-  if (values.length === 0) return <span className="text-slate-300 text-xs">no data</span>
+  if (values.length === 0) return <span className="text-slate-400 text-xs">no data</span>
   const mean = values.reduce((a, b) => a + b, 0) / values.length
   const min = Math.min(...values)
   const max = Math.max(...values)
@@ -23,12 +27,32 @@ function Stats({ axisKey }: { axisKey: AxisKey }) {
   return (
     <div className="text-xs space-y-0.5">
       <div className="flex gap-3">
-        <span className="text-slate-400">mean</span><span className="font-medium text-slate-700">{mean.toFixed(2)}</span>
-        <span className="text-slate-400">min</span><span className="font-medium text-slate-700">{min.toFixed(1)}</span>
-        <span className="text-slate-400">max</span><span className="font-medium text-slate-700">{max.toFixed(1)}</span>
-        <span className="text-slate-400">σ</span><span className="font-medium text-slate-700">{std.toFixed(2)}</span>
+        <span className="text-slate-500">mean</span><span className="font-medium text-slate-800">{mean.toFixed(2)}</span>
+        <span className="text-slate-500">min</span><span className="font-medium text-slate-800">{min.toFixed(1)}</span>
+        <span className="text-slate-500">max</span><span className="font-medium text-slate-800">{max.toFixed(1)}</span>
+        <span className="text-slate-500">σ</span><span className="font-medium text-slate-800">{std.toFixed(2)}</span>
       </div>
-      <div className="text-slate-300">n = {values.length} of {productKeys.length}</div>
+      <div className="text-slate-400">n = {values.length} of {productKeys.length}</div>
+    </div>
+  )
+}
+
+function StatsRate() {
+  const values = productKeys.map(k => products[k].absorptionRate).filter((v): v is number => v !== null)
+  if (values.length === 0) return <span className="text-slate-400 text-xs">no data</span>
+  const mean = values.reduce((a, b) => a + b, 0) / values.length
+  const min = Math.min(...values)
+  const max = Math.max(...values)
+  const std = Math.sqrt(values.reduce((s, v) => s + (v - mean) ** 2, 0) / values.length)
+  return (
+    <div className="text-xs space-y-0.5">
+      <div className="flex gap-3">
+        <span className="text-slate-500">mean</span><span className="font-medium text-slate-800">{mean.toFixed(2)} s</span>
+        <span className="text-slate-500">min</span><span className="font-medium text-slate-800">{min.toFixed(2)} s</span>
+        <span className="text-slate-500">max</span><span className="font-medium text-slate-800">{max.toFixed(2)} s</span>
+        <span className="text-slate-500">σ</span><span className="font-medium text-slate-800">{std.toFixed(2)}</span>
+      </div>
+      <div className="text-slate-400">n = {values.length} of {productKeys.length}</div>
     </div>
   )
 }
@@ -84,9 +108,9 @@ export default function DataResults() {
   return (
     <div className="max-w-5xl mx-auto px-6 py-16">
       <div className="mb-12">
-        <span className="text-xs font-semibold tracking-widest text-rose-400 uppercase">Data & Results</span>
+        <span className="text-xs font-semibold tracking-widest text-rose-500 uppercase">Data & Results</span>
         <h1 className="text-3xl font-bold text-slate-900 mt-2 mb-3">Findings</h1>
-        <p className="text-slate-500 max-w-2xl">
+        <p className="text-slate-600 max-w-2xl">
           All scores 0–10 (higher = better). Physics data is real; other axes pending.
           Pending axes shown as — or 0 in charts.
         </p>
@@ -98,10 +122,10 @@ export default function DataResults() {
           <button
             key={k}
             onClick={() => toggleProduct(k)}
-            className={`flex items-center gap-2 px-3 py-1.5 rounded-full text-sm border transition-colors ${
+            className={`flex items-center gap-2 px-3 py-1.5 rounded-full text-sm border transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-rose-500 ${
               visibleProducts.has(k)
                 ? 'border-transparent text-white'
-                : 'border-slate-200 text-slate-400 bg-white'
+                : 'border-slate-300 text-slate-600 bg-white hover:border-rose-300'
             }`}
             style={visibleProducts.has(k) ? { background: products[k].color } : {}}
           >
@@ -111,9 +135,9 @@ export default function DataResults() {
       </div>
 
       {/* Radar */}
-      <div className="border border-slate-100 rounded-2xl p-6 mb-8">
+      <div className="border border-slate-200 rounded-2xl p-6 shadow-sm mb-8">
         <h2 className="font-semibold text-slate-900 mb-1">Overall Comparison</h2>
-        <p className="text-sm text-slate-400 mb-6">Radar chart across all four axes. Toggle products above.</p>
+        <p className="text-sm text-slate-500 mb-6">Radar chart across all four axes. Toggle products above.</p>
         <ResponsiveContainer width="100%" height={360}>
           <RadarChart data={radarData}>
             <PolarGrid stroke="#f1f5f9" />
@@ -146,9 +170,9 @@ export default function DataResults() {
           }))
           const hasPending = barData.some(d => d.pending)
           return (
-            <div key={key} className="border border-slate-100 rounded-2xl p-6">
+            <div key={key} className="border border-slate-200 rounded-2xl p-6 shadow-sm">
               <h3 className="font-semibold text-slate-900 mb-1">{label}</h3>
-              <p className="text-xs text-slate-400 mb-1">{description}</p>
+              <p className="text-xs text-slate-500 mb-1">{description}</p>
               {hasPending && <p className="text-xs text-amber-400 mb-3">Pending axes shown as 0</p>}
               <ResponsiveContainer width="100%" height={200}>
                 <BarChart data={barData} margin={{ top: 0, right: 0, left: -20, bottom: 40 }}>
@@ -173,11 +197,41 @@ export default function DataResults() {
         })}
       </div>
 
+      {/* Absorption rate bar chart */}
+      <div className="border border-slate-200 rounded-2xl p-6 shadow-sm mb-10">
+        <h3 className="font-semibold text-slate-900 mb-1">Absorption Rate (5 mL)</h3>
+        <p className="text-xs text-slate-500 mb-1">Time for 5 mL of simulated fluid to be fully absorbed. Lower is better.</p>
+        <ResponsiveContainer width="100%" height={220}>
+          <BarChart
+            data={productKeys.map(k => ({
+              name: products[k].label,
+              rate: products[k].absorptionRate ?? 0,
+              fill: products[k].color,
+              rank: products[k].absorptionRateRank,
+            }))}
+            margin={{ top: 0, right: 0, left: -20, bottom: 40 }}
+          >
+            <CartesianGrid strokeDasharray="3 3" stroke="#f1f5f9" vertical={false} />
+            <XAxis dataKey="name" tick={{ fontSize: 10, fill: '#94a3b8' }} angle={-30} textAnchor="end" />
+            <YAxis tick={{ fontSize: 11, fill: '#94a3b8' }} label={{ value: 'Seconds', angle: -90, position: 'insideLeft', offset: 0, fontSize: 11, fill: '#94a3b8' }} />
+            <Tooltip
+              contentStyle={{ borderRadius: 8, border: '1px solid #e2e8f0', fontSize: 13 }}
+              formatter={(v: number) => [`${v.toFixed(2)} s`, 'Absorption Rate']}
+            />
+            <Bar dataKey="rate" radius={[4, 4, 0, 0]}>
+              {productKeys.map((k, i) => (
+                <Cell key={i} fill={products[k].color} />
+              ))}
+            </Bar>
+          </BarChart>
+        </ResponsiveContainer>
+      </div>
+
       {/* Rankings table */}
-      <div className="border border-slate-100 rounded-2xl overflow-hidden mb-10">
+      <div className="border border-slate-200 rounded-2xl overflow-hidden shadow-sm mb-10">
         <div className="px-5 py-3 bg-slate-50 flex items-center justify-between">
-          <span className="text-xs font-semibold text-slate-500 uppercase tracking-wider">Rankings</span>
-          <span className="text-xs text-slate-400">Click axis header to sort</span>
+          <span className="text-xs font-semibold text-slate-600 uppercase tracking-wider">Rankings</span>
+          <span className="text-xs text-slate-500">Click axis header to sort</span>
         </div>
         <table className="w-full text-sm">
           <thead className="bg-slate-50/50">
@@ -187,20 +241,22 @@ export default function DataResults() {
                 <th
                   key={a.key}
                   onClick={() => handleSort(a.key)}
-                  className="px-4 py-3 text-center font-semibold text-slate-500 cursor-pointer hover:text-rose-500 select-none"
+                  className="px-4 py-3 text-center font-semibold text-slate-600 cursor-pointer hover:text-rose-500 select-none transition-colors duration-200"
                 >
                   {a.label}
                   {sortAxis === a.key && (
-                    <span className="ml-1 text-rose-400">{sortDir === 'desc' ? '↓' : '↑'}</span>
+                    <span className="ml-1 text-rose-500">{sortDir === 'desc' ? '↓' : '↑'}</span>
                   )}
                 </th>
               ))}
+              <th className="px-4 py-3 text-center font-semibold text-slate-600">Rate (s/5 mL)</th>
+              <th className="px-4 py-3 text-center font-semibold text-slate-600">€ Price</th>
             </tr>
           </thead>
           <tbody>
             {sortedKeys.map((k, i) => (
               <tr key={k} className={i % 2 === 0 ? '' : 'bg-slate-50/50'}>
-                <td className="px-5 py-3 font-medium text-slate-800">
+                <td className="px-5 py-3 font-medium text-slate-900">
                   <div className="flex items-center gap-2">
                     <span className="w-2.5 h-2.5 rounded-full flex-shrink-0" style={{ background: products[k].color }} />
                     {products[k].label}
@@ -208,11 +264,13 @@ export default function DataResults() {
                 </td>
                 {axes.map(a => (
                   <td key={a.key} className={`px-4 py-3 text-center ${
-                    a.key === sortAxis ? 'font-semibold text-slate-800' : 'text-slate-500'
+                    a.key === sortAxis ? 'font-semibold text-slate-900' : 'text-slate-600'
                   }`}>
                     {fmt(products[k].scores[a.key])}
                   </td>
                 ))}
+                <td className="px-4 py-3 text-center text-slate-600">{fmtRate(products[k].absorptionRate)}</td>
+                <td className="px-4 py-3 text-center text-slate-600">{products[k].price !== null ? `€${products[k].price.toFixed(2)}` : '—'}</td>
               </tr>
             ))}
           </tbody>
@@ -220,9 +278,9 @@ export default function DataResults() {
       </div>
 
       {/* Statistical summary */}
-      <div className="border border-slate-100 rounded-2xl overflow-hidden">
+      <div className="border border-slate-200 rounded-2xl overflow-hidden shadow-sm">
         <div className="px-5 py-3 bg-slate-50">
-          <span className="text-xs font-semibold text-slate-500 uppercase tracking-wider">Statistical Summary</span>
+          <span className="text-xs font-semibold text-slate-600 uppercase tracking-wider">Statistical Summary</span>
         </div>
         <table className="w-full text-sm">
           <thead className="bg-slate-50/50">
@@ -234,18 +292,22 @@ export default function DataResults() {
           <tbody>
             {axes.map(({ key, label }, i) => (
               <tr key={key} className={i % 2 === 0 ? '' : 'bg-slate-50/50'}>
-                <td className="px-5 py-3 font-medium text-slate-700">{label}</td>
+                <td className="px-5 py-3 font-medium text-slate-800">{label}</td>
                 <td className="px-4 py-3"><Stats axisKey={key} /></td>
               </tr>
             ))}
+            <tr className="bg-slate-50/50">
+              <td className="px-5 py-3 font-medium text-slate-800">Absorption Rate</td>
+              <td className="px-4 py-3"><StatsRate /></td>
+            </tr>
           </tbody>
         </table>
       </div>
 
       {/* Correlation scatter */}
-      <div className="border border-slate-100 rounded-2xl p-6 mt-10">
+      <div className="border border-slate-200 rounded-2xl p-6 shadow-sm mt-10">
         <h2 className="font-semibold text-slate-900 mb-1">Correlation Explorer</h2>
-        <p className="text-sm text-slate-400 mb-6">
+        <p className="text-sm text-slate-500 mb-6">
           Select two axes to visualise their relationship across all products.
           Each dot is one product. Only products with data on both axes are shown.
         </p>
@@ -253,7 +315,7 @@ export default function DataResults() {
         <div className="flex gap-6 mb-6 flex-wrap">
           {(['x', 'y'] as const).map(axis => (
             <div key={axis}>
-              <label className="text-xs font-semibold text-slate-500 uppercase tracking-wider block mb-2">
+              <label className="text-xs font-semibold text-slate-600 uppercase tracking-wider block mb-2">
                 {axis.toUpperCase()} Axis
               </label>
               <div className="flex gap-2 flex-wrap">
@@ -265,12 +327,12 @@ export default function DataResults() {
                       key={a.key}
                       disabled={!hasData}
                       onClick={() => axis === 'x' ? setXAxis(a.key) : setYAxis(a.key)}
-                      className={`px-3 py-1.5 rounded-lg text-sm border transition-colors ${
+                      className={`px-3 py-1.5 rounded-lg text-sm border transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-rose-500 ${
                         selected
                           ? 'bg-rose-500 text-white border-rose-500'
                           : hasData
-                            ? 'border-slate-200 text-slate-600 hover:border-rose-200'
-                            : 'border-slate-100 text-slate-300 cursor-not-allowed'
+                            ? 'border-slate-300 text-slate-700 hover:border-rose-300'
+                            : 'border-slate-200 text-slate-400 cursor-not-allowed'
                       }`}
                     >
                       {a.label}
@@ -294,7 +356,7 @@ export default function DataResults() {
 
           if (scatterData.length < 2) {
             return (
-              <div className="h-64 flex items-center justify-center text-slate-400 text-sm">
+              <div className="h-64 flex items-center justify-center text-slate-500 text-sm">
                 Not enough data yet — select axes with collected data
               </div>
             )
@@ -328,10 +390,10 @@ export default function DataResults() {
                       if (!payload?.length) return null
                       const d = payload[0].payload as { name: string; x: number; y: number }
                       return (
-                        <div className="bg-white border border-slate-100 rounded-lg p-3 text-sm shadow">
-                          <p className="font-semibold text-slate-800 mb-1">{d.name}</p>
-                          <p className="text-slate-500">{axes.find(a => a.key === xAxis)?.label}: {d.x.toFixed(1)}</p>
-                          <p className="text-slate-500">{axes.find(a => a.key === yAxis)?.label}: {d.y.toFixed(1)}</p>
+                        <div className="bg-white border border-slate-200 rounded-lg p-3 text-sm shadow-lg">
+                          <p className="font-semibold text-slate-900 mb-1">{d.name}</p>
+                          <p className="text-slate-600">{axes.find(a => a.key === xAxis)?.label}: {d.x.toFixed(1)}</p>
+                          <p className="text-slate-600">{axes.find(a => a.key === yAxis)?.label}: {d.y.toFixed(1)}</p>
                         </div>
                       )
                     }}
@@ -344,8 +406,8 @@ export default function DataResults() {
                   />
                 </ScatterChart>
               </ResponsiveContainer>
-              <p className="text-xs text-slate-400 mt-3">
-                Pearson r = <strong className="text-slate-600">{r.toFixed(3)}</strong>
+              <p className="text-xs text-slate-500 mt-3">
+                Pearson r = <strong className="text-slate-800">{r.toFixed(3)}</strong>
                 {' · '}{scatterData.length} products with data on both axes
               </p>
             </>
