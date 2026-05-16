@@ -1,2 +1,4 @@
-- [ ] differences between types of products
-- [ ] change product cards to be bigger and include a picture
+- [ ] different ratio
+- [ ] differnt product descriptions
+- [ ] add Yang photo to gallery
+- [ ] upgrade graphs in products to match graph in dataresults
