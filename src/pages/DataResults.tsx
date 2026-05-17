@@ -80,15 +80,31 @@ export default function DataResults() {
     return products[k].subMetrics[key]
   }
 
+  const lowerBetterKeys: SubMetricKey[] = ['colonyCount', 'rate', 'co2e']
+
+  function normalizeSubMetric(key: SubMetricKey, val: number | null, allVals: (number | null)[]): number {
+    if (val === null) return 0
+    const nums = allVals.filter((v): v is number => v !== null)
+    if (nums.length === 0) return 0
+    const mn = Math.min(...nums)
+    const mx = Math.max(...nums)
+    if (mn === mx) return 5
+    const raw = (val - mn) / (mx - mn)
+    return lowerBetterKeys.includes(key) ? (1 - raw) * 10 : raw * 10
+  }
+
   const mainRadarData = mainAxes.map(({ key, label }) => ({
     axis: label,
     ...Object.fromEntries(visibleKeys.map(k => [k, products[k].scores[key] ?? 0])),
   }))
 
-  const subRadarData = subMetrics.map(({ key, label }) => ({
-    axis: label,
-    ...Object.fromEntries(visibleKeys.map(k => [k, getSubMetric(k, key) ?? 0])),
-  }))
+  const subRadarData = subMetrics.map(({ key, label }) => {
+    const allVals = productKeys.map(k => getSubMetric(k, key))
+    return {
+      axis: label,
+      ...Object.fromEntries(visibleKeys.map(k => [k, normalizeSubMetric(key, getSubMetric(k, key), allVals)])),
+    }
+  })
 
   const sortedKeys = [...productKeys].sort((a, b) => {
     const va = products[a].scores[sortAxis] ?? -1
@@ -103,8 +119,8 @@ export default function DataResults() {
         <span className="text-sm font-semibold tracking-widest text-rose-500 uppercase">Data & Results</span>
         <h1 className="text-4xl font-bold text-slate-950 mt-2 mb-3">Findings</h1>
         <p className="text-lg text-slate-700 max-w-3xl">
-          All scores 0–10 (higher = better). Physics data is real; other axes pending.
-          Pending axes shown as — or 0 in charts.
+          All scores 0–10 (higher = better). Safety, Chemistry, and Environment
+          scores populated from published literature research.
         </p>
       </div>
 
@@ -189,14 +205,11 @@ export default function DataResults() {
             name: products[k].label,
             score: products[k].scores[key] ?? 0,
             fill: products[k].color,
-            pending: products[k].scores[key] === null,
           }))
-          const hasPending = barData.some(d => d.pending)
           return (
             <div key={key} className="border border-slate-200 rounded-2xl p-6 shadow-sm">
               <h3 className="text-lg font-bold text-slate-950 mb-1">{label}</h3>
-              <p className="text-sm text-slate-700 mb-1">{description}</p>
-              {hasPending && <p className="text-sm text-amber-600 mb-3 font-medium">Pending axes shown as 0</p>}
+              <p className="text-sm text-slate-700 mb-4">{description}</p>
               <ResponsiveContainer width="100%" height={240}>
                 <BarChart data={barData} margin={{ top: 0, right: 0, left: -20, bottom: 40 }}>
                   <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" vertical={false} />
@@ -204,13 +217,11 @@ export default function DataResults() {
                   <YAxis domain={[0, 10]} tick={{ fontSize: 12, fill: '#475569' }} />
                   <Tooltip
                     contentStyle={{ borderRadius: 8, border: '1px solid #f1f5f9', fontSize: 13 }}
-                    formatter={(v: number, _: string, entry: { payload?: { pending?: boolean } }) =>
-                      [entry.payload?.pending ? 'Pending' : (v as number).toFixed(1), label]
-                    }
+                    formatter={(v: number) => [(v as number).toFixed(1), label]}
                   />
                   <Bar dataKey="score" radius={[4, 4, 0, 0]}>
                     {barData.map((entry, i) => (
-                      <Cell key={i} fill={entry.pending ? '#e2e8f0' : entry.fill} />
+                      <Cell key={i} fill={entry.fill} />
                     ))}
                   </Bar>
                 </BarChart>
@@ -230,15 +241,12 @@ export default function DataResults() {
               name: products[k].label,
               value: val ?? 0,
               fill: products[k].color,
-              pending: val === null,
             })
           })
-          const hasPending = barData.some(d => d.pending)
           return (
             <div key={key} className="border border-slate-200 rounded-2xl p-6 shadow-sm">
               <h3 className="text-lg font-bold text-slate-950 mb-1">{label}</h3>
-              <p className="text-sm text-slate-700 mb-1">{description}</p>
-              {hasPending && <p className="text-sm text-amber-600 mb-3 font-medium">Data pending</p>}
+              <p className="text-sm text-slate-700 mb-4">{description}</p>
               <ResponsiveContainer width="100%" height={240}>
                 <BarChart data={barData} margin={{ top: 0, right: 0, left: -20, bottom: 40 }}>
                   <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" vertical={false} />
@@ -246,13 +254,11 @@ export default function DataResults() {
                   <YAxis tick={{ fontSize: 12, fill: '#475569' }} />
                   <Tooltip
                     contentStyle={{ borderRadius: 8, border: '1px solid #f1f5f9', fontSize: 13 }}
-                    formatter={(v: number, _: string, entry: { payload?: { pending?: boolean } }) =>
-                      [entry.payload?.pending ? 'Pending' : `${v} ${unit}`, label]
-                    }
+                    formatter={(v: number) => [`${v} ${unit}`, label]}
                   />
                   <Bar dataKey="value" radius={[4, 4, 0, 0]}>
                     {barData.map((entry, i) => (
-                      <Cell key={i} fill={entry.pending ? '#e2e8f0' : entry.fill} />
+                      <Cell key={i} fill={entry.fill} />
                     ))}
                   </Bar>
                 </BarChart>

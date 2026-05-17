@@ -111,7 +111,11 @@ export default function Home() {
         </h2>
         <div style={{ columns: "4 320px", columnGap: "12px" }}>
           {galleryImages.map((src, i) => {
-            const ratios = ["3/4", "1/1", "4/5", "2/3", "5/6", "3/5"];
+            const ratios = [
+              "3/4", "1/1", "4/5", "2/3", "5/6", "3/5",
+              "7/10", "9/16", "2/1", "5/4", "3/2", "4/3",
+              "16/9", "5/3", "7/5", "8/5",
+            ];
             const ar = ratios[i % ratios.length];
             return (
               <img

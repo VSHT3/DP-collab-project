@@ -1,5 +1,5 @@
 const team = [
-  { name: "Hui Ru Yang", subject: "Physics", image: "/pictures/yang.jpeg" },
+  { name: "Hui Ru Yang", subject: "Physics", image: "/pictures/lab-21.jpeg" },
   { name: "Anna Udičová", subject: "Chemistry" },
   { name: "Ela Sabolová", subject: "Biology" },
   { name: "Milana Golubková", subject: "Environmental Systems and Societies" },

@@ -1,6 +1,5 @@
 - [ ] different ratio in the experiment
 - [ ] differnt product descriptions
-- [ ] add Yang photo to gallery
 - [ ] upgrade graphs in products to match graph in dataresults
 - [ ] fix recommendations
 - [ ] add sizes to products
