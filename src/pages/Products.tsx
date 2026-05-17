@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom'
-import { products, productTypeLabels, brandCoverage, axes, type ProductKey, type ProductType } from '../data/products'
+import { products, productTypeLabels, brandCoverage, axes, type ProductKey, type ProductType, type ProductSize } from '../data/products'
 
 const typeOrder: ProductType[] = ['commercial', 'organic', 'cloth', 'tampon']
 
@@ -13,6 +13,25 @@ const typeDescriptions: Record<ProductType, string> = {
 function ScoreCell({ value }: { value: number | null }) {
   if (value === null) return <span className="text-slate-400">—</span>
   return <span className="font-medium text-slate-800">{value.toFixed(1)}</span>
+}
+
+function SizeDots({ size, color }: { size: ProductSize; color: string }) {
+  const maxAbsorbency = 7
+  return (
+    <div className="flex items-center gap-3 text-sm">
+      <span className="text-slate-600 font-medium min-w-[100px]">{size.label}</span>
+      <div className="flex gap-1">
+        {Array.from({ length: maxAbsorbency }, (_, i) => (
+          <span
+            key={i}
+            className="w-3 h-3 rounded-full border border-slate-300"
+            style={i < size.absorbency ? { background: color, borderColor: color } : {}}
+          />
+        ))}
+      </div>
+      <span className="text-slate-500">{size.pads} pad{size.pads !== 1 ? 's' : ''}</span>
+    </div>
+  )
 }
 
 export default function Products() {
@@ -65,6 +84,18 @@ export default function Products() {
                           )}
                         </div>
                         <h3 className="text-xl font-bold text-slate-900 mb-4">{p.label}</h3>
+                        {p.sizes.length > 0 && (
+                          <div className="mb-4 space-y-1">
+                            {p.sizes.map(s => (
+                              <SizeDots key={s.label} size={s} color={p.color} />
+                            ))}
+                          </div>
+                        )}
+                        {p.price !== null && p.sizes.length > 0 && (
+                          <p className="text-xs text-slate-500 mb-3">
+                            €{(p.price / p.sizes.reduce((sum, s) => sum + s.pads, 0)).toFixed(2)} per pad
+                          </p>
+                        )}
                         <div className="grid grid-cols-6 gap-x-6 gap-y-2 text-sm">
                           {axes.map(({ key, label }) => (
                             <div key={key} className="min-w-0">

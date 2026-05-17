@@ -4,4 +4,4 @@
 - [ ] upgrade graphs in products to match graph in dataresults
 - [ ] fix recommendations
 - [ ] add sizes to products
-- [ ]
+- [ ] include price impact

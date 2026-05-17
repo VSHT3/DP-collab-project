@@ -53,6 +53,30 @@ export default function ProductDetail() {
               ? <p className="text-xl text-slate-700 font-medium">€{product.price.toFixed(2)} per pack</p>
               : <p className="text-base text-slate-600 mt-2">Price TBD</p>
             }
+            {product.price !== null && product.sizes.length > 0 && (
+              <p className="text-sm text-slate-500 mt-1">
+                €{(product.price / product.sizes.reduce((sum, s) => sum + s.pads, 0)).toFixed(2)} per pad
+              </p>
+            )}
+            {product.sizes.length > 0 && (
+              <div className="mt-4 space-y-1">
+                {product.sizes.map(s => (
+                  <div key={s.label} className="flex items-center gap-3 text-sm">
+                    <span className="text-slate-600 font-medium min-w-[100px]">{s.label}</span>
+                    <div className="flex gap-1">
+                      {Array.from({ length: 7 }, (_, i) => (
+                        <span
+                          key={i}
+                          className="w-3 h-3 rounded-full border border-slate-300"
+                          style={i < s.absorbency ? { background: product.color, borderColor: product.color } : {}}
+                        />
+                      ))}
+                    </div>
+                    <span className="text-slate-500">{s.pads} pad{s.pads !== 1 ? 's' : ''}</span>
+                  </div>
+                ))}
+              </div>
+            )}
             <div className="mt-6 flex items-center gap-3">
               <span className="w-4 h-4 rounded-full" style={{ background: product.color }} />
               <span className="text-sm font-medium text-slate-700">{productTypeLabels[product.type]}</span>

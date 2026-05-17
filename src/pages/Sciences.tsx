@@ -39,7 +39,7 @@ const subjects = [
     rq: 'Which product type absorbs the most fluid per gram of dry mass, and how quickly?',
     methodology: [
       'Weighed each product dry (digital scale, ±0.01 g precision)',
-      'Prepared simulated fluid: 90 mL water + 10 mL corn syrup + food colouring (1:9 ratio)',
+      'Prepared simulated fluid: 40 mL glycerin + 60 mL water + food colouring (4:6 ratio)',
       'Slowly poured fluid until saturation, recorded total volume',
       'Let excess drip for 5 seconds, then weighed wet product',
       'Calculated absorption capacity = (wet mass − dry mass) / dry mass',

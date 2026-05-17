@@ -9,6 +9,12 @@ export type ProductKey =
 
 export type ProductType = "organic" | "commercial" | "cloth" | "tampon";
 
+export interface ProductSize {
+  label: string;
+  absorbency: number;
+  pads: number;
+}
+
 export interface ProductData {
   label: string;
   brand: string;
@@ -41,6 +47,7 @@ export interface ProductData {
   absorptionRate: number | null;
   absorptionRateRank: number | null;
   absorptionRateTrials: [number, number, number] | null;
+  sizes: ProductSize[];
 }
 
 export const products: Record<ProductKey, ProductData> = {
@@ -76,6 +83,7 @@ export const products: Record<ProductKey, ProductData> = {
     absorptionRate: 44.23,
     absorptionRateRank: 7,
     absorptionRateTrials: [42.27, 44.63, 45.78],
+    sizes: [{ label: "3 Maxi", absorbency: 6, pads: 14 }],
   },
   always_platinum: {
     label: "Always Platinum",
@@ -109,6 +117,7 @@ export const products: Record<ProductKey, ProductData> = {
     absorptionRate: 7.76,
     absorptionRateRank: 1,
     absorptionRateTrials: [6.89, 8.65, 7.74],
+    sizes: [{ label: "Size 3 Super Extra", absorbency: 5, pads: 12 }],
   },
   ria_pad: {
     label: "Ria Ultra Pad",
@@ -142,6 +151,7 @@ export const products: Record<ProductKey, ProductData> = {
     absorptionRate: 13.73,
     absorptionRateRank: 5,
     absorptionRateTrials: [13.35, 13.72, 14.13],
+    sizes: [{ label: "Normal Plus", absorbency: 4, pads: 18 }],
   },
   ria_tampon: {
     label: "Ria Tampon",
@@ -175,6 +185,7 @@ export const products: Record<ProductKey, ProductData> = {
     absorptionRate: 12.73,
     absorptionRateRank: 4,
     absorptionRateTrials: [13.48, 11.70, 13.02],
+    sizes: [{ label: "Normal", absorbency: 3, pads: 16 }],
   },
   ob_tampon: {
     label: "o.b. Tampon",
@@ -208,6 +219,7 @@ export const products: Record<ProductKey, ProductData> = {
     absorptionRate: 14.07,
     absorptionRateRank: 6,
     absorptionRateTrials: [12.77, 14.61, 14.84],
+    sizes: [{ label: "Normal", absorbency: 3, pads: 16 }],
   },
   jessa_cotton: {
     label: "Jessa Cotton Pad",
@@ -241,6 +253,7 @@ export const products: Record<ProductKey, ProductData> = {
     absorptionRate: 8.6,
     absorptionRateRank: 2,
     absorptionRateTrials: [10.48, 7.73, 7.60],
+    sizes: [{ label: "Normal", absorbency: 4, pads: 14 }],
   },
   jessa_cloth: {
     label: "Jessa Cloth Pad",
@@ -274,6 +287,7 @@ export const products: Record<ProductKey, ProductData> = {
     absorptionRate: 10.08,
     absorptionRateRank: 3,
     absorptionRateTrials: [8.87, 10.87, 10.52],
+    sizes: [{ label: "Normal", absorbency: 4, pads: 1 }],
   },
 };
 

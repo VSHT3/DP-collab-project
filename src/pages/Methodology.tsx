@@ -40,7 +40,7 @@ const sections = [
     emoji: "📐",
     aim: "Quantify mechanical performance: absorbency capacity, and absorption rate.",
     method: [
-      "Prepared simulated fluid: 90 mL water + 10 mL corn syrup + 2–3 drops red food colouring (1:9 ratio)",
+      "Prepared simulated fluid: 40 mL glycerin + 60 mL water + 2–3 drops red food colouring (4:6 ratio)",
       "Stirred until well mixed",
       "Experiment 1 — Absorption Capacity: weighed dry product, poured fluid until saturation, let drip 5s, weighed wet, calculated g/g",
       "Experiment 2 — Absorption Rate: measured time for exactly 5 mL fluid to be fully absorbed (no shiny surface visible)",
