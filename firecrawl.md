@@ -269,8 +269,8 @@ parameters, and SDKs:
 
 ## Session-specific auth
 
-Use this API key for this onboarding session:
+Set your API key in `.env`:
 
 ```dotenv
-FIRECRAWL_API_KEY=fc-086ba0d6e9c948a2b88363a6a52da4bd
+FIRECRAWL_API_KEY=your-api-key-here
 ```
