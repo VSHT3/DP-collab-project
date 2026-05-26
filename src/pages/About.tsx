@@ -1,7 +1,11 @@
 const team = [
   { name: "Hui Ru Yang", subject: "Physics", image: "/pictures/lab-21.jpeg" },
-  { name: "Anna Udičová", subject: "Chemistry" },
-  { name: "Ela Sabolová", subject: "Biology" },
+  {
+    name: "Anna Udičová",
+    subject: "Chemistry",
+    image: "/pictures/anicka.jpeg",
+  },
+  { name: "Ela Sabolová", subject: "Biology", image: "/pictures/ela.jpeg" },
   { name: "Milana Golubková", subject: "Environmental Systems and Societies" },
   { name: "Alexander Hvezdoň Štefko", subject: "Computer Science" },
 ];
@@ -28,14 +32,20 @@ export default function About() {
           {team.map(({ name, subject, image }) => (
             <div
               key={name}
-              className="border border-slate-200 rounded-2xl p-6 shadow-sm hover:-translate-y-0.5 hover:shadow-md transition-all duration-200"
+              className="border border-slate-200 rounded-2xl p-6 shadow-sm hover:-translate-y-0.5 hover:shadow-md transition-all duration-200 flex items-center gap-5"
             >
-              <div className="w-16 h-16 rounded-full bg-rose-50 flex items-center justify-center mb-4 overflow-hidden">
+              <div className="flex-1 min-w-0">
+                <h3 className="text-lg font-bold text-slate-950 mb-1">
+                  {name}
+                </h3>
+                <p className="text-base text-rose-500 font-medium">{subject}</p>
+              </div>
+              <div className="w-20 h-28 shrink-0 rounded-2xl bg-rose-50 flex items-center justify-center overflow-hidden">
                 {image ? (
                   <img
                     src={image}
                     alt={name}
-                    className="w-full h-full object-cover"
+                    className={`w-full h-full object-cover ${image === "/pictures/ela.jpeg" ? "scale-[3] origin-top" : ""}`}
                   />
                 ) : (
                   <span className="text-2xl font-bold text-rose-500">
@@ -47,8 +57,6 @@ export default function About() {
                   </span>
                 )}
               </div>
-              <h3 className="text-lg font-bold text-slate-950 mb-1">{name}</h3>
-              <p className="text-base text-rose-500 font-medium">{subject}</p>
             </div>
           ))}
         </div>

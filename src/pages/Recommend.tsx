@@ -11,6 +11,7 @@ const defaultWeights: Weights = {
   rate: 5,
   performance: 5,
   environment: 5,
+  cost: 5,
 }
 
 function computeScores(weights: Weights): { key: ProductKey; score: number; hasPending: boolean }[] {
@@ -44,9 +45,11 @@ export default function Recommend() {
           Drag the sliders to reflect what matters most to you. The tool ranks all
           seven products based on our research data.
         </p>
-        <p className="text-sm text-amber-600 mt-2 font-medium">
-          Only Physics data is collected so far. Pending axes are treated as 0 and marked with *.
-        </p>
+        {ranked.some(r => r.hasPending) && (
+          <p className="text-sm text-amber-600 mt-2 font-medium">
+            Some axes have pending data (treated as 0, marked with *).
+          </p>
+        )}
       </div>
 
       <div className="border border-slate-200 rounded-2xl p-8 shadow-sm mb-8">
@@ -143,24 +146,27 @@ export default function Recommend() {
               Score Breakdown — {products[winner.key].label}
             </h3>
             <div className="space-y-3">
-              {mainAxes.map(({ key, label }) => {
-                const rawScore = products[winner.key].scores[key]
-                const weight = weights[key]
-                const isPending = rawScore === null
-                return (
-                  <div key={key} className="flex items-center justify-between text-base">
-                    <span className="text-slate-700 font-medium">{label}</span>
-                    <div className="flex items-center gap-4">
-                      <span className="text-slate-600 text-sm">
-                        score {isPending ? '— (pending)' : rawScore.toFixed(1)} × priority {weight}
-                      </span>
-                      <span className="font-bold text-slate-950 w-12 text-right">
-                        {isPending ? '—' : (rawScore * weight).toFixed(1)}
-                      </span>
+              {(() => {
+                const totalWeight = mainAxes.reduce((sum, a) => sum + weights[a.key], 0) || 1
+                return mainAxes.map(({ key, label }) => {
+                  const rawScore = products[winner.key].scores[key]
+                  const weight = weights[key]
+                  const isPending = rawScore === null
+                  return (
+                    <div key={key} className="flex items-center justify-between text-base">
+                      <span className="text-slate-700 font-medium">{label}</span>
+                      <div className="flex items-center gap-4">
+                        <span className="text-slate-600 text-sm">
+                          score {isPending ? '— (pending)' : rawScore.toFixed(1)} × {weight}/{totalWeight}
+                        </span>
+                        <span className="font-bold text-slate-950 w-12 text-right">
+                          {isPending ? '—' : ((weight / totalWeight) * (rawScore ?? 0)).toFixed(2)}
+                        </span>
+                      </div>
                     </div>
-                  </div>
-                )
-              })}
+                  )
+                })
+              })()}
             </div>
           </div>
 

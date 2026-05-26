@@ -55,7 +55,7 @@ export default function ProductDetail() {
             }
             {product.price !== null && product.sizes.length > 0 && (
               <p className="text-sm text-slate-500 mt-1">
-                €{(product.price / product.sizes.reduce((sum, s) => sum + s.pads, 0)).toFixed(2)} per pad
+                €{(product.price / product.sizes.reduce((sum, s) => sum + s.pads, 0)).toFixed(2)} per unit · {product.subMetrics.annualCost !== null ? `~€${product.subMetrics.annualCost.toFixed(0)}/year` : ''} (based on ~22 uses × 13 cycles/year)
               </p>
             )}
             {product.sizes.length > 0 && (
@@ -130,7 +130,7 @@ export default function ProductDetail() {
         </div>
 
         {/* Absorption rate trials */}
-        {product.absorptionRateTrials && (
+        {product.absorptionRateTrials && product.absorptionRate !== null && (
           <div className="border border-slate-200 rounded-2xl p-8 shadow-sm mb-14">
             <h2 className="text-xl font-bold text-slate-950 mb-4">Absorption Rate — Raw Trials</h2>
             <div className="grid grid-cols-4 gap-6">
@@ -142,7 +142,7 @@ export default function ProductDetail() {
               ))}
               <div className="text-center">
                 <p className="text-sm text-slate-600 font-medium mb-1">Average</p>
-                <p className="text-2xl font-bold text-slate-900">{product.absorptionRate!.toFixed(2)} s</p>
+                <p className="text-2xl font-bold text-slate-900">{product.absorptionRate.toFixed(2)} s</p>
               </div>
             </div>
           </div>

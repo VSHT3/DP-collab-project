@@ -1,6 +1,5 @@
 - [ ] different ratio in the experiment
-- [ ] differnt product descriptions
-- [ ] upgrade graphs in products to match graph in dataresults
+- [ ] different product descriptions
 - [ ] fix recommendations
-- [ ] add sizes to products
-- [ ] include price impact
+- [x] include price impact in recommendation scores (added Cost axis with annual cost computation, auto-appears on all pages)
+- [x] copy team photos (anicka.jpeg, ela.jpeg) from /pictures/ into /public/pictures/ (broken images on /about)

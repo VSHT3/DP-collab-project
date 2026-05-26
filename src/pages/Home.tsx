@@ -87,11 +87,11 @@ export default function Home() {
         </Link>
       </div>
 
-      {/* Six Axes */}
+      {/* Main Axes */}
       <h2 className="text-2xl font-bold text-slate-950 mb-6">
-        Our Four Evaluation Axes
+        Our Evaluation Axes
       </h2>
-      <div className="grid sm:grid-cols-2 xl:grid-cols-4 gap-6 mb-16">
+      <div className="grid sm:grid-cols-2 xl:grid-cols-5 gap-6 mb-16">
         {mainAxes.map(({ key, label, description }) => (
           <Link
             key={key}

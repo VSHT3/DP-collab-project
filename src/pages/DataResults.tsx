@@ -117,16 +117,17 @@ export default function DataResults() {
     return products[k].subMetrics[key];
   }
 
-  const lowerBetterKeys: SubMetricKey[] = ["colonyCount", "rate", "co2e"];
+  const lowerBetterKeys: SubMetricKey[] = ["colonyCount", "co2e", "tssRisk"];
 
   function normalizeSubMetric(
     key: SubMetricKey,
     val: number | null,
     allVals: (number | null)[],
   ): number {
-    if (val === null) return 0;
+    if (val === null) return NaN;
+    if (key === "capacity" || key === "rate" || key === "skinIrritation") return val;
     const nums = allVals.filter((v): v is number => v !== null);
-    if (nums.length === 0) return 0;
+    if (nums.length === 0) return NaN;
     const mn = Math.min(...nums);
     const mx = Math.max(...nums);
     if (mn === mx) return 5;
@@ -204,7 +205,7 @@ export default function DataResults() {
               Overall Scores
             </h2>
             <p className="text-base text-slate-700 mb-4">
-              Safety, Chemistry, Performance, Environment
+              Safety, Chemistry, Performance, Environment, Cost
             </p>
             <ResponsiveContainer width="100%" height={400}>
               <RadarChart data={mainRadarData}>
@@ -380,7 +381,12 @@ export default function DataResults() {
                         border: "1px solid #f1f5f9",
                         fontSize: 13,
                       }}
-                      formatter={(v: number) => [`${v} ${unit}`, label]}
+                      formatter={(v: number) => [
+                        (key === 'capacity' || key === 'rate')
+                          ? `${(v as number).toFixed(1)} / 10`
+                          : `${(v as number).toFixed(2)} ${unit}`,
+                        label,
+                      ]}
                     />
                     <Bar dataKey="value" radius={[4, 4, 0, 0]}>
                       {barData.map((entry, i) => (

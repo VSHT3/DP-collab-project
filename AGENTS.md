@@ -1,77 +1,56 @@
-
-# CLAUDE.md
-
-This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+# AGENTS.md
 
 ## Commands
 
 ```bash
 npm run dev      # dev server at localhost:5173
-npm run build    # tsc type-check + vite production build → dist/
+npm run build    # tsc && vite build — tsc failures block the build
 npm run preview  # serve dist/ locally
 ```
 
-No test suite or linter configured.
+No test suite, no linter. Verification = `npm run build` (catches type errors).
 
 ## Architecture
 
-Static SPA — no backend, no API. All data is hardcoded.
+Static SPA. No backend, no API. All data hardcoded.
 
-**Single source of truth:** `src/data/products.ts`
-- Defines `ProductKey`, `ProductData`, `AxisKey` types
-- `products` object holds all scores (0–10) and labels for all four products
-- `axes` array defines the four evaluation dimensions (safety, chemistry, performance, environment)
-- **When real experimental data arrives, only this file needs to change.** All charts, tables, and the recommendation tool consume it directly.
+**Single source of truth: `src/data/products.ts`**
+- Types: `ProductKey`, `ProductData`, `AxisKey`, `SubMetricKey`
+- `products` — scores (0–10), raw sub-metrics, labels for all **7** products (`naturella_pad`, `always_platinum`, `ria_pad`, `ria_tampon`, `ob_tampon`, `jessa_cotton`, `jessa_cloth`)
+- `axes` — 6 eval dimensions: safety, chemistry, capacity, rate, performance, environment
+- `mainAxes` — 4 composite scores: safety, chemistry, performance, environment
+- `subMetrics` — 8 raw measurements (colonyCount, ph, tssRisk, skinIrritation, capacity, rate, massLoss, co2e) normalized 0–10 for radar
+- `brandCoverage`, `galleryImages`, `productTypeRankings` also exported here
+- **Data updates: change only this file.** All charts, tables, recommendation tool read it directly.
 
-**Pages** (`src/pages/`):
-- `Home` — hero, global issue framing, axes overview
-- `Methodology` — per-subject procedure descriptions (hardcoded text, update with actual methods)
-- `DataResults` — Recharts radar + per-axis bar charts + comparison table, all driven by `products.ts`
-- `Recommend` — weighted score tool: user sets per-axis priority (0–10 sliders), `computeScores()` normalises weights and ranks products
-- `Conclusions` — per-axis winners, proposed improved product (placeholder text, update last)
+**Routes** (`src/App.tsx`):
 
-**Recommendation algorithm** (`Recommend.tsx:13`):
-```
-score(product) = Σ (weight[axis] / totalWeight) × product.scores[axis]
-```
-Pure client-side, no state outside the component.
+| Path | Component |
+|---|---|
+| `/` | `Home` |
+| `/sciences` | `Sciences` |
+| `/products` | `Products` |
+| `/products/:id` | `ProductDetail` |
+| `/data` | `DataResults` |
+| `/recommend` | `Recommend` |
+| `/conclusions` | `Conclusions` |
+| `/about` | `About` |
 
-**Routing:** React Router v6, flat routes in `App.tsx`. No nested routes.
+Note: `src/pages/Methodology.tsx` exists but has **no route** — not accessible in the app.
 
-**Styling:** Tailwind v3, rose accent palette (`rose-500` = `#e8738a`), slate text. No CSS modules or styled-components.
+**Key page details:**
+- `DataResults` — Recharts radar + bar charts + comparison table + correlation explorer. Uses `NaN` for missing radar data (creates visual gaps, not center-collapse).
+- `Recommend` — `computeScores()` at line 13: `score = Σ (weight[axis] / totalWeight) × scores[axis]`. Pure client-side.
+- `Conclusions` — per-axis winners + proposed improved product (placeholder text).
 
+**Styling:** Tailwind v3. Rose accent (`rose-500` = `#e8738a`, custom palette in `tailwind.config.js`). Slate text. Font: Inter. No CSS modules.
 
-#Behavioral guidelines
-Tradeoff: Guidelines bias toward caution over speed. For trivial tasks, use judgment.
-## 1. Think Before Coding
-Before implementing:
-State assumptions. If uncertain, ask.
-Multiple interpretations → present them, don't pick silently.
-Simpler approach exists → say so. Push back when warranted.
-Unclear → name what’s confusing. Ask.
-## 2. Simplicity First
-Minimum code that solves problem. Nothing speculative.
-No features beyond what was asked.
-No abstractions for single-use code.
-No unrequested “flexibility” or “configurability”.
-No error handling for impossible scenarios.
-200 lines when 50 works → rewrite.
-## 3. Surgical Changes
-Touch only what you must. Clean up only your own mess.
-Editing existing code:
-Don't "improve" adjacent code, comments, or formatting.
-Don't refactor things not broken.
-Match existing style.
-Unrelated dead code → mention, don’t delete.
-Your changes create orphans:
-Remove imports/variables/functions YOUR changes made unused.
-Don’t remove pre-existing dead code unless asked.
-## 4. Goal-Driven Execution
-Transform tasks to verifiable goals:
-"Add validation" → "Write tests for invalid inputs, then make them pass"
-"Fix the bug" → "Write test reproducing it, then make it pass"
-"Refactor X" → "Ensure tests pass before and after"
-Multi-step tasks, state brief plan:
-1. [Step] → verify: [check]
-2. [Step] → verify: [check]
-3. [Step] → verify: [check]
+**Routing:** React Router v6, flat. `ScrollToTop` component resets scroll on every navigation.
+
+## TypeScript gotchas
+
+`tsconfig.json` has `strict: true` + `noUnusedLocals: true` + `noUnusedParameters: true`. Any unused import or variable fails `tsc`. Remove unused imports when editing.
+
+## Deployment
+
+Production hosted on Vercel from `main` branch. This is the dev branch — changes reach prod via merge to `main`.
