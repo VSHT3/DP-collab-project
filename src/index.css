@@ -3,6 +3,19 @@
 @tailwind utilities;
 
 @layer base {
+  :root {
+    --chart-background: #ffffff;
+    --chart-foreground: #0f172a;
+    --chart-foreground-muted: #475569;
+    --chart-label: #1e293b;
+    --chart-grid: #94a3b8;
+    --border: #94a3b8;
+    --chart-1: #34d399;
+    --chart-2: #60a5fa;
+    --chart-3: #f59e0b;
+    --chart-4: #a78bfa;
+    --chart-5: #f472b6;
+  }
   body {
     @apply bg-white text-slate-800 font-sans antialiased;
   }

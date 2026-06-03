@@ -115,9 +115,21 @@ export default function BiologyDetail() {
             </span>
           </div>
           <h1 className="text-5xl font-bold text-slate-950 mb-3">Biology</h1>
-          <p className="text-xl text-rose-500 font-medium italic max-w-4xl">
-            Which product type produces the least bacterial growth after exposure to simulated menstrual fluid?
+          <p className="text-xl text-rose-500 font-medium italic max-w-5xl whitespace-nowrap">
+            How do menstrual products compare across bacterial growth, chemical exposure, TSS risk, and skin irritation?
           </p>
+        </div>
+
+        {/* Legend + Disclaimer */}
+        <div className="mb-6 flex flex-col sm:flex-row sm:items-start justify-between gap-4">
+          <p className="text-sm text-black italic">
+            Brand comparison from the file (ratings are by product type/material, not lab tests of these exact brands).
+          </p>
+          <div className="flex gap-2 shrink-0">
+            <span className="px-4 py-1.5 text-sm font-bold uppercase rounded-full bg-rose-100 text-rose-700">HIGH</span>
+            <span className="px-4 py-1.5 text-sm font-bold uppercase rounded-full bg-orange-100 text-orange-700">MODERATE</span>
+            <span className="px-4 py-1.5 text-sm font-bold uppercase rounded-full bg-slate-100 text-black">LOW</span>
+          </div>
         </div>
 
         {/* Chemical Exposure Panel */}
@@ -162,18 +174,6 @@ export default function BiologyDetail() {
                 claims on reusable products.
               </p>
             </div>
-          </div>
-        </div>
-
-        {/* Legend + Disclaimer */}
-        <div className="mb-6 flex flex-col sm:flex-row sm:items-start justify-between gap-4">
-          <p className="text-sm text-black italic">
-            Brand comparison from the file (ratings are by product type/material, not lab tests of these exact brands).
-          </p>
-          <div className="flex gap-2 shrink-0">
-            <span className="px-4 py-1.5 text-sm font-bold uppercase rounded-full bg-rose-100 text-rose-700">HIGH</span>
-            <span className="px-4 py-1.5 text-sm font-bold uppercase rounded-full bg-orange-100 text-orange-700">MODERATE</span>
-            <span className="px-4 py-1.5 text-sm font-bold uppercase rounded-full bg-slate-100 text-black">LOW</span>
           </div>
         </div>
 

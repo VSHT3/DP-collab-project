@@ -11,6 +11,7 @@ import DataResults from './pages/DataResults'
 import Recommend from './pages/Recommend'
 import Conclusions from './pages/Conclusions'
 import About from './pages/About'
+import RadarTest from './pages/RadarTest'
 
 function ScrollToTop() {
   const { pathname } = useLocation()
@@ -36,6 +37,7 @@ export default function App() {
           <Route path="/recommend"          element={<Recommend />} />
           <Route path="/conclusions"        element={<Conclusions />} />
           <Route path="/about"              element={<About />} />
+          <Route path="/radar-test"         element={<RadarTest />} />
         </Routes>
       </main>
       <Footer />

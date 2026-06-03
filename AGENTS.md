@@ -38,9 +38,32 @@ Static SPA. No backend, no API. All data hardcoded.
 | `/about` | `About` |
 
 **Key page details:**
-- `DataResults` — Recharts radar + bar charts + comparison table + correlation explorer. Uses `NaN` for missing radar data (creates visual gaps, not center-collapse).
+- `DataResults` — Recharts bar charts + comparison table + correlation explorer. Radar charts use Bklit UI (not Recharts).
 - `Recommend` — `computeScores()` at line 17: `score = Σ (weight[axis] / totalWeight) × scores[axis]`. Pure client-side.
 - `Conclusions` — per-axis winners + proposed improved product (placeholder text).
+
+**Charts:** Bklit UI Radar Chart (`@bklit/radar-chart` via shadcn registry).
+- Components in `src/components/charts/` — `radar-chart.tsx`, `radar-grid.tsx`, `radar-axis.tsx`, `radar-labels.tsx`, `radar-area.tsx`.
+- Import pattern:
+  ```tsx
+  import { RadarChart } from "../components/charts/radar-chart"
+  import { RadarGrid } from "../components/charts/radar-grid"
+  import { RadarAxis } from "../components/charts/radar-axis"
+  import { RadarLabels } from "../components/charts/radar-labels"
+  import { RadarArea } from "../components/charts/radar-area"
+
+  <RadarChart data={data} metrics={metrics} size={400}>
+    <RadarGrid />
+    <RadarAxis />
+    <RadarLabels />
+    {data.map((item, i) => <RadarArea key={item.label} index={i} />)}
+  </RadarChart>
+  ```
+- **Scale:** Bklit expects 0–100, our scores are 0–10 → multiply by 10 before passing.
+- **Data shape:** `{ label, color, values: { [metricKey]: number } }` (0–100).
+- **Metrics shape:** `{ key, label }`.
+- **CSS vars required in `src/index.css` `:root`:** `--chart-background`, `--chart-foreground`, `--chart-foreground-muted`, `--chart-label`, `--chart-grid`, `--border`, `--chart-1` through `--chart-5`. Missing vars make grid/axes invisible.
+- `/radar-test` route exists for testing new chart configurations.
 
 **Styling:** Tailwind v3. Rose accent (`rose-500` = `#e8738a`, custom palette in `tailwind.config.js`). Slate text. Font: Inter (Google Fonts via `index.html`). No CSS modules.
 
