@@ -16,10 +16,10 @@ Static SPA. No backend, no API. All data hardcoded.
 
 **Single source of truth: `src/data/products.ts`**
 - Types: `ProductKey`, `ProductData`, `AxisKey`, `SubMetricKey`
-- `products` — scores (0–10), raw sub-metrics, labels for all **7** products (`naturella_pad`, `always_platinum`, `ria_pad`, `ria_tampon`, `ob_tampon`, `jessa_cotton`, `jessa_cloth`)
-- `axes` — 6 eval dimensions: safety, chemistry, capacity, rate, performance, environment
-- `mainAxes` — 4 composite scores: safety, chemistry, performance, environment
-- `subMetrics` — 8 raw measurements (colonyCount, ph, tssRisk, skinIrritation, capacity, rate, massLoss, co2e) normalized 0–10 for radar
+- `products` — 7 products (`naturella_pad`, `always_platinum`, `ria_pad`, `ria_tampon`, `ob_tampon`, `jessa_cotton`, `jessa_cloth`). Scores (0–10), raw sub-metrics, labels, details.
+- `axes` — 7 eval dimensions: safety, chemistry, capacity, rate, performance, environment, cost
+- `mainAxes` — 5 composite scores: safety, chemistry, performance, environment, cost
+- `subMetrics` — 9 raw measurements (colonyCount, ph, tssRisk, skinIrritation, capacity, rate, massLoss, co2e, annualCost) normalized 0–10 for radar
 - `brandCoverage`, `galleryImages`, `productTypeRankings` also exported here
 - **Data updates: change only this file.** All charts, tables, recommendation tool read it directly.
 
@@ -29,6 +29,7 @@ Static SPA. No backend, no API. All data hardcoded.
 |---|---|
 | `/` | `Home` |
 | `/sciences` | `Sciences` |
+| `/sciences/:slug` | `ScienceDetail` |
 | `/products` | `Products` |
 | `/products/:id` | `ProductDetail` |
 | `/data` | `DataResults` |
@@ -36,14 +37,12 @@ Static SPA. No backend, no API. All data hardcoded.
 | `/conclusions` | `Conclusions` |
 | `/about` | `About` |
 
-Note: `src/pages/Methodology.tsx` exists but has **no route** — not accessible in the app.
-
 **Key page details:**
 - `DataResults` — Recharts radar + bar charts + comparison table + correlation explorer. Uses `NaN` for missing radar data (creates visual gaps, not center-collapse).
-- `Recommend` — `computeScores()` at line 13: `score = Σ (weight[axis] / totalWeight) × scores[axis]`. Pure client-side.
+- `Recommend` — `computeScores()` at line 17: `score = Σ (weight[axis] / totalWeight) × scores[axis]`. Pure client-side.
 - `Conclusions` — per-axis winners + proposed improved product (placeholder text).
 
-**Styling:** Tailwind v3. Rose accent (`rose-500` = `#e8738a`, custom palette in `tailwind.config.js`). Slate text. Font: Inter. No CSS modules.
+**Styling:** Tailwind v3. Rose accent (`rose-500` = `#e8738a`, custom palette in `tailwind.config.js`). Slate text. Font: Inter (Google Fonts via `index.html`). No CSS modules.
 
 **Routing:** React Router v6, flat. `ScrollToTop` component resets scroll on every navigation.
 
@@ -53,4 +52,4 @@ Note: `src/pages/Methodology.tsx` exists but has **no route** — not accessible
 
 ## Deployment
 
-Production hosted on Vercel from `main` branch. This is the dev branch — changes reach prod via merge to `main`.
+Vercel (git push to `main` triggers auto-deploy). Standard Vite SPA — no config needed. `Dockerfile`, `nginx.conf`, `deploy.sh`, `DEPLOY_COOLIFY.md` are legacy.

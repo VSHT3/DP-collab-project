@@ -2,4 +2,30 @@ node_modules/
 dist/
 .DS_Store
 *.local
+*.log
+.env
+.env.*
+*.tsbuildinfo
+
+# Research / working documents (not part of website)
+*.pdf
+*.docx
+docs/
+data.md
+document.md
+experimental-methods-and-data.md
+firecrawl.md
+health-research-review.md
+something\ new.md
+# Agent / tooling config
+.claude/
+.firecrawl/
 .superpowers/
+
+# Legacy deployment (Vercel replaced these)
+deploy.sh
+start-ngrok.sh
+webhook.js
+Dockerfile
+nginx.conf
+DEPLOY_COOLIFY.md
