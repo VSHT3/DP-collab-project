@@ -61,7 +61,7 @@ export const products: Record<ProductKey, ProductData> = {
     brand: "Naturella",
     type: "commercial",
     price: 3.59,
-    color: "#34d399",
+    color: "#2d8a4e",
     image: "/pictures/products/naturella.jpeg",
     scores: {
       safety: 5.0,
@@ -100,7 +100,7 @@ export const products: Record<ProductKey, ProductData> = {
     brand: "Always",
     type: "commercial",
     price: 3.79,
-    color: "#60a5fa",
+    color: "#4a7dc4",
     image: "/pictures/products/always plat.jpeg",
     scores: {
       safety: 5.0,
@@ -139,7 +139,7 @@ export const products: Record<ProductKey, ProductData> = {
     brand: "Ria",
     type: "commercial",
     price: 3.69,
-    color: "#22d3ee",
+    color: "#3a9b9b",
     image: "/pictures/products/ria ultra.jpeg",
     scores: {
       safety: 5.0,
@@ -178,7 +178,7 @@ export const products: Record<ProductKey, ProductData> = {
     brand: "Ria",
     type: "tampon",
     price: 2.39,
-    color: "#e879f9",
+    color: "#b5569e",
     image: "/pictures/products/ria tampon.jpeg",
     scores: {
       safety: 2.5,
@@ -218,7 +218,7 @@ export const products: Record<ProductKey, ProductData> = {
     brand: "o.b.",
     type: "tampon",
     price: 4.45,
-    color: "#a78bfa",
+    color: "#7c6db8",
     image: "/pictures/products/ob.jpeg",
     scores: {
       safety: 2.5,
@@ -258,7 +258,7 @@ export const products: Record<ProductKey, ProductData> = {
     brand: "Jessa",
     type: "organic",
     price: 3.95,
-    color: "#fb923c",
+    color: "#c97d3a",
     image: "/pictures/products/jessa cotton.jpeg",
     scores: {
       safety: 7.5,
@@ -297,7 +297,7 @@ export const products: Record<ProductKey, ProductData> = {
     brand: "Jessa",
     type: "cloth",
     price: 2.15,
-    color: "#f43f5e",
+    color: "#c94d58",
     image: "/pictures/products/jessa nature.jpeg",
     scores: {
       safety: 8.5,

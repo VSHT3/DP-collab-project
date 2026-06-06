@@ -1,9 +1,11 @@
 import { useParams, Link } from 'react-router-dom'
-import {
-  RadarChart, Radar, PolarGrid, PolarAngleAxis, PolarRadiusAxis,
-  ResponsiveContainer,
-} from 'recharts'
 import { products, axes, productTypeLabels, type ProductKey } from '../data/products'
+import { RadarChart as BklitRadarChart } from "../components/charts/radar-chart"
+import { RadarGrid } from "../components/charts/radar-grid"
+import { RadarAxis } from "../components/charts/radar-axis"
+import { RadarLabels } from "../components/charts/radar-labels"
+import { RadarArea } from "../components/charts/radar-area"
+import { RadarTooltip } from "../components/charts/radar-tooltip"
 
 export default function ProductDetail() {
   const { id } = useParams<{ id: string }>()
@@ -20,11 +22,11 @@ export default function ProductDetail() {
     )
   }
 
-  const radarData = axes.map(({ key, label }) => ({
-    axis: label,
-    score: product.scores[key] ?? 0,
-    pending: product.scores[key] === null,
-  }))
+  const bklitData = [{
+    label: product.label,
+    color: product.color,
+    values: Object.fromEntries(axes.map(a => [a.key, product.scores[a.key] ?? 0])),
+  }]
 
   const hasAnyPendingScore = axes.some(a => product.scores[a.key] === null)
 
@@ -92,20 +94,15 @@ export default function ProductDetail() {
             {hasAnyPendingScore && (
               <p className="text-sm text-amber-600 mb-4 font-medium">Axes with no data yet are shown as 0</p>
             )}
-            <ResponsiveContainer width="100%" height={480}>
-              <RadarChart data={radarData}>
-                <PolarGrid stroke="#e2e8f0" />
-                <PolarAngleAxis dataKey="axis" tick={{ fontSize: 15, fill: '#334155', fontWeight: 600 }} />
-                <PolarRadiusAxis domain={[0, 10]} tick={{ fontSize: 13, fill: '#475569' }} />
-                <Radar
-                  dataKey="score"
-                  stroke={product.color}
-                  fill={product.color}
-                  fillOpacity={0.2}
-                  strokeWidth={3}
-                />
-              </RadarChart>
-            </ResponsiveContainer>
+            <div className="flex justify-center">
+              <BklitRadarChart data={bklitData} metrics={axes.map(a => ({ key: a.key, label: a.label }))} size={460}>
+                <RadarGrid />
+                <RadarAxis />
+                <RadarLabels offset={30} fontSize={13} />
+                <RadarArea index={0} />
+                <RadarTooltip />
+              </BklitRadarChart>
+            </div>
           </div>
 
           {/* Quick stats - takes 1/3 */}

@@ -100,12 +100,12 @@ function RadarChartInner({
   const size = Math.min(width, height);
   const radius = (size - margin * 2) / 2;
 
-  // Scale for converting values (0-100) to radius
+  // Scale for converting values (0-11) to radius
   const yScale = useCallback(
     (value: number) => {
       const scale = scaleLinear<number>({
         range: [0, radius],
-        domain: [0, 100],
+        domain: [0, 11],
       });
       return scale(value) ?? 0;
     },
@@ -191,7 +191,7 @@ export function RadarChart({
   data,
   metrics,
   size: fixedSize,
-  levels = 5,
+  levels = 11,
   margin = 60,
   animate = true,
   enterDurationMs = 1100,

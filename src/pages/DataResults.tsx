@@ -1,22 +1,11 @@
 import { useState } from "react";
-import {
-  RadarChart,
-  Radar,
-  PolarGrid,
-  PolarAngleAxis,
-  PolarRadiusAxis,
-  ResponsiveContainer,
-  BarChart,
-  Bar,
-  XAxis,
-  YAxis,
-  CartesianGrid,
-  Tooltip,
-  Legend,
-  Cell,
-  ScatterChart,
-  Scatter,
-} from "recharts";
+import { RadarChart as BklitRadarChart } from "../components/charts/radar-chart"
+import { RadarGrid } from "../components/charts/radar-grid"
+import { RadarAxis } from "../components/charts/radar-axis"
+import { RadarLabels } from "../components/charts/radar-labels"
+import { RadarArea } from "../components/charts/radar-area"
+import { RadarTooltip } from "../components/charts/radar-tooltip"
+import { SimpleBars, type SimpleBarDatum } from "../components/charts/simple-bars"
 import {
   products,
   axes,
@@ -79,11 +68,116 @@ function pearsonR(xs: number[], ys: number[]): number {
   return dx === 0 || dy === 0 ? 0 : num / (dx * dy);
 }
 
+function ScatterPlot({
+  data,
+  xLabel,
+  yLabel,
+  r,
+}: {
+  data: { x: number; y: number; name: string; color: string }[];
+  xLabel: string;
+  yLabel: string;
+  r: number;
+}) {
+  const [hovered, setHovered] = useState<number | null>(null);
+  const h = 300;
+  const pad = { top: 20, right: 20, bottom: 40, left: 44 };
+  const svgW = 600;
+  const innerW = svgW - pad.left - pad.right;
+  const innerH = h - pad.top - pad.bottom;
+  const xScale = (v: number) => pad.left + (v / 10) * innerW;
+  const yScale = (v: number) => pad.top + innerH - (v / 10) * innerH;
+
+  return (
+    <div>
+      <svg
+        width="100%"
+        height={h}
+        viewBox={`0 0 ${svgW} ${h}`}
+        preserveAspectRatio="xMidYMid meet"
+        className="overflow-visible"
+      >
+        {/* Grid */}
+        {[0, 2, 4, 6, 8, 10].map((t) => (
+          <g key={t}>
+            <line
+              x1={xScale(t)} x2={xScale(t)}
+              y1={pad.top} y2={pad.top + innerH}
+              stroke="#e2e8f0" strokeWidth={1} strokeDasharray="4,4"
+            />
+            <line
+              x1={pad.left} x2={pad.left + innerW}
+              y1={yScale(t)} y2={yScale(t)}
+              stroke="#e2e8f0" strokeWidth={1} strokeDasharray="4,4"
+            />
+            <text x={pad.left - 6} y={yScale(t) + 4} textAnchor="end" fill="#475569" fontSize={12}>
+              {t}
+            </text>
+            <text x={xScale(t)} y={h - pad.bottom + 14} textAnchor="middle" fill="#475569" fontSize={12}>
+              {t}
+            </text>
+          </g>
+        ))}
+
+        {/* Axis labels */}
+        <text x={pad.left + innerW / 2} y={h - 6} textAnchor="middle" fill="#334155" fontSize={13} fontWeight={600}>
+          {xLabel}
+        </text>
+        <text x={12} y={pad.top + innerH / 2} textAnchor="middle" fill="#334155" fontSize={13} fontWeight={600} transform={`rotate(-90, 12, ${pad.top + innerH / 2})`}>
+          {yLabel}
+        </text>
+
+        {/* Points */}
+        {data.map((d, i) => {
+          const cx = xScale(d.x);
+          const cy = yScale(d.y);
+          const isHovered = hovered === i;
+          return (
+            <g key={d.name}>
+              <circle
+                cx={cx} cy={cy} r={isHovered ? 9 : 7}
+                fill={d.color} fillOpacity={isHovered ? 1 : hovered !== null ? 0.3 : 0.85}
+                stroke="white" strokeWidth={1.5}
+                style={{ cursor: "pointer", transition: "r 0.1s" }}
+                onMouseEnter={() => setHovered(i)}
+                onMouseLeave={() => setHovered(null)}
+              />
+              {isHovered && (
+                <>
+                  <rect
+                    x={Math.max(2, cx - 60)}
+                    y={Math.max(0, cy - 50)}
+                    width={120} height={40} rx={6}
+                    fill="white" stroke="#e2e8f0" strokeWidth={1}
+                    filter="drop-shadow(0 2px 4px rgba(0,0,0,0.1))"
+                  />
+                  <text x={cx} y={cy - 36} textAnchor="middle" fill="#1e293b" fontSize={13} fontWeight={700}>
+                    {d.name}
+                  </text>
+                  <text x={cx} y={cy - 18} textAnchor="middle" fill="#475569" fontSize={11}>
+                    {xLabel}: {d.x.toFixed(1)} · {yLabel}: {d.y.toFixed(1)}
+                  </text>
+                </>
+              )}
+            </g>
+          );
+        })}
+      </svg>
+      <p className="text-sm text-slate-600 mt-3">
+        Pearson r ={" "}
+        <strong className="text-slate-900">{r.toFixed(3)}</strong>
+        {" · "}
+        {data.length} products with data on both axes
+      </p>
+    </div>
+  );
+}
+
 export default function DataResults() {
   const [sortAxis, setSortAxis] = useState<AxisKey>("performance");
   const [sortDir, setSortDir] = useState<"asc" | "desc">("desc");
   const [visibleProducts, setVisibleProducts] = useState<Set<ProductKey>>(
-    new Set(["naturella_pad", "jessa_cotton"]),
+    new Set(["naturella_pad", "jessa_cloth"]),
   );
   const [xAxis, setXAxis] = useState<AxisKey>("performance");
   const [yAxis, setYAxis] = useState<AxisKey>("environment");
@@ -117,7 +211,7 @@ export default function DataResults() {
     return products[k].subMetrics[key];
   }
 
-  const lowerBetterKeys: SubMetricKey[] = ["colonyCount", "co2e", "tssRisk"];
+  const lowerBetterKeys: SubMetricKey[] = ["colonyCount", "co2e", "tssRisk", "annualCost"];
 
   function normalizeSubMetric(
     key: SubMetricKey,
@@ -135,25 +229,28 @@ export default function DataResults() {
     return lowerBetterKeys.includes(key) ? (1 - raw) * 10 : raw * 10;
   }
 
-  const mainRadarData = mainAxes.map(({ key, label }) => ({
-    axis: label,
-    ...Object.fromEntries(
-      visibleKeys.map((k) => [k, products[k].scores[key] ?? 0]),
+  const mainBklitData = visibleKeys.map((k) => ({
+    label: products[k].label,
+    color: products[k].color,
+    values: Object.fromEntries(
+      mainAxes.map((a) => [a.key, products[k].scores[a.key] ?? 0]),
     ),
   }));
 
-  const subRadarData = subMetrics.map(({ key, label }) => {
-    const allVals = productKeys.map((k) => getSubMetric(k, key));
-    return {
-      axis: label,
-      ...Object.fromEntries(
-        visibleKeys.map((k) => [
-          k,
-          normalizeSubMetric(key, getSubMetric(k, key), allVals),
-        ]),
-      ),
-    };
-  });
+  const subBklitData = visibleKeys.map((k) => ({
+    label: products[k].label,
+    color: products[k].color,
+    values: Object.fromEntries(
+      subMetrics.map((sm) => [
+        sm.key,
+        normalizeSubMetric(
+          sm.key,
+          getSubMetric(k, sm.key),
+          productKeys.map((pk) => getSubMetric(pk, sm.key)),
+        ),
+      ]),
+    ),
+  }));
 
   const sortedKeys = [...productKeys].sort((a, b) => {
     const va = products[a].scores[sortAxis] ?? -1;
@@ -207,32 +304,17 @@ export default function DataResults() {
             <p className="text-base text-slate-700 mb-4">
               Safety, Chemistry, Performance, Environment, Cost
             </p>
-            <ResponsiveContainer width="100%" height={400}>
-              <RadarChart data={mainRadarData}>
-                <PolarGrid stroke="#e2e8f0" />
-                <PolarAngleAxis
-                  dataKey="axis"
-                  tick={{ fontSize: 14, fill: "#334155", fontWeight: 600 }}
-                />
-                <PolarRadiusAxis
-                  domain={[0, 10]}
-                  tick={{ fontSize: 12, fill: "#475569" }}
-                />
-                {visibleKeys.map((k) => (
-                  <Radar
-                    key={k}
-                    name={products[k].label}
-                    dataKey={k}
-                    stroke={products[k].color}
-                    fill={products[k].color}
-                    fillOpacity={0.12}
-                    strokeWidth={2}
-                    isAnimationActive={false}
-                  />
+            <div className="flex justify-center">
+              <BklitRadarChart data={mainBklitData} metrics={mainAxes} size={380}>
+                <RadarGrid />
+                <RadarAxis />
+                <RadarLabels offset={28} fontSize={12} />
+                {mainBklitData.map((item, i) => (
+                  <RadarArea key={item.label} index={i} />
                 ))}
-                <Legend />
-              </RadarChart>
-            </ResponsiveContainer>
+                <RadarTooltip />
+              </BklitRadarChart>
+            </div>
           </div>
 
           {/* Right — specific measurements */}
@@ -243,32 +325,17 @@ export default function DataResults() {
             <p className="text-base text-slate-700 mb-4">
               Metrics from each science
             </p>
-            <ResponsiveContainer width="100%" height={400}>
-              <RadarChart data={subRadarData}>
-                <PolarGrid stroke="#e2e8f0" />
-                <PolarAngleAxis
-                  dataKey="axis"
-                  tick={{ fontSize: 13, fill: "#334155", fontWeight: 600 }}
-                />
-                <PolarRadiusAxis
-                  domain={[0, 10]}
-                  tick={{ fontSize: 12, fill: "#475569" }}
-                />
-                {visibleKeys.map((k) => (
-                  <Radar
-                    key={k}
-                    name={products[k].label}
-                    dataKey={k}
-                    stroke={products[k].color}
-                    fill={products[k].color}
-                    fillOpacity={0.12}
-                    strokeWidth={2}
-                    isAnimationActive={false}
-                  />
+            <div className="flex justify-center">
+              <BklitRadarChart data={subBklitData} metrics={subMetrics} size={380}>
+                <RadarGrid />
+                <RadarAxis />
+                <RadarLabels offset={28} fontSize={12} />
+                {subBklitData.map((item, i) => (
+                  <RadarArea key={item.label} index={i} />
                 ))}
-                <Legend />
-              </RadarChart>
-            </ResponsiveContainer>
+                <RadarTooltip />
+              </BklitRadarChart>
+            </div>
           </div>
         </div>
 
@@ -278,10 +345,10 @@ export default function DataResults() {
         </h2>
         <div className="grid sm:grid-cols-2 gap-6 mb-10">
           {mainAxes.map(({ key, label, description }) => {
-            const barData = productKeys.map((k) => ({
+            const barData: SimpleBarDatum[] = productKeys.map((k) => ({
               name: products[k].label,
-              score: products[k].scores[key] ?? 0,
-              fill: products[k].color,
+              value: products[k].scores[key] ?? 0,
+              color: products[k].color,
             }));
             return (
               <div
@@ -292,44 +359,7 @@ export default function DataResults() {
                   {label}
                 </h3>
                 <p className="text-sm text-slate-700 mb-4">{description}</p>
-                <ResponsiveContainer width="100%" height={240}>
-                  <BarChart
-                    data={barData}
-                    margin={{ top: 0, right: 0, left: -20, bottom: 40 }}
-                  >
-                    <CartesianGrid
-                      strokeDasharray="3 3"
-                      stroke="#e2e8f0"
-                      vertical={false}
-                    />
-                    <XAxis
-                      dataKey="name"
-                      tick={{ fontSize: 11, fill: "#475569" }}
-                      angle={-30}
-                      textAnchor="end"
-                    />
-                    <YAxis
-                      domain={[0, 10]}
-                      tick={{ fontSize: 12, fill: "#475569" }}
-                    />
-                    <Tooltip
-                      contentStyle={{
-                        borderRadius: 8,
-                        border: "1px solid #f1f5f9",
-                        fontSize: 13,
-                      }}
-                      formatter={(v: number) => [
-                        (v as number).toFixed(1),
-                        label,
-                      ]}
-                    />
-                    <Bar dataKey="score" radius={[4, 4, 0, 0]}>
-                      {barData.map((entry, i) => (
-                        <Cell key={i} fill={entry.fill} />
-                      ))}
-                    </Bar>
-                  </BarChart>
-                </ResponsiveContainer>
+                <SimpleBars data={barData} domain={[0, 10]} />
               </div>
             );
           })}
@@ -340,13 +370,13 @@ export default function DataResults() {
           Specific Measurements
         </h2>
         <div className="grid sm:grid-cols-2 gap-6 mb-10">
-          {subMetrics.map(({ key, label, description, unit }) => {
-            const barData = productKeys.map((k) => {
+          {subMetrics.map(({ key, label, description }) => {
+            const barData: SimpleBarDatum[] = productKeys.map((k) => {
               const val = getSubMetric(k, key);
               return {
                 name: products[k].label,
                 value: val ?? 0,
-                fill: products[k].color,
+                color: products[k].color,
               };
             });
             return (
@@ -358,43 +388,7 @@ export default function DataResults() {
                   {label}
                 </h3>
                 <p className="text-sm text-slate-700 mb-4">{description}</p>
-                <ResponsiveContainer width="100%" height={240}>
-                  <BarChart
-                    data={barData}
-                    margin={{ top: 0, right: 0, left: -20, bottom: 40 }}
-                  >
-                    <CartesianGrid
-                      strokeDasharray="3 3"
-                      stroke="#e2e8f0"
-                      vertical={false}
-                    />
-                    <XAxis
-                      dataKey="name"
-                      tick={{ fontSize: 11, fill: "#475569" }}
-                      angle={-30}
-                      textAnchor="end"
-                    />
-                    <YAxis tick={{ fontSize: 12, fill: "#475569" }} />
-                    <Tooltip
-                      contentStyle={{
-                        borderRadius: 8,
-                        border: "1px solid #f1f5f9",
-                        fontSize: 13,
-                      }}
-                      formatter={(v: number) => [
-                        (key === 'capacity' || key === 'rate')
-                          ? `${(v as number).toFixed(1)} / 10`
-                          : `${(v as number).toFixed(2)} ${unit}`,
-                        label,
-                      ]}
-                    />
-                    <Bar dataKey="value" radius={[4, 4, 0, 0]}>
-                      {barData.map((entry, i) => (
-                        <Cell key={i} fill={entry.fill} />
-                      ))}
-                    </Bar>
-                  </BarChart>
-                </ResponsiveContainer>
+                <SimpleBars data={barData} />
               </div>
             );
           })}
@@ -584,95 +578,12 @@ export default function DataResults() {
               scatterData.map((d) => d.y),
             );
 
-            return (
-              <>
-                <ResponsiveContainer width="100%" height={300}>
-                  <ScatterChart
-                    margin={{ top: 10, right: 20, bottom: 20, left: 0 }}
-                  >
-                    <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" />
-                    <XAxis
-                      type="number"
-                      dataKey="x"
-                      domain={[0, 10]}
-                      name={axes.find((a) => a.key === xAxis)?.label}
-                      tick={{ fontSize: 12, fill: "#475569" }}
-                      label={{
-                        value: axes.find((a) => a.key === xAxis)?.label,
-                        position: "insideBottom",
-                        offset: -10,
-                        fontSize: 13,
-                        fill: "#334155",
-                      }}
-                    />
-                    <YAxis
-                      type="number"
-                      dataKey="y"
-                      domain={[0, 10]}
-                      name={axes.find((a) => a.key === yAxis)?.label}
-                      tick={{ fontSize: 12, fill: "#475569" }}
-                      label={{
-                        value: axes.find((a) => a.key === yAxis)?.label,
-                        angle: -90,
-                        position: "insideLeft",
-                        offset: 10,
-                        fontSize: 13,
-                        fill: "#334155",
-                      }}
-                    />
-                    <Tooltip
-                      content={({ payload }) => {
-                        if (!payload?.length) return null;
-                        const d = payload[0].payload as {
-                          name: string;
-                          x: number;
-                          y: number;
-                        };
-                        return (
-                          <div className="bg-white border border-slate-200 rounded-lg p-3 text-base shadow-lg">
-                            <p className="font-bold text-slate-950 mb-1">
-                              {d.name}
-                            </p>
-                            <p className="text-slate-700">
-                              {axes.find((a) => a.key === xAxis)?.label}:{" "}
-                              {d.x.toFixed(1)}
-                            </p>
-                            <p className="text-slate-700">
-                              {axes.find((a) => a.key === yAxis)?.label}:{" "}
-                              {d.y.toFixed(1)}
-                            </p>
-                          </div>
-                        );
-                      }}
-                    />
-                    <Scatter
-                      data={scatterData}
-                      shape={(props: {
-                        cx?: number;
-                        cy?: number;
-                        payload?: { color: string };
-                      }) => (
-                        <circle
-                          cx={props.cx}
-                          cy={props.cy}
-                          r={7}
-                          fill={props.payload?.color ?? "#e11d48"}
-                          fillOpacity={0.85}
-                          stroke="white"
-                          strokeWidth={1.5}
-                        />
-                      )}
-                    />
-                  </ScatterChart>
-                </ResponsiveContainer>
-                <p className="text-sm text-slate-600 mt-3">
-                  Pearson r ={" "}
-                  <strong className="text-slate-900">{r.toFixed(3)}</strong>
-                  {" · "}
-                  {scatterData.length} products with data on both axes
-                </p>
-              </>
-            );
+            return <ScatterPlot
+              data={scatterData}
+              xLabel={axes.find((a) => a.key === xAxis)?.label ?? ""}
+              yLabel={axes.find((a) => a.key === yAxis)?.label ?? ""}
+              r={r}
+            />;
           })()}
         </div>
       </div>

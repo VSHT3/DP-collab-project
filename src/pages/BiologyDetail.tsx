@@ -1,13 +1,13 @@
 import { Link } from 'react-router-dom'
 
 const columns = [
-  { brand: 'Naturella', type: 'Pad' },
-  { brand: 'Always', type: 'Platinum' },
-  { brand: 'Ria Ultra', type: 'Pad' },
-  { brand: 'Ria', type: 'Tampon' },
-  { brand: 'o.b.', type: 'Tampon' },
-  { brand: 'Jessa Cotton', type: 'Pad' },
-  { brand: 'Jessa Cloth', type: 'Pad' },
+  { brand: 'Naturella', type: 'Pad', key: 'naturella_pad' },
+  { brand: 'Always', type: 'Platinum', key: 'always_platinum' },
+  { brand: 'Ria Ultra', type: 'Pad', key: 'ria_pad' },
+  { brand: 'Ria', type: 'Tampon', key: 'ria_tampon' },
+  { brand: 'o.b.', type: 'Tampon', key: 'ob_tampon' },
+  { brand: 'Jessa Cotton', type: 'Pad', key: 'jessa_cotton' },
+  { brand: 'Jessa Cloth', type: 'Pad', key: 'jessa_cloth' },
 ]
 
 const chemicalExposure = [
@@ -54,10 +54,14 @@ function BrandHeader() {
   return (
     <div className="grid grid-cols-7 gap-3 mb-4">
       {columns.map((c, i) => (
-        <div key={i} className="text-center bg-slate-100 rounded-lg px-3 py-3">
+        <Link
+          key={i}
+          to={`/products/${c.key}`}
+          className="text-center bg-slate-100 rounded-lg px-3 py-3 block"
+        >
           <div className="text-sm font-bold text-black">{c.brand}</div>
           <div className="text-xs text-black">{c.type}</div>
-        </div>
+        </Link>
       ))}
     </div>
   )
@@ -67,10 +71,14 @@ function RiskRow({ cells }: { cells: { risk: string; desc: string; color: string
   return (
     <div className="grid grid-cols-7 gap-3">
       {cells.map((c, i) => (
-        <div key={i} className={`${c.color} rounded-lg px-3 py-4 text-center`}>
+        <Link
+          key={i}
+          to={`/products/${columns[i].key}`}
+          className={`${c.color} rounded-lg px-3 py-4 text-center block`}
+        >
           <div className="text-sm font-bold text-black">{c.risk}</div>
           <div className="text-xs text-black italic leading-tight">{c.desc}</div>
-        </div>
+        </Link>
       ))}
     </div>
   )

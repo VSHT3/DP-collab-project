@@ -84,35 +84,39 @@ export function RadarGrid({
         );
       })}
 
-      {/* Grid level labels */}
+      {/* Grid level labels (only even values) */}
       {showLabels &&
-        [...new Array(levels)].map((_, i) => (
-          <motion.g
-            animate={{ opacity: 1 }}
-            initial={animate ? { opacity: 0 } : { opacity: 1 }}
-            // biome-ignore lint/suspicious/noArrayIndexKey: Static grid levels
-            key={`level-label-${i}-${motionReplayKey}`}
-            transition={
-              animate
-                ? transitionWithDelay(
-                    enterTransition,
-                    labelDelay + i * 0.06 * durationFactor
-                  )
-                : undefined
-            }
-          >
-            <text
-              dominantBaseline="middle"
-              fill={radarCssVars.foregroundMuted}
-              fontSize={9}
-              textAnchor="start"
-              x={4}
-              y={-((i + 1) * radius) / levels}
+        [...new Array(levels)].map((_, i) => {
+          const label = ((i + 1) * 11) / levels;
+          if (label % 2 !== 0) return null;
+          return (
+            <motion.g
+              animate={{ opacity: 1 }}
+              initial={animate ? { opacity: 0 } : { opacity: 1 }}
+              // biome-ignore lint/suspicious/noArrayIndexKey: Static grid levels
+              key={`level-label-${i}-${motionReplayKey}`}
+              transition={
+                animate
+                  ? transitionWithDelay(
+                      enterTransition,
+                      labelDelay + i * 0.06 * durationFactor
+                    )
+                  : undefined
+              }
             >
-              {((i + 1) * 100) / levels}
-            </text>
-          </motion.g>
-        ))}
+              <text
+                dominantBaseline="middle"
+                fill={radarCssVars.foregroundMuted}
+                fontSize={9}
+                textAnchor="start"
+                x={4}
+                y={-((i + 1) * radius) / levels}
+              >
+                {label}
+              </text>
+            </motion.g>
+          );
+        })}
     </g>
   );
 }
