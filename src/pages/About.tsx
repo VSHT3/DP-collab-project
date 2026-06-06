@@ -40,7 +40,7 @@ export default function About() {
                 </h3>
                 <p className="text-base text-rose-500 font-medium">{subject}</p>
               </div>
-              <div className="w-20 h-28 shrink-0 rounded-2xl bg-rose-50 flex items-center justify-center overflow-hidden">
+              <div className="w-20 h-20 shrink-0 rounded-full bg-rose-50 flex items-center justify-center overflow-hidden">
                 {image ? (
                   <img
                     src={image}

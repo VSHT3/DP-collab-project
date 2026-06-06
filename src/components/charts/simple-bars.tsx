@@ -12,12 +12,14 @@ interface SimpleBarsProps {
   data: SimpleBarDatum[];
   height?: number;
   domain?: [number, number];
+  yAxisLabel?: string;
 }
 
 export function SimpleBars({
   data,
   height = 240,
   domain: domainProp,
+  yAxisLabel,
 }: SimpleBarsProps) {
   const [hovered, setHovered] = useState<number | null>(null);
   const [min, max] = useMemo(() => {
@@ -83,6 +85,20 @@ export function SimpleBars({
             </text>
           </g>
         ))}
+
+        {yAxisLabel && (
+          <text
+            x={-height / 2}
+            y={12}
+            textAnchor="middle"
+            fill="#475569"
+            fontSize={12}
+            fontWeight={500}
+            transform={`rotate(-90)`}
+          >
+            {yAxisLabel}
+          </text>
+        )}
 
         {data.map((d, i) => {
           const x = pad.left + i * barAreaW + (barAreaW - barW) / 2;

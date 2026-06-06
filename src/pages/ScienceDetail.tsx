@@ -2,6 +2,7 @@ import { useParams, Link } from 'react-router-dom'
 import { subjects } from '../data/sciences'
 import BiologyDetail from './BiologyDetail'
 import ChemistryDetail from './ChemistryDetail'
+import ESSDetail from './ESSDetail'
 
 export default function ScienceDetail() {
   const { slug } = useParams<{ slug: string }>()
@@ -12,6 +13,10 @@ export default function ScienceDetail() {
 
   if (slug === 'chemistry') {
     return <ChemistryDetail />
+  }
+
+  if (slug === 'environment') {
+    return <ESSDetail />
   }
 
   const subject = subjects.find(s => s.slug === slug)

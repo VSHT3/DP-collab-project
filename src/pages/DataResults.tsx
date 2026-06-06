@@ -211,7 +211,7 @@ export default function DataResults() {
     return products[k].subMetrics[key];
   }
 
-  const lowerBetterKeys: SubMetricKey[] = ["colonyCount", "co2e", "tssRisk", "annualCost"];
+  const lowerBetterKeys: SubMetricKey[] = ["tssRisk", "chemicalExposure", "annualCost"];
 
   function normalizeSubMetric(
     key: SubMetricKey,

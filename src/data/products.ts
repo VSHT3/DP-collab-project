@@ -41,12 +41,9 @@ export interface ProductData {
     cost: string;
   };
   subMetrics: {
-    colonyCount: number | null;
-    ph: number | null;
-    massLoss: number | null;
-    co2e: number | null;
     tssRisk: number | null;
     skinIrritation: number | null;
+    chemicalExposure: number | null;
     annualCost: number | null;
   };
   absorptionRate: number | null;
@@ -69,7 +66,7 @@ export const products: Record<ProductKey, ProductData> = {
       capacity: 10.0,
       rate: 1.75,
       performance: 5.88,
-      environment: 2.0,
+      environment: null,
       cost: null,
     },
     details: {
@@ -78,16 +75,13 @@ export const products: Record<ProductKey, ProductData> = {
       capacity: "Absorption capacity: 16.0 g/g (rank 1 of 7)",
       rate: "Absorption rate: 44.23 s/5 mL (rank 7 of 7)",
       performance: "Computed from capacity and rate scores",
-      environment: "~90% plastic by weight; 500–800 year decomposition; ~10 g CO₂e per use (Paul et al., 2026; Mirzaie et al., 2025)",
+      environment: "",
       cost: "",
     },
     subMetrics: {
-      colonyCount: 420,
-      ph: 7.0,
-      massLoss: 10,
-      co2e: 10.0,
       tssRisk: 0,
       skinIrritation: 5.0,
+      chemicalExposure: 5,
       annualCost: null,
     },
     absorptionRate: 44.23,
@@ -96,7 +90,7 @@ export const products: Record<ProductKey, ProductData> = {
     sizes: [{ label: "3 Maxi", absorbency: 6, pads: 14 }],
   },
   always_platinum: {
-    label: "Always Platinum",
+    label: "Always Platinum Pad",
     brand: "Always",
     type: "commercial",
     price: 3.79,
@@ -108,7 +102,7 @@ export const products: Record<ProductKey, ProductData> = {
       capacity: 7.1,
       rate: 10.0,
       performance: 8.55,
-      environment: 2.0,
+      environment: null,
       cost: null,
     },
     details: {
@@ -117,16 +111,13 @@ export const products: Record<ProductKey, ProductData> = {
       capacity: "Absorption capacity: 11.3 g/g (rank 2 of 7)",
       rate: "Absorption rate: 7.76 s/5 mL (rank 1 of 7)",
       performance: "Computed from capacity and rate scores",
-      environment: "~90% plastic by weight; 500–800 year decomposition; ~10 g CO₂e per use (Paul et al., 2026)",
+      environment: "",
       cost: "",
     },
     subMetrics: {
-      colonyCount: 400,
-      ph: 7.2,
-      massLoss: 8,
-      co2e: 10.5,
       tssRisk: 0,
       skinIrritation: 5.0,
+      chemicalExposure: 5,
       annualCost: null,
     },
     absorptionRate: 7.76,
@@ -147,7 +138,7 @@ export const products: Record<ProductKey, ProductData> = {
       capacity: 5.4,
       rate: 5.65,
       performance: 5.53,
-      environment: 2.5,
+      environment: null,
       cost: null,
     },
     details: {
@@ -156,16 +147,13 @@ export const products: Record<ProductKey, ProductData> = {
       capacity: "Absorption capacity: 8.6 g/g (rank 3 of 7)",
       rate: "Absorption rate: 13.73 s/5 mL (rank 5 of 7)",
       performance: "Computed from capacity and rate scores",
-      environment: "High plastic content; slow decomposition (~12% mass loss in 14 days); ~8 g CO₂e per use (Brunsek et al., 2023)",
+      environment: "",
       cost: "",
     },
     subMetrics: {
-      colonyCount: 380,
-      ph: 6.8,
-      massLoss: 12,
-      co2e: 8.0,
       tssRisk: 0,
       skinIrritation: 5.0,
+      chemicalExposure: 5,
       annualCost: null,
     },
     absorptionRate: 13.73,
@@ -186,7 +174,7 @@ export const products: Record<ProductKey, ProductData> = {
       capacity: 5.0,
       rate: 6.1,
       performance: 5.55,
-      environment: 4.0,
+      environment: null,
       cost: null,
     },
     details: {
@@ -196,16 +184,13 @@ export const products: Record<ProductKey, ProductData> = {
         "Absorption capacity: 8.0 g/g (rank 4–5 of 7, tied with o.b. Tampon)",
       rate: "Absorption rate: 12.73 s/5 mL (rank 4 of 7)",
       performance: "Computed from capacity and rate scores",
-      environment: "Cotton/rayon blend; moderate biodegradation (~30% mass loss); ~4 g CO₂e per use (Brunsek et al., 2023)",
+      environment: "",
       cost: "",
     },
     subMetrics: {
-      colonyCount: 720,
-      ph: 6.5,
-      massLoss: 30,
-      co2e: 4.0,
-      tssRisk: 10,
+      tssRisk: 5,
       skinIrritation: 4.0,
+      chemicalExposure: 7.5,
       annualCost: null,
     },
     absorptionRate: 12.73,
@@ -226,7 +211,7 @@ export const products: Record<ProductKey, ProductData> = {
       capacity: 5.0,
       rate: 5.52,
       performance: 5.26,
-      environment: 4.5,
+      environment: null,
       cost: null,
     },
     details: {
@@ -236,16 +221,13 @@ export const products: Record<ProductKey, ProductData> = {
         "Absorption capacity: 8.0 g/g (rank 4–5 of 7, tied with Ria Tampon)",
       rate: "Absorption rate: 14.07 s/5 mL (rank 6 of 7)",
       performance: "Computed from capacity and rate scores",
-      environment: "Cotton/rayon blend; moderate biodegradation; no plastic applicator reduces CO₂e (~3 g CO₂e) (Mirzaie et al., 2025)",
+      environment: "",
       cost: "",
     },
     subMetrics: {
-      colonyCount: 680,
-      ph: 6.5,
-      massLoss: 32,
-      co2e: 3.0,
-      tssRisk: 10,
+      tssRisk: 5,
       skinIrritation: 4.0,
+      chemicalExposure: 7.5,
       annualCost: null,
     },
     absorptionRate: 14.07,
@@ -266,7 +248,7 @@ export const products: Record<ProductKey, ProductData> = {
       capacity: 4.9,
       rate: 9.02,
       performance: 6.96,
-      environment: 6.5,
+      environment: null,
       cost: null,
     },
     details: {
@@ -275,16 +257,13 @@ export const products: Record<ProductKey, ProductData> = {
       capacity: "Absorption capacity: 7.8 g/g (rank 6 of 7)",
       rate: "Absorption rate: 8.60 s/5 mL (rank 2 of 7)",
       performance: "Computed from capacity and rate scores",
-      environment: "Natural cotton biodegrades well (~50% mass loss); no synthetic polymers; ~5 g CO₂e per use (Paul et al., 2026)",
+      environment: "",
       cost: "",
     },
     subMetrics: {
-      colonyCount: 180,
-      ph: 6.0,
-      massLoss: 50,
-      co2e: 5.0,
       tssRisk: 0,
       skinIrritation: 7.5,
+      chemicalExposure: 2,
       annualCost: null,
     },
     absorptionRate: 8.6,
@@ -305,7 +284,7 @@ export const products: Record<ProductKey, ProductData> = {
       capacity: 1.6,
       rate: 7.7,
       performance: 4.65,
-      environment: 9.5,
+      environment: null,
       cost: null,
     },
     details: {
@@ -315,16 +294,13 @@ export const products: Record<ProductKey, ProductData> = {
         "Absorption capacity: 2.5 g/g (rank 7 of 7). Reusable — low capacity by design.",
       rate: "Absorption rate: 10.08 s/5 mL (rank 3 of 7)",
       performance: "Computed from capacity and rate scores",
-      environment: "Reusable over 100+ cycles; ~0.3 g CO₂e per use (amortized); fully biodegradable cotton (~60% mass loss) (Mirzaie et al., 2025; Brunsek et al., 2023)",
+      environment: "",
       cost: "",
     },
     subMetrics: {
-      colonyCount: 120,
-      ph: 6.2,
-      massLoss: 60,
-      co2e: 0.3,
       tssRisk: 0,
       skinIrritation: 7.5,
+      chemicalExposure: 5,
       annualCost: null,
     },
     absorptionRate: 10.08,
@@ -335,9 +311,8 @@ export const products: Record<ProductKey, ProductData> = {
 };
 
 // -- Recompute composite scores from sub-metrics --
-// Safety = avg of colonyCount (lowerBetter) + tssRisk (lowerBetter) + skinIrritation (lowerBetter, invert)
-// Chemistry = pH normalized by distance from 7.0 (closer = better)
-// Environment = avg of massLoss (higherBetter) + co2e (lowerBetter)
+// Safety = avg of tssRisk (lowerBetter) + skinIrritation (higher = better, use as-is)
+// Chemistry = chemicalExposure normalized (lowerBetter: less exposure = higher score)
 // Performance = avg of capacity + rate (both already scores)
 
 const __allKeys = Object.keys(products) as ProductKey[]
@@ -357,38 +332,19 @@ function __norm(val: number | null, vals: number[], lowerBetter: boolean): numbe
   return lowerBetter ? (1 - raw) * 10 : raw * 10
 }
 
-const __colonyVals = __vals('colonyCount')
-const __phVals = __vals('ph')
 const __tssVals = __vals('tssRisk')
-const __massVals = __vals('massLoss')
-const __co2eVals = __vals('co2e')
+const __chemVals = __vals('chemicalExposure')
 
 for (const _k of __allKeys) {
   const _p = products[_k]
 
-  // Safety: avg of colonyCount (lowerBetter), tssRisk (lowerBetter), skinIrritation (higher = better comfort, use as-is)
-  const colony = __norm(_p.subMetrics.colonyCount, __colonyVals, true)
+  // Safety: avg of tssRisk (lowerBetter) + skinIrritation (higher = better)
   const tss = __norm(_p.subMetrics.tssRisk, __tssVals, true)
   const skin = _p.subMetrics.skinIrritation ?? 0
-  _p.scores.safety = parseFloat(((colony + tss + skin) / 3).toFixed(2))
+  _p.scores.safety = parseFloat(((tss + skin) / 2).toFixed(2))
 
-  // Chemistry: pH distance from 7.0 (closer = better)
-  const ph = _p.subMetrics.ph
-  if (ph !== null && __phVals.length > 0) {
-    const dists = __phVals.map(v => Math.abs(v - 7.0))
-    const mnPh = Math.min(...dists)
-    const mxPh = Math.max(...dists)
-    const myDist = Math.abs(ph - 7.0)
-    const val = mxPh === mnPh ? 10 : ((mxPh - myDist) / (mxPh - mnPh)) * 10
-    _p.scores.chemistry = parseFloat(val.toFixed(2))
-  } else {
-    _p.scores.chemistry = 0
-  }
-
-  // Environment: avg of massLoss (higherBetter) + co2e (lowerBetter)
-  const mass = __norm(_p.subMetrics.massLoss, __massVals, false)
-  const co2e = __norm(_p.subMetrics.co2e, __co2eVals, true)
-  _p.scores.environment = parseFloat(((mass + co2e) / 2).toFixed(2))
+  // Chemistry: chemicalExposure (lowerBetter: less exposure = higher score)
+  _p.scores.chemistry = parseFloat(__norm(_p.subMetrics.chemicalExposure, __chemVals, true).toFixed(2))
 
   // Performance: avg of capacity + rate (already scores)
   _p.scores.performance = parseFloat((((_p.scores.capacity ?? 0) + (_p.scores.rate ?? 0)) / 2).toFixed(2))
@@ -472,20 +428,6 @@ export const mainAxes = axes.filter((a) =>
 
 export const subMetrics = [
   {
-    key: "colonyCount" as const,
-    label: "Bacterial Resistance",
-    description: "Resistance to bacterial proliferation (Biology, inverted from CFU/cm²)",
-    unit: "score",
-    lowerBetter: true,
-  },
-  {
-    key: "ph" as const,
-    label: "pH Neutrality",
-    description: "How close to skin-safe pH range (Chemistry)",
-    unit: "score",
-    lowerBetter: false,
-  },
-  {
     key: "tssRisk" as const,
     label: "TSS Safety",
     description: "Freedom from Toxic Shock Syndrome risk (Biology, inverted)",
@@ -500,6 +442,13 @@ export const subMetrics = [
     lowerBetter: false,
   },
   {
+    key: "chemicalExposure" as const,
+    label: "Chemical Safety",
+    description: "Low exposure to VOCs, phthalates, heavy metals, bleaching residues (Chemistry, inverted: higher = safer)",
+    unit: "score",
+    lowerBetter: true,
+  },
+  {
     key: "capacity" as const,
     label: "Absorption Capacity",
     description: "Fluid held per gram of dry product (Physics Exp 1)",
@@ -511,20 +460,6 @@ export const subMetrics = [
     label: "Absorption Rate",
     description: "Time to absorb 5 mL (Physics Exp 2, seconds)",
     unit: "s/5 mL",
-    lowerBetter: true,
-  },
-  {
-    key: "massLoss" as const,
-    label: "Biodegradability",
-    description: "% mass loss over 14 days (ESS)",
-    unit: "%",
-    lowerBetter: false,
-  },
-  {
-    key: "co2e" as const,
-    label: "Carbon Efficiency",
-    description: "Low CO₂ footprint per use (ESS, inverted from g CO₂e)",
-    unit: "score",
     lowerBetter: true,
   },
   {

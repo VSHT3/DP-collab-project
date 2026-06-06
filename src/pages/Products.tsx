@@ -23,9 +23,9 @@ const typeDescriptions: Record<ProductType, string> = {
     "Inserted cotton/rayon plugs that absorb fluid internally. Compact and discreet but limited by insertion volume.",
 };
 
-type SortKey = "category" | "price-asc" | "price-desc" | "name-asc" | "name-desc" | "performance";
-
-const previewAxes = axes.filter((a) => a.key !== "capacity" && a.key !== "rate");
+const previewAxes = axes.filter(
+  (a) => a.key !== "capacity" && a.key !== "rate",
+);
 
 const allKeys = Object.keys(products) as ProductKey[];
 
@@ -102,10 +102,9 @@ function ProductCard({ k }: { k: ProductKey }) {
           {p.price !== null && p.sizes.length > 0 && (
             <p className="text-xs text-slate-500 mb-3">
               €
-              {(
-                p.price /
-                p.sizes.reduce((sum, s) => sum + s.pads, 0)
-              ).toFixed(2)}{" "}
+              {(p.price / p.sizes.reduce((sum, s) => sum + s.pads, 0)).toFixed(
+                2,
+              )}{" "}
               per pad
             </p>
           )}
@@ -127,10 +126,9 @@ function ProductCard({ k }: { k: ProductKey }) {
 
 export default function Products() {
   const [search, setSearch] = useState("");
-  const [sort, setSort] = useState<SortKey>("category");
 
   const query = search.toLowerCase().trim();
-  const hasFilter = query.length > 0 || sort !== "category";
+  const hasFilter = query.length > 0;
 
   const filtered = allKeys.filter(
     (k) =>
@@ -139,27 +137,10 @@ export default function Products() {
       products[k].brand.toLowerCase().includes(query),
   );
 
-  const sorted = [...filtered].sort((a, b) => {
-    switch (sort) {
-      case "price-asc":
-        return (products[a].price ?? Infinity) - (products[b].price ?? Infinity);
-      case "price-desc":
-        return (products[b].price ?? 0) - (products[a].price ?? 0);
-      case "name-asc":
-        return products[a].label.localeCompare(products[b].label);
-      case "name-desc":
-        return products[b].label.localeCompare(products[a].label);
-      case "performance":
-        return (products[b].scores.performance ?? 0) - (products[a].scores.performance ?? 0);
-      default:
-        return 0;
-    }
-  });
-
   const byType = typeOrder.map((type) => ({
     type,
     label: productTypeLabels[type],
-    keys: sorted.filter((k) => products[k].type === type),
+    keys: filtered.filter((k) => products[k].type === type),
   }));
 
   return (
@@ -173,11 +154,12 @@ export default function Products() {
             Products Tested
           </h1>
           <p className="text-lg text-slate-700 whitespace-nowrap">
-            Seven branded products across four categories. Scores are on a scale of 0-10, (higher means better).
+            Seven branded products across four categories. Scores are on a scale
+            of 0-10, (higher means better).
           </p>
         </div>
 
-        {/* Search + Sort bar */}
+        {/* Search bar */}
         <div className="flex gap-3 mb-8">
           <input
             type="text"
@@ -186,29 +168,17 @@ export default function Products() {
             onChange={(e) => setSearch(e.target.value)}
             className="flex-1 border border-slate-300 rounded-xl px-4 py-2.5 text-base text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-rose-500 focus:border-transparent transition-all duration-200"
           />
-          <select
-            value={sort}
-            onChange={(e) => setSort(e.target.value as SortKey)}
-            className="border border-slate-300 rounded-xl px-4 py-2.5 text-base text-slate-900 bg-white focus:outline-none focus:ring-2 focus:ring-rose-500 focus:border-transparent transition-all duration-200"
-          >
-            <option value="category">Category</option>
-            <option value="price-asc">Price: Low → High</option>
-            <option value="price-desc">Price: High → Low</option>
-            <option value="name-asc">Name: A → Z</option>
-            <option value="name-desc">Name: Z → A</option>
-            <option value="performance">Best Rated</option>
-          </select>
         </div>
 
         {hasFilter ? (
           /* Flat list when searching/sorting */
           <div className="space-y-6">
-            {sorted.length === 0 ? (
+            {filtered.length === 0 ? (
               <p className="text-base text-slate-600 text-center py-12">
                 No products match your search.
               </p>
             ) : (
-              sorted.map((k) => <ProductCard key={k} k={k} />)
+              filtered.map((k) => <ProductCard key={k} k={k} />)
             )}
           </div>
         ) : (
@@ -216,7 +186,9 @@ export default function Products() {
           <div className="space-y-12">
             {byType.map(({ type, label, keys }) => (
               <section key={type}>
-                <h2 className="text-xl font-bold text-slate-950 mb-1">{label}</h2>
+                <h2 className="text-xl font-bold text-slate-950 mb-1">
+                  {label}
+                </h2>
                 <p className="text-base text-slate-600 mb-4">
                   {typeDescriptions[type]}
                 </p>
@@ -236,7 +208,7 @@ export default function Products() {
             Brand Coverage
           </h2>
           <p className="text-base text-slate-700 mb-6 max-w-3xl">
-            Which brands offer which product types. Our study covers 5 brands
+            Which brands offer which product types. Our study covers five brands
             across all four categories.
           </p>
           <div className="border border-slate-200 rounded-2xl overflow-hidden shadow-sm">
