@@ -57,7 +57,7 @@ function BrandHeader() {
         <Link
           key={i}
           to={`/products/${c.key}`}
-          className="text-center bg-slate-100 rounded-lg px-3 py-3 block"
+          className="text-center bg-slate-100 rounded-lg px-3 py-3 block hover:scale-105 transition-transform"
         >
           <div className="text-sm font-bold text-black">{c.brand}</div>
           <div className="text-xs text-black">{c.type}</div>
@@ -74,7 +74,7 @@ function RiskRow({ cells }: { cells: { risk: string; desc: string; color: string
         <Link
           key={i}
           to={`/products/${columns[i].key}`}
-          className={`${c.color} rounded-lg px-3 py-4 text-center block`}
+          className={`${c.color} rounded-lg px-3 py-4 text-center block hover:scale-105 transition-transform`}
         >
           <div className="text-sm font-bold text-black">{c.risk}</div>
           <div className="text-xs text-black italic leading-tight">{c.desc}</div>
