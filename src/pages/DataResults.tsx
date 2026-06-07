@@ -1,11 +1,14 @@
 import { useState } from "react";
-import { RadarChart as BklitRadarChart } from "../components/charts/radar-chart"
-import { RadarGrid } from "../components/charts/radar-grid"
-import { RadarAxis } from "../components/charts/radar-axis"
-import { RadarLabels } from "../components/charts/radar-labels"
-import { RadarArea } from "../components/charts/radar-area"
-import { RadarTooltip } from "../components/charts/radar-tooltip"
-import { SimpleBars, type SimpleBarDatum } from "../components/charts/simple-bars"
+import { RadarChart as BklitRadarChart } from "../components/charts/radar-chart";
+import { RadarGrid } from "../components/charts/radar-grid";
+import { RadarAxis } from "../components/charts/radar-axis";
+import { RadarLabels } from "../components/charts/radar-labels";
+import { RadarArea } from "../components/charts/radar-area";
+import { RadarTooltip } from "../components/charts/radar-tooltip";
+import {
+  SimpleBars,
+  type SimpleBarDatum,
+} from "../components/charts/simple-bars";
 import {
   products,
   axes,
@@ -101,29 +104,64 @@ function ScatterPlot({
         {[0, 2, 4, 6, 8, 10].map((t) => (
           <g key={t}>
             <line
-              x1={xScale(t)} x2={xScale(t)}
-              y1={pad.top} y2={pad.top + innerH}
-              stroke="#e2e8f0" strokeWidth={1} strokeDasharray="4,4"
+              x1={xScale(t)}
+              x2={xScale(t)}
+              y1={pad.top}
+              y2={pad.top + innerH}
+              stroke="#e2e8f0"
+              strokeWidth={1}
+              strokeDasharray="4,4"
             />
             <line
-              x1={pad.left} x2={pad.left + innerW}
-              y1={yScale(t)} y2={yScale(t)}
-              stroke="#e2e8f0" strokeWidth={1} strokeDasharray="4,4"
+              x1={pad.left}
+              x2={pad.left + innerW}
+              y1={yScale(t)}
+              y2={yScale(t)}
+              stroke="#e2e8f0"
+              strokeWidth={1}
+              strokeDasharray="4,4"
             />
-            <text x={pad.left - 6} y={yScale(t) + 4} textAnchor="end" fill="#475569" fontSize={12}>
+            <text
+              x={pad.left - 6}
+              y={yScale(t) + 4}
+              textAnchor="end"
+              fill="#475569"
+              fontSize={12}
+            >
               {t}
             </text>
-            <text x={xScale(t)} y={h - pad.bottom + 14} textAnchor="middle" fill="#475569" fontSize={12}>
+            <text
+              x={xScale(t)}
+              y={h - pad.bottom + 14}
+              textAnchor="middle"
+              fill="#475569"
+              fontSize={12}
+            >
               {t}
             </text>
           </g>
         ))}
 
         {/* Axis labels */}
-        <text x={pad.left + innerW / 2} y={h - 6} textAnchor="middle" fill="#334155" fontSize={13} fontWeight={600}>
+        <text
+          x={pad.left + innerW / 2}
+          y={h - 6}
+          textAnchor="middle"
+          fill="#334155"
+          fontSize={13}
+          fontWeight={600}
+        >
           {xLabel}
         </text>
-        <text x={12} y={pad.top + innerH / 2} textAnchor="middle" fill="#334155" fontSize={13} fontWeight={600} transform={`rotate(-90, 12, ${pad.top + innerH / 2})`}>
+        <text
+          x={12}
+          y={pad.top + innerH / 2}
+          textAnchor="middle"
+          fill="#334155"
+          fontSize={13}
+          fontWeight={600}
+          transform={`rotate(-90, 12, ${pad.top + innerH / 2})`}
+        >
           {yLabel}
         </text>
 
@@ -135,9 +173,13 @@ function ScatterPlot({
           return (
             <g key={d.name}>
               <circle
-                cx={cx} cy={cy} r={isHovered ? 9 : 7}
-                fill={d.color} fillOpacity={isHovered ? 1 : hovered !== null ? 0.3 : 0.85}
-                stroke="white" strokeWidth={1.5}
+                cx={cx}
+                cy={cy}
+                r={isHovered ? 9 : 7}
+                fill={d.color}
+                fillOpacity={isHovered ? 1 : hovered !== null ? 0.3 : 0.85}
+                stroke="white"
+                strokeWidth={1.5}
                 style={{ cursor: "pointer", transition: "r 0.1s" }}
                 onMouseEnter={() => setHovered(i)}
                 onMouseLeave={() => setHovered(null)}
@@ -147,14 +189,31 @@ function ScatterPlot({
                   <rect
                     x={Math.max(2, cx - 60)}
                     y={Math.max(0, cy - 50)}
-                    width={120} height={40} rx={6}
-                    fill="white" stroke="#e2e8f0" strokeWidth={1}
+                    width={120}
+                    height={40}
+                    rx={6}
+                    fill="white"
+                    stroke="#e2e8f0"
+                    strokeWidth={1}
                     filter="drop-shadow(0 2px 4px rgba(0,0,0,0.1))"
                   />
-                  <text x={cx} y={cy - 36} textAnchor="middle" fill="#1e293b" fontSize={13} fontWeight={700}>
+                  <text
+                    x={cx}
+                    y={cy - 36}
+                    textAnchor="middle"
+                    fill="#1e293b"
+                    fontSize={13}
+                    fontWeight={700}
+                  >
                     {d.name}
                   </text>
-                  <text x={cx} y={cy - 18} textAnchor="middle" fill="#475569" fontSize={11}>
+                  <text
+                    x={cx}
+                    y={cy - 18}
+                    textAnchor="middle"
+                    fill="#475569"
+                    fontSize={11}
+                  >
                     {xLabel}: {d.x.toFixed(1)} · {yLabel}: {d.y.toFixed(1)}
                   </text>
                 </>
@@ -164,8 +223,7 @@ function ScatterPlot({
         })}
       </svg>
       <p className="text-sm text-slate-600 mt-3">
-        Pearson r ={" "}
-        <strong className="text-slate-900">{r.toFixed(3)}</strong>
+        Pearson r = <strong className="text-slate-900">{r.toFixed(3)}</strong>
         {" · "}
         {data.length} products with data on both axes
       </p>
@@ -211,7 +269,12 @@ export default function DataResults() {
     return products[k].subMetrics[key];
   }
 
-  const lowerBetterKeys: SubMetricKey[] = ["tssRisk", "chemicalExposure", "annualCost"];
+  const lowerBetterKeys: SubMetricKey[] = [
+    "tssRisk",
+    "chemicalExposure",
+    "environmentalImpact",
+    "annualCost",
+  ];
 
   function normalizeSubMetric(
     key: SubMetricKey,
@@ -219,7 +282,8 @@ export default function DataResults() {
     allVals: (number | null)[],
   ): number {
     if (val === null) return NaN;
-    if (key === "capacity" || key === "rate" || key === "skinIrritation") return val;
+    if (key === "capacity" || key === "rate" || key === "skinIrritation")
+      return val;
     const nums = allVals.filter((v): v is number => v !== null);
     if (nums.length === 0) return NaN;
     const mn = Math.min(...nums);
@@ -305,7 +369,11 @@ export default function DataResults() {
               Safety, Chemistry, Performance, Environment, Cost
             </p>
             <div className="flex justify-center">
-              <BklitRadarChart data={mainBklitData} metrics={mainAxes} size={380}>
+              <BklitRadarChart
+                data={mainBklitData}
+                metrics={mainAxes}
+                size={380}
+              >
                 <RadarGrid />
                 <RadarAxis />
                 <RadarLabels offset={28} fontSize={12} />
@@ -326,7 +394,11 @@ export default function DataResults() {
               Metrics from each science
             </p>
             <div className="flex justify-center">
-              <BklitRadarChart data={subBklitData} metrics={subMetrics} size={380}>
+              <BklitRadarChart
+                data={subBklitData}
+                metrics={subMetrics}
+                size={380}
+              >
                 <RadarGrid />
                 <RadarAxis />
                 <RadarLabels offset={28} fontSize={12} />
@@ -578,12 +650,14 @@ export default function DataResults() {
               scatterData.map((d) => d.y),
             );
 
-            return <ScatterPlot
-              data={scatterData}
-              xLabel={axes.find((a) => a.key === xAxis)?.label ?? ""}
-              yLabel={axes.find((a) => a.key === yAxis)?.label ?? ""}
-              r={r}
-            />;
+            return (
+              <ScatterPlot
+                data={scatterData}
+                xLabel={axes.find((a) => a.key === xAxis)?.label ?? ""}
+                yLabel={axes.find((a) => a.key === yAxis)?.label ?? ""}
+                r={r}
+              />
+            );
           })()}
         </div>
       </div>

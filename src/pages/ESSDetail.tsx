@@ -4,8 +4,19 @@ import {
   type SimpleBarDatum,
 } from "../components/charts/simple-bars";
 import { subjects } from "../data/sciences";
+import { products } from "../data/products";
 
 const subject = subjects.find((s) => s.slug === "environment")!;
+
+const productEnvIssues = [
+  { key: "always_platinum", label: "Always Platinum Pad", type: "Disposable pad", issue: "Plastic waste, landfill accumulation, resource use" },
+  { key: "ria_pad", label: "Ria Ultra Pad", type: "Disposable pad", issue: "Plastic layers and packaging waste" },
+  { key: "naturella_pad", label: "Naturella Pad", type: "Disposable pad", issue: "Plastic waste, packaging waste" },
+  { key: "jessa_cotton", label: "Jessa Cotton Pad", type: "Disposable cotton pad", issue: "Less synthetic materials but still single-use waste" },
+  { key: "ria_tampon", label: "Ria Tampon", type: "Disposable tampon", issue: "Cotton production, packaging waste" },
+  { key: "ob_tampon", label: "o.b. Tampon", type: "Disposable tampon", issue: "Lower plastic than pads, but still single-use" },
+  { key: "jessa_cloth", label: "Jessa Cloth Pad", type: "Reusable cloth pad", issue: "Water and energy for washing, but much less waste overall" },
+] as const;
 
 const surveyData: SimpleBarDatum[] = [
   { name: "Regular tampons", value: 47, color: "#e8738a" },
@@ -127,6 +138,44 @@ export default function ESSDetail() {
               Key Metric
             </h2>
             <p className="text-base text-slate-800">{subject.metric}</p>
+          </div>
+
+          {/* Per-Product Environmental Issues */}
+          <div className="border border-slate-200 rounded-2xl overflow-hidden shadow-sm">
+            <div className="px-8 py-5 bg-rose-50">
+              <h2 className="text-sm font-bold text-slate-700 uppercase tracking-wider">
+                Environmental Issues by Product
+              </h2>
+            </div>
+            <table className="w-full text-sm">
+              <thead>
+                <tr className="bg-slate-50 border-b border-slate-200">
+                  <th className="px-5 py-3 text-left font-semibold text-slate-600">Product</th>
+                  <th className="px-4 py-3 text-left font-semibold text-slate-600">Type</th>
+                  <th className="px-4 py-3 text-left font-semibold text-slate-600">Main Environmental Issues</th>
+                </tr>
+              </thead>
+              <tbody>
+                {productEnvIssues.map((p, i) => {
+                  const pr = products[p.key as keyof typeof products];
+                  return (
+                    <tr key={p.key} className={i % 2 === 0 ? "" : "bg-slate-50/50"}>
+                      <td className="px-5 py-3">
+                        <Link
+                          to={`/products/${p.key}`}
+                          className="flex items-center gap-2 text-slate-900 font-medium hover:text-rose-500 transition-colors"
+                        >
+                          <span className="w-2.5 h-2.5 rounded-full flex-shrink-0" style={{ background: pr.color }} />
+                          {p.label}
+                        </Link>
+                      </td>
+                      <td className="px-4 py-3 text-slate-600">{p.type}</td>
+                      <td className="px-4 py-3 text-slate-700 leading-relaxed">{p.issue}</td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
           </div>
 
           {/* Where It Goes + Solutions side by side */}
