@@ -386,12 +386,12 @@ export const axes = [
   {
     key: "safety",
     label: "Safety",
-    description: "Bacterial growth under simulated conditions (Biology)",
+    description: "TSS risk level and skin irritation potential (Biology)",
   },
   {
     key: "chemistry",
     label: "Chemistry",
-    description: "pH neutrality and absence of harmful additives (Chemistry)",
+    description: "Chemical exposure — VOCs, phthalates, heavy metals, bleaching residues (Chemistry)",
   },
   {
     key: "capacity",
@@ -411,7 +411,7 @@ export const axes = [
   {
     key: "environment",
     label: "Environment",
-    description: "Decomposition rate and CO₂ footprint per use (ESS)",
+    description: "Waste volume, decomposition time, and marine pollution impact (ESS — per-product data pending)",
   },
   {
     key: "cost",
