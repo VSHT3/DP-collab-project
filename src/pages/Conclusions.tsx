@@ -1,6 +1,32 @@
-import { productTypeRankings } from "../data/products";
+import { productTypeRankings, products, type ProductKey } from "../data/products";
+
+function computeOverallScores(): { key: ProductKey; score: number; safety: number; chemistry: number; performance: number; environment: number; cost: number }[] {
+  const keys = Object.keys(products) as ProductKey[];
+  return keys
+    .map((key) => {
+      const s = products[key].scores;
+      const safety = s.safety ?? 0;
+      const chemistry = s.chemistry ?? 0;
+      const perf = s.performance ?? 0;
+      const env = s.environment ?? 0;
+      const cost = s.cost ?? 0;
+      return {
+        key,
+        safety,
+        chemistry,
+        performance: perf,
+        environment: env,
+        cost,
+        score: parseFloat(((safety + chemistry + perf + env + cost) / 5).toFixed(2)),
+      };
+    })
+    .sort((a, b) => b.score - a.score);
+}
 
 export default function Conclusions() {
+  const overall = computeOverallScores();
+  const winner = overall[0];
+
   return (
     <div className="px-8 lg:px-16 py-16">
       <div className="max-w-7xl mx-auto">
@@ -14,6 +40,44 @@ export default function Conclusions() {
         <p className="text-lg text-slate-700 max-w-3xl">
           Summary conclusions drawn from experimental data and literature
           research across Biology, Chemistry, Physics, and Environmental Science.
+        </p>
+      </div>
+
+      {/* Overall Winner */}
+      <div className="border-2 border-rose-200 rounded-2xl p-10 mb-12 bg-gradient-to-br from-rose-50 to-white shadow-sm">
+        <p className="text-sm font-bold text-rose-500 uppercase tracking-wider mb-2">
+          Overall Winner
+        </p>
+        <p className="text-4xl font-bold text-slate-950 mb-2">
+          {products[winner.key].label}
+        </p>
+        <p className="text-lg text-slate-600 mb-6">
+          Weighted equally across all five evaluation axes: Safety, Chemistry,
+          Performance, Environment, and Cost.
+        </p>
+        <div className="grid grid-cols-5 gap-3 mb-8">
+          {overall.map(({ key, safety, chemistry, performance, environment: env, cost: costScore }) => (
+            <div key={key} className="border border-slate-200 rounded-xl p-4 text-center shadow-sm">
+              <span
+                className="inline-block w-3 h-3 rounded-full mb-2"
+                style={{ background: products[key].color }}
+              />
+              <p className="text-sm font-bold text-slate-950 mb-1">
+                {products[key].label}
+              </p>
+              <p className="text-xs text-slate-500">
+                S {safety.toFixed(1)} · C {chemistry.toFixed(1)} · P {performance.toFixed(1)} · E {env.toFixed(1)} · $ {costScore.toFixed(1)}
+              </p>
+            </div>
+          ))}
+        </div>
+        <p className="text-base text-slate-700 leading-relaxed">
+          The reusable cloth pad ranks highest overall due to strong safety (8.5)
+          and perfect environment (10.0) and cost (10.0) scores, outweighing its
+          lower physics performance. The organic cotton pad follows closely as the
+          best single-use option, with top chemistry (10.0) and solid safety (8.8).
+          Commercial pads and tampons are dragged down by poor environment and cost
+          scores despite competitive physics performance.
         </p>
       </div>
 
@@ -36,7 +100,7 @@ export default function Conclusions() {
             },
             {
               title: "PFAS in Reusables",
-              finding: "33% of period underwear and 25% of reusable pads had intentionally added PFAS at parts-per-million levels — far above typical trace contamination.",
+              finding: "33% of period underwear and 25% of reusable pads had intentionally added PFAS at parts-per-million levels, far above typical trace contamination.",
               source: "Wicks et al., EST Letters, 2025",
             },
             {
@@ -54,41 +118,49 @@ export default function Conclusions() {
         </div>
       </div>
 
-      {/* Per-axis winners */}
-      <div className="grid sm:grid-cols-2 gap-6 mb-12">
-        {[
-          {
-            label: "Safest (Biology)",
-            value: "Organic & Cloth Pads",
-            note: "External wear eliminates vaginal bacterial introduction. Natural fibres are more breathable, reducing surface moisture that promotes growth.",
-          },
-          {
-            label: "Chemically Safest",
-            value: "Organic Cotton Pad",
-            note: "Free from synthetic fragrances, dyes, and chlorine bleaching. Eliminates VOC and phthalate exposure found in commercial pads.",
-          },
-          {
-            label: "Best Performance",
-            value: "Naturella Pad",
-            note: "Highest absorption: 16.0 g/g. Always Platinum fastest rate: 7.76 s/5 mL.",
-          },
-          {
-            label: "Most Sustainable",
-            value: "Reusable Cloth Pad",
-            note: "Near-zero per-use CO₂e when amortized over 100+ uses. Fully biodegradable — highest expected mass loss in soil burial test.",
-          },
-        ].map(({ label, value, note }) => (
-          <div
-            key={label}
-            className="border border-slate-200 rounded-2xl p-6 shadow-sm hover:-translate-y-0.5 hover:shadow-md transition-all duration-200"
-          >
-            <p className="text-sm font-bold text-slate-700 uppercase tracking-wider mb-2">
-              {label}
+      {/* Environmental Impact Stats */}
+      <div className="border border-slate-200 rounded-2xl p-8 shadow-sm mb-12">
+        <h2 className="text-sm font-bold text-slate-800 uppercase tracking-wider mb-6">
+          Environmental Impact at Scale
+        </h2>
+        <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
+          <div className="bg-rose-50 rounded-xl p-5 text-center">
+            <p className="text-3xl font-bold text-rose-500">80.85B</p>
+            <p className="text-sm text-slate-600 mt-1">
+              products per menstrual cycle globally
             </p>
-            <p className="text-2xl font-bold text-slate-950 mb-1">{value}</p>
-            <p className="text-base text-slate-700 italic">{note}</p>
           </div>
-        ))}
+          <div className="bg-rose-50 rounded-xl p-5 text-center">
+            <p className="text-3xl font-bold text-rose-500">4.3B</p>
+            <p className="text-sm text-slate-600 mt-1">
+              disposable products used annually in the UK
+            </p>
+          </div>
+          <div className="bg-rose-50 rounded-xl p-5 text-center">
+            <p className="text-3xl font-bold text-rose-500">~800</p>
+            <p className="text-sm text-slate-600 mt-1">
+              years to fully decompose in landfills
+            </p>
+          </div>
+          <div className="bg-amber-50 rounded-xl p-5 text-center">
+            <p className="text-3xl font-bold text-amber-600">2B</p>
+            <p className="text-sm text-slate-600 mt-1">
+              items flushed down UK toilets yearly
+            </p>
+          </div>
+          <div className="bg-amber-50 rounded-xl p-5 text-center">
+            <p className="text-3xl font-bold text-amber-600">18,000</p>
+            <p className="text-sm text-slate-600 mt-1">
+              products wash up on beaches annually worldwide
+            </p>
+          </div>
+          <div className="bg-emerald-50 rounded-xl p-5 text-center">
+            <p className="text-3xl font-bold text-emerald-600">100K</p>
+            <p className="text-sm text-slate-600 mt-1">
+              marine animals killed by plastic debris each year
+            </p>
+          </div>
+        </div>
       </div>
 
       {/* Product type rankings */}
@@ -147,7 +219,7 @@ export default function Conclusions() {
                   {row.rank === 3 &&
                     "Lower capacity than commercial pads but faster absorption rate in some cases."}
                   {row.rank === 4 &&
-                    "Lowest capacity by design — reusable, washable, and environmentally sustainable."}
+                     "Lowest capacity by design, reusable, washable, and environmentally sustainable."}
                 </td>
               </tr>
             ))}
@@ -163,13 +235,13 @@ export default function Conclusions() {
         <p className="text-base text-slate-700 leading-relaxed mb-4">
           Physics data shows commercial pads (especially Naturella) absorb
           significantly more fluid per gram than cloth pads. However, absorption
-          rate tells a different story — Always Platinum absorbed 5 mL in just
+          rate tells a different story. Always Platinum absorbed 5 mL in just
           7.76 seconds (rank 1), while Naturella took 44.23 seconds (rank 7).
         </p>
         <p className="text-base text-slate-700 leading-relaxed mb-4">
           Literature research reveals a critical health tradeoff: tampons carry
           the highest bacterial growth risk and are the only product type
-          associated with Toxic Shock Syndrome (TSS), caused by <em>Staphylococcus aureus</em> toxin release. A 2024 study detected 16 heavy metals — including lead, arsenic, and cadmium — across all 14 tampon brands tested (Shearston et al., <em>Environment International</em>). Meanwhile, a 2025 Notre Dame study found PFAS &quot;forever chemicals&quot; in 33% of reusable period products at parts-per-million levels (Wicks et al., <em>EST Letters</em>).
+          associated with Toxic Shock Syndrome (TSS), caused by <em>Staphylococcus aureus</em> toxin release. A 2024 study detected 16 heavy metals, including lead, arsenic, and cadmium, across all 14 tampon brands tested (Shearston et al., <em>Environment International</em>). Meanwhile, a 2025 Notre Dame study found PFAS &quot;forever chemicals&quot; in 33% of reusable period products at parts-per-million levels (Wicks et al., <em>EST Letters</em>).
         </p>
         <p className="text-base text-slate-700 leading-relaxed">
           No single product excels across all four axes. The optimal choice depends on user priorities: performance (commercial pads), safety and chemistry (organic pads), or environmental impact (reusable cloth).
@@ -210,7 +282,7 @@ export default function Conclusions() {
           Our Conceptual Product
         </h2>
         <p className="text-base text-slate-600 mb-4">
-          Brand name TBD — designed by our team
+          Brand name TBD, designed by our team
         </p>
         <p className="text-base text-slate-700 leading-relaxed mb-6">
           As part of this project, we are designing a conceptual menstrual
@@ -222,7 +294,7 @@ export default function Conclusions() {
             {
               axis: "Biology",
               detail:
-                "Minimize bacterial growth through breathable, natural-fibre materials. External pad design eliminates TSS risk entirely — unlike tampons which introduce oxygen and promote S. aureus proliferation.",
+                "Minimize bacterial growth through breathable, natural-fibre materials. External pad design eliminates TSS risk entirely, unlike tampons which introduce oxygen and promote S. aureus proliferation.",
             },
             {
               axis: "Chemistry",
@@ -232,7 +304,7 @@ export default function Conclusions() {
             {
               axis: "Physics",
               detail:
-                "Balance high absorption capacity (target: ≥12 g/g) with fast absorption rate (target: ≤15 s/5 mL). Commercial pads set the benchmark; organic materials must compete.",
+                "Balance high absorption capacity (target: ≥12 g/g) with fast absorption rate (target: ≤15 s/5 mL). Commercial pads set the benchmark, but organic materials must compete.",
             },
             {
               axis: "Environment",
@@ -252,8 +324,8 @@ export default function Conclusions() {
           ))}
         </div>
         <p className="text-base text-slate-700 leading-relaxed">
-          Details — including branding, materials sourcing, pricing strategy,
-          and product specifications — will be added once the team finalises the
+          Details, including branding, materials sourcing, pricing strategy,
+          and product specifications, will be added once the team finalises the
           concept.
         </p>
       </div>

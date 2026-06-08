@@ -7,7 +7,11 @@ const team = [
   },
   { name: "Ela Sabolová", subject: "Biology", image: "/pictures/ela.jpeg" },
   { name: "Milana Golubková", subject: "Environmental Systems and Societies" },
-  { name: "Alexander Hvezdoň Štefko", subject: "Computer Science" },
+  {
+    name: "Alexander Hvezdoň Štefko",
+    subject: "Computer Science",
+    image: "/pictures/alex.png",
+  },
 ];
 
 export default function About() {
@@ -23,8 +27,8 @@ export default function About() {
           </h1>
           <p className="text-lg text-slate-700 max-w-3xl">
             Five IB Diploma students from five disciplines, collaborating across
-            subject boundaries to investigate a real-world health and
-            sustainability challenge.
+            subjects to investigate a real-world health and sustainability
+            challenge.
           </p>
         </div>
 
@@ -45,7 +49,7 @@ export default function About() {
                   <img
                     src={image}
                     alt={name}
-                    className={`w-full h-full object-cover ${image === "/pictures/ela.jpeg" ? "scale-[3] origin-top" : ""}`}
+                    className={`w-full h-full object-cover ${image === "/pictures/ela.jpeg" ? "scale-[3] origin-top" : image === "/pictures/alex.png" ? "scale-150 translate-x-1 -translate-y-1" : ""}`}
                   />
                 ) : (
                   <span className="text-2xl font-bold text-rose-500">
@@ -68,9 +72,14 @@ export default function About() {
           <p className="text-base text-slate-700 leading-relaxed">
             This IB Collaborative Science project investigates menstrual
             products across Biology, Chemistry, Physics, and Environmental
-            Science. Seven branded products from three manufacturers were tested
-            in a controlled school laboratory setting. The findings are
-            presented here alongside an interactive recommendation tool.
+            Science. Physics involved hands-on laboratory experiments
+            measuring absorption capacity and rate for all seven products. The
+            Biology, Chemistry, and Environmental Science assessments are based
+            on published literature review and peer-reviewed scientific studies.
+            Computer Science contributed the interactive web platform, data
+            processing, and statistical analysis that makes the findings
+            accessible. The results are presented here alongside an interactive
+            recommendation tool.
           </p>
         </div>
       </div>

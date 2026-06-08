@@ -25,41 +25,6 @@ function fmt(v: number | null): string {
   return v === null ? "—" : v.toFixed(1);
 }
 
-function fmtRate(v: number | null): string {
-  return v === null ? "—" : `${v.toFixed(2)} s`;
-}
-
-function Stats({ axisKey }: { axisKey: AxisKey }) {
-  const values = productKeys
-    .map((k) => products[k].scores[axisKey])
-    .filter((v): v is number => v !== null);
-  if (values.length === 0)
-    return <span className="text-slate-500 text-sm">no data</span>;
-  const mean = values.reduce((a, b) => a + b, 0) / values.length;
-  const min = Math.min(...values);
-  const max = Math.max(...values);
-  const std = Math.sqrt(
-    values.reduce((s, v) => s + (v - mean) ** 2, 0) / values.length,
-  );
-  return (
-    <div className="text-sm space-y-0.5">
-      <div className="flex gap-3">
-        <span className="text-slate-600">mean</span>
-        <span className="font-medium text-slate-900">{mean.toFixed(2)}</span>
-        <span className="text-slate-600">min</span>
-        <span className="font-medium text-slate-900">{min.toFixed(1)}</span>
-        <span className="text-slate-600">max</span>
-        <span className="font-medium text-slate-900">{max.toFixed(1)}</span>
-        <span className="text-slate-600">σ</span>
-        <span className="font-medium text-slate-900">{std.toFixed(2)}</span>
-      </div>
-      <div className="text-slate-500">
-        n = {values.length} of {productKeys.length}
-      </div>
-    </div>
-  );
-}
-
 function pearsonR(xs: number[], ys: number[]): number {
   const n = xs.length;
   if (n < 2) return 0;
@@ -83,9 +48,9 @@ function ScatterPlot({
   r: number;
 }) {
   const [hovered, setHovered] = useState<number | null>(null);
-  const h = 300;
-  const pad = { top: 20, right: 20, bottom: 40, left: 44 };
-  const svgW = 600;
+  const h = 480;
+  const pad = { top: 24, right: 24, bottom: 52, left: 56 };
+  const svgW = 720;
   const innerW = svgW - pad.left - pad.right;
   const innerH = h - pad.top - pad.bottom;
   const xScale = (v: number) => pad.left + (v / 10) * innerW;
@@ -126,16 +91,16 @@ function ScatterPlot({
               y={yScale(t) + 4}
               textAnchor="end"
               fill="#475569"
-              fontSize={12}
+              fontSize={14}
             >
               {t}
             </text>
             <text
               x={xScale(t)}
-              y={h - pad.bottom + 14}
+              y={h - pad.bottom + 16}
               textAnchor="middle"
               fill="#475569"
-              fontSize={12}
+              fontSize={14}
             >
               {t}
             </text>
@@ -148,17 +113,17 @@ function ScatterPlot({
           y={h - 6}
           textAnchor="middle"
           fill="#334155"
-          fontSize={13}
+          fontSize={14}
           fontWeight={600}
         >
           {xLabel}
         </text>
         <text
-          x={12}
+          x={14}
           y={pad.top + innerH / 2}
           textAnchor="middle"
           fill="#334155"
-          fontSize={13}
+          fontSize={14}
           fontWeight={600}
           transform={`rotate(-90, 12, ${pad.top + innerH / 2})`}
         >
@@ -186,33 +151,22 @@ function ScatterPlot({
               />
               {isHovered && (
                 <>
-                  <rect
-                    x={Math.max(2, cx - 60)}
-                    y={Math.max(0, cy - 50)}
-                    width={120}
-                    height={40}
-                    rx={6}
-                    fill="white"
-                    stroke="#e2e8f0"
-                    strokeWidth={1}
-                    filter="drop-shadow(0 2px 4px rgba(0,0,0,0.1))"
-                  />
                   <text
                     x={cx}
-                    y={cy - 36}
+                    y={cy - 28}
                     textAnchor="middle"
                     fill="#1e293b"
-                    fontSize={13}
+                    fontSize={15}
                     fontWeight={700}
                   >
                     {d.name}
                   </text>
                   <text
                     x={cx}
-                    y={cy - 18}
+                    y={cy - 8}
                     textAnchor="middle"
                     fill="#475569"
-                    fontSize={11}
+                    fontSize={13}
                   >
                     {xLabel}: {d.x.toFixed(1)} · {yLabel}: {d.y.toFixed(1)}
                   </text>
@@ -232,13 +186,13 @@ function ScatterPlot({
 }
 
 export default function DataResults() {
-  const [sortAxis, setSortAxis] = useState<AxisKey>("performance");
+  const [sortKey, setSortKey] = useState<string>("performance");
   const [sortDir, setSortDir] = useState<"asc" | "desc">("desc");
   const [visibleProducts, setVisibleProducts] = useState<Set<ProductKey>>(
     new Set(["naturella_pad", "jessa_cloth"]),
   );
-  const [xAxis, setXAxis] = useState<AxisKey>("performance");
-  const [yAxis, setYAxis] = useState<AxisKey>("environment");
+  const [xAxis, setXAxis] = useState<string>("performance");
+  const [yAxis, setYAxis] = useState<string>("environment");
 
   function toggleProduct(k: ProductKey) {
     setVisibleProducts((prev) => {
@@ -252,13 +206,37 @@ export default function DataResults() {
     });
   }
 
-  function handleSort(key: AxisKey) {
-    if (key === sortAxis) {
+  function handleSort(key: string) {
+    if (key === sortKey) {
       setSortDir((d) => (d === "desc" ? "asc" : "desc"));
     } else {
-      setSortAxis(key);
+      setSortKey(key);
       setSortDir("desc");
     }
+  }
+
+  function getSortValue(k: ProductKey, key: string): number {
+    if (key === "price") return products[k].price ?? -1;
+    if (key === "absorptionRate") return products[k].absorptionRate ?? -1;
+    if (key === "annualCost") return products[k].subMetrics.annualCost ?? -1;
+    return products[k].scores[key as AxisKey] ?? -1;
+  }
+
+  const allMetricKeys = [...new Set([...axes.map(a => a.key), ...subMetrics.map(sm => sm.key)])];
+
+  const sortedKeys = [...productKeys].sort((a, b) => {
+    const va = getSortValue(a, sortKey);
+    const vb = getSortValue(b, sortKey);
+    return sortDir === "desc" ? vb - va : va - vb;
+  });
+
+  function getMetricValue(k: ProductKey, key: string): number | null {
+    const axisKey = key as AxisKey;
+    if (axes.some(a => a.key === axisKey)) return products[k].scores[axisKey];
+    const smKey = key as SubMetricKey;
+    const raw = getSubMetric(k, smKey);
+    if (raw === null) return null;
+    return normalizeSubMetric(smKey, raw, productKeys.map(pk => getSubMetric(pk, smKey)));
   }
 
   const visibleKeys = productKeys.filter((k) => visibleProducts.has(k));
@@ -316,12 +294,6 @@ export default function DataResults() {
     ),
   }));
 
-  const sortedKeys = [...productKeys].sort((a, b) => {
-    const va = products[a].scores[sortAxis] ?? -1;
-    const vb = products[b].scores[sortAxis] ?? -1;
-    return sortDir === "desc" ? vb - va : va - vb;
-  });
-
   return (
     <div className="px-8 lg:px-16 py-16">
       <div className="max-w-7xl mx-auto">
@@ -359,9 +331,9 @@ export default function DataResults() {
         </div>
 
         {/* Radar charts — two side by side */}
-        <div className="grid grid-cols-2 gap-8 mb-8">
+        <div className="grid grid-cols-2 gap-10 mb-8">
           {/* Left — main axes scores */}
-          <div className="border border-slate-200 rounded-2xl p-8 shadow-sm">
+          <div className="border border-slate-200 rounded-2xl p-10 shadow-sm">
             <h2 className="text-xl font-bold text-slate-950 mb-1">
               Overall Scores
             </h2>
@@ -386,7 +358,7 @@ export default function DataResults() {
           </div>
 
           {/* Right — specific measurements */}
-          <div className="border border-slate-200 rounded-2xl p-8 shadow-sm">
+          <div className="border border-slate-200 rounded-2xl p-10 shadow-sm">
             <h2 className="text-xl font-bold text-slate-950 mb-1">
               Specific Measurements
             </h2>
@@ -425,13 +397,13 @@ export default function DataResults() {
             return (
               <div
                 key={key}
-                className="border border-slate-200 rounded-2xl p-6 shadow-sm"
+                className="border border-slate-200 rounded-2xl p-10 shadow-sm"
               >
                 <h3 className="text-lg font-bold text-slate-950 mb-1">
                   {label}
                 </h3>
                 <p className="text-sm text-slate-700 mb-4">{description}</p>
-                <SimpleBars data={barData} domain={[0, 10]} />
+                <SimpleBars data={barData} domain={[0, 10]} height={280} />
               </div>
             );
           })}
@@ -454,13 +426,13 @@ export default function DataResults() {
             return (
               <div
                 key={key}
-                className="border border-slate-200 rounded-2xl p-6 shadow-sm"
+                className="border border-slate-200 rounded-2xl p-10 shadow-sm"
               >
                 <h3 className="text-lg font-bold text-slate-950 mb-1">
                   {label}
                 </h3>
                 <p className="text-sm text-slate-700 mb-4">{description}</p>
-                <SimpleBars data={barData} />
+                <SimpleBars data={barData} height={280} />
               </div>
             );
           })}
@@ -476,7 +448,7 @@ export default function DataResults() {
               Click axis header to sort
             </span>
           </div>
-          <table className="w-full text-base">
+          <table className="w-full text-lg">
             <thead className="bg-slate-50/50">
               <tr>
                 <th className="px-6 py-4 text-left font-bold text-slate-800">
@@ -486,28 +458,33 @@ export default function DataResults() {
                   <th
                     key={a.key}
                     onClick={() => handleSort(a.key)}
-                    className="px-5 py-4 text-center font-bold text-slate-800 cursor-pointer hover:text-rose-500 select-none transition-colors duration-200"
+                    className="px-5 py-4 text-center font-bold text-slate-800 cursor-pointer hover:text-rose-500 select-none transition-colors duration-200 hover:bg-rose-50/50"
                   >
                     {a.label}
-                    {sortAxis === a.key && (
+                    {sortKey === a.key && (
                       <span className="ml-1 text-rose-500">
                         {sortDir === "desc" ? "↓" : "↑"}
                       </span>
                     )}
                   </th>
                 ))}
-                <th className="px-5 py-4 text-center font-bold text-slate-800">
-                  Rate (s/5 mL)
-                </th>
-                <th className="px-5 py-4 text-center font-bold text-slate-800">
+                <th
+                  onClick={() => handleSort("price")}
+                  className="px-5 py-4 text-center font-bold text-slate-800 cursor-pointer hover:text-rose-500 select-none transition-colors duration-200 hover:bg-rose-50/50"
+                >
                   € Price
+                  {sortKey === "price" && (
+                    <span className="ml-1 text-rose-500">
+                      {sortDir === "desc" ? "↓" : "↑"}
+                    </span>
+                  )}
                 </th>
               </tr>
             </thead>
             <tbody>
               {sortedKeys.map((k, i) => (
-                <tr key={k} className={i % 2 === 0 ? "" : "bg-slate-50/50"}>
-                  <td className="px-6 py-4 font-medium text-slate-950">
+                <tr key={k} className={`${i % 2 === 0 ? "" : "bg-slate-50/50"} hover:bg-rose-50/30 transition-colors duration-150`}>
+                  <td className="px-6 py-4 font-semibold text-slate-950">
                     <div className="flex items-center gap-2">
                       <span
                         className="w-2.5 h-2.5 rounded-full flex-shrink-0"
@@ -519,19 +496,12 @@ export default function DataResults() {
                   {axes.map((a) => (
                     <td
                       key={a.key}
-                      className={`px-5 py-4 text-center text-base ${
-                        a.key === sortAxis
-                          ? "font-bold text-slate-950"
-                          : "text-slate-700"
-                      }`}
+                      className={`px-5 py-4 text-center ${sortKey === a.key ? "font-bold text-slate-950" : "text-slate-700"}`}
                     >
                       {fmt(products[k].scores[a.key])}
                     </td>
                   ))}
-                  <td className="px-5 py-4 text-center text-slate-700">
-                    {fmtRate(products[k].absorptionRate)}
-                  </td>
-                  <td className="px-5 py-4 text-center text-slate-700">
+                  <td className={`px-5 py-4 text-center ${sortKey === "price" ? "font-bold text-slate-950" : "text-slate-700"}`}>
                     {products[k].price !== null
                       ? `€${products[k].price.toFixed(2)}`
                       : "—"}
@@ -548,91 +518,108 @@ export default function DataResults() {
             <span className="text-sm font-bold text-slate-800 uppercase tracking-wider">
               Statistical Summary
             </span>
+            <span className="text-sm text-slate-500 ml-3">
+              mean · min · max · σ across all products
+            </span>
           </div>
-          <table className="w-full text-base">
-            <thead className="bg-slate-50/50">
-              <tr>
-                <th className="px-6 py-4 text-left font-bold text-slate-800">
-                  Axis
-                </th>
-                <th className="px-5 py-4 text-center font-bold text-slate-800">
-                  Statistics
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              {axes.map(({ key, label }, i) => (
-                <tr key={key} className={i % 2 === 0 ? "" : "bg-slate-50/50"}>
-                  <td className="px-6 py-4 font-medium text-slate-900">
-                    {label}
-                  </td>
-                  <td className="px-4 py-3">
-                    <Stats axisKey={key} />
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+          <div className="p-6 grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            {axes.map(({ key, label }) => {
+              const values = productKeys
+                .map((k) => products[k].scores[key])
+                .filter((v): v is number => v !== null);
+              if (values.length === 0) return null;
+              const mean = values.reduce((a, b) => a + b, 0) / values.length;
+              const min = Math.min(...values);
+              const max = Math.max(...values);
+              const std = Math.sqrt(
+                values.reduce((s, v) => s + (v - mean) ** 2, 0) / values.length,
+              );
+              return (
+                <div
+                  key={key}
+                  className="border border-slate-200 rounded-xl p-5 bg-white hover:shadow-sm transition-shadow duration-200"
+                >
+                  <p className="text-sm font-bold text-slate-800 mb-3">{label}</p>
+                  <div className="grid grid-cols-2 gap-x-4 gap-y-1 text-sm">
+                    <span className="text-slate-500">Mean</span>
+                    <span className="font-semibold text-slate-900 text-right">{mean.toFixed(2)}</span>
+                    <span className="text-slate-500">Min</span>
+                    <span className="font-semibold text-slate-900 text-right">{min.toFixed(1)}</span>
+                    <span className="text-slate-500">Max</span>
+                    <span className="font-semibold text-slate-900 text-right">{max.toFixed(1)}</span>
+                    <span className="text-slate-500">σ</span>
+                    <span className="font-semibold text-slate-900 text-right">{std.toFixed(2)}</span>
+                  </div>
+                  <p className="text-xs text-slate-400 mt-2">
+                    n = {values.length} of {productKeys.length}
+                  </p>
+                </div>
+              );
+            })}
+          </div>
         </div>
 
         {/* Correlation scatter */}
-        <div className="border border-slate-200 rounded-2xl p-8 shadow-sm mt-10">
+        <div className="border border-slate-200 rounded-2xl p-10 shadow-sm mt-10">
           <h2 className="text-xl font-bold text-slate-950 mb-1">
             Correlation Explorer
           </h2>
           <p className="text-base text-slate-700 mb-6">
-            Select two axes to visualise their relationship across all products.
-            Each dot is one product. Only products with data on both axes are
-            shown.
+            Select two metrics to visualise their relationship. All values
+            normalised 0–10. Each dot is one product.
           </p>
 
-          <div className="flex gap-8 mb-6 flex-wrap">
-            {(["x", "y"] as const).map((axis) => (
-              <div key={axis}>
-                <label className="text-sm font-bold text-slate-800 uppercase tracking-wider block mb-2">
-                  {axis.toUpperCase()} Axis
-                </label>
-                <div className="flex gap-2 flex-wrap">
-                  {axes.map((a) => {
-                    const hasData = productKeys.some(
-                      (k) => products[k].scores[a.key] !== null,
-                    );
-                    const selected =
-                      axis === "x" ? xAxis === a.key : yAxis === a.key;
-                    return (
-                      <button
-                        key={a.key}
-                        disabled={!hasData}
-                        onClick={() =>
-                          axis === "x" ? setXAxis(a.key) : setYAxis(a.key)
-                        }
-                        className={`px-3 py-1.5 rounded-lg text-sm border transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-rose-500 ${
-                          selected
-                            ? "bg-rose-500 text-white border-rose-500"
-                            : hasData
-                              ? "border-slate-300 text-slate-700 hover:border-rose-300"
-                              : "border-slate-200 text-slate-400 cursor-not-allowed"
-                        }`}
-                      >
-                        {a.label}
-                      </button>
-                    );
-                  })}
+          <div className="flex gap-10 mb-6 flex-wrap">
+            {(["x", "y"] as const).map((axis) => {
+              const selected = axis === "x" ? xAxis : yAxis;
+              return (
+                <div key={axis}>
+                  <label className="text-sm font-bold text-slate-800 uppercase tracking-wider block mb-2">
+                    {axis.toUpperCase()} Axis
+                  </label>
+                  <div className="flex gap-2 flex-wrap">
+                    {allMetricKeys.map((key) => {
+                      const label = axes.find(a => a.key === key)?.label ?? subMetrics.find(sm => sm.key === key)?.label ?? key;
+                      const hasData = productKeys.some(
+                        (k) => getMetricValue(k, key) !== null && !isNaN(getMetricValue(k, key)!),
+                      );
+                      return (
+                        <button
+                          key={key}
+                          disabled={!hasData}
+                          onClick={() =>
+                            axis === "x" ? setXAxis(key) : setYAxis(key)
+                          }
+                          className={`px-3 py-1.5 rounded-lg text-sm border transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-rose-500 ${
+                            selected === key
+                              ? "bg-rose-500 text-white border-rose-500"
+                              : hasData
+                                ? "border-slate-300 text-slate-700 hover:border-rose-300"
+                                : "border-slate-200 text-slate-400 cursor-not-allowed"
+                          }`}
+                        >
+                          {label}
+                        </button>
+                      );
+                    })}
+                  </div>
                 </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
 
           {(() => {
             const scatterData = productKeys
               .filter(
-                (k) =>
-                  products[k].scores[xAxis] !== null &&
-                  products[k].scores[yAxis] !== null,
+                (k) => {
+                  const xVal = getMetricValue(k, xAxis);
+                  const yVal = getMetricValue(k, yAxis);
+                  return xVal !== null && yVal !== null && !isNaN(xVal) && !isNaN(yVal);
+                },
               )
               .map((k) => ({
-                x: products[k].scores[xAxis]!,
-                y: products[k].scores[yAxis]!,
+                x: getMetricValue(k, xAxis)!,
+                y: getMetricValue(k, yAxis)!,
                 name: products[k].label,
                 color: products[k].color,
               }));
@@ -650,11 +637,14 @@ export default function DataResults() {
               scatterData.map((d) => d.y),
             );
 
+            const xLabel = axes.find((a) => a.key === xAxis)?.label ?? subMetrics.find(sm => sm.key === xAxis)?.label ?? xAxis;
+            const yLabel = axes.find((a) => a.key === yAxis)?.label ?? subMetrics.find(sm => sm.key === yAxis)?.label ?? yAxis;
+
             return (
               <ScatterPlot
                 data={scatterData}
-                xLabel={axes.find((a) => a.key === xAxis)?.label ?? ""}
-                yLabel={axes.find((a) => a.key === yAxis)?.label ?? ""}
+                xLabel={xLabel}
+                yLabel={yLabel}
                 r={r}
               />
             );

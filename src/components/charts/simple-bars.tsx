@@ -102,7 +102,7 @@ export function SimpleBars({
 
         {data.map((d, i) => {
           const x = pad.left + i * barAreaW + (barAreaW - barW) / 2;
-          const barH = Math.max(0, ((d.value - min) / range) * innerH);
+          const barH = Math.max(3, ((d.value - min) / range) * innerH);
           const y = pad.top + innerH - barH;
           const isHovered = hovered === i;
 

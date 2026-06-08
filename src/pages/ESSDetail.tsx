@@ -9,13 +9,48 @@ import { products } from "../data/products";
 const subject = subjects.find((s) => s.slug === "environment")!;
 
 const productEnvIssues = [
-  { key: "always_platinum", label: "Always Platinum Pad", type: "Disposable pad", issue: "Plastic waste, landfill accumulation, resource use" },
-  { key: "ria_pad", label: "Ria Ultra Pad", type: "Disposable pad", issue: "Plastic layers and packaging waste" },
-  { key: "naturella_pad", label: "Naturella Pad", type: "Disposable pad", issue: "Plastic waste, packaging waste" },
-  { key: "jessa_cotton", label: "Jessa Cotton Pad", type: "Disposable cotton pad", issue: "Less synthetic materials but still single-use waste" },
-  { key: "ria_tampon", label: "Ria Tampon", type: "Disposable tampon", issue: "Cotton production, packaging waste" },
-  { key: "ob_tampon", label: "o.b. Tampon", type: "Disposable tampon", issue: "Lower plastic than pads, but still single-use" },
-  { key: "jessa_cloth", label: "Jessa Cloth Pad", type: "Reusable cloth pad", issue: "Water and energy for washing, but much less waste overall" },
+  {
+    key: "always_platinum",
+    label: "Always Platinum Pad",
+    type: "Disposable pad",
+    issue: "Plastic waste, landfill accumulation, resource use",
+  },
+  {
+    key: "ria_pad",
+    label: "Ria Ultra Pad",
+    type: "Disposable pad",
+    issue: "Plastic layers and packaging waste",
+  },
+  {
+    key: "naturella_pad",
+    label: "Naturella Pad",
+    type: "Disposable pad",
+    issue: "Plastic waste, packaging waste",
+  },
+  {
+    key: "jessa_cotton",
+    label: "Jessa Cotton Pad",
+    type: "Disposable cotton pad",
+    issue: "Less synthetic materials but still single-use waste",
+  },
+  {
+    key: "ria_tampon",
+    label: "Ria Tampon",
+    type: "Disposable tampon",
+    issue: "Cotton production, packaging waste",
+  },
+  {
+    key: "ob_tampon",
+    label: "o.b. Tampon",
+    type: "Disposable tampon",
+    issue: "Lower plastic than pads, but still single-use",
+  },
+  {
+    key: "jessa_cloth",
+    label: "Jessa Cloth Pad",
+    type: "Reusable cloth pad",
+    issue: "Water and energy for washing, but much less waste overall",
+  },
 ] as const;
 
 const surveyData: SimpleBarDatum[] = [
@@ -150,27 +185,41 @@ export default function ESSDetail() {
             <table className="w-full text-sm">
               <thead>
                 <tr className="bg-slate-50 border-b border-slate-200">
-                  <th className="px-5 py-3 text-left font-semibold text-slate-600">Product</th>
-                  <th className="px-4 py-3 text-left font-semibold text-slate-600">Type</th>
-                  <th className="px-4 py-3 text-left font-semibold text-slate-600">Main Environmental Issues</th>
+                  <th className="px-5 py-3 text-left font-semibold text-slate-600">
+                    Product
+                  </th>
+                  <th className="px-4 py-3 text-left font-semibold text-slate-600">
+                    Type
+                  </th>
+                  <th className="px-4 py-3 text-left font-semibold text-slate-600">
+                    Main Environmental Issues
+                  </th>
                 </tr>
               </thead>
               <tbody>
                 {productEnvIssues.map((p, i) => {
                   const pr = products[p.key as keyof typeof products];
                   return (
-                    <tr key={p.key} className={i % 2 === 0 ? "" : "bg-slate-50/50"}>
+                    <tr
+                      key={p.key}
+                      className={i % 2 === 0 ? "" : "bg-slate-50/50"}
+                    >
                       <td className="px-5 py-3">
                         <Link
                           to={`/products/${p.key}`}
                           className="flex items-center gap-2 text-slate-900 font-medium hover:text-rose-500 transition-colors"
                         >
-                          <span className="w-2.5 h-2.5 rounded-full flex-shrink-0" style={{ background: pr.color }} />
+                          <span
+                            className="w-2.5 h-2.5 rounded-full flex-shrink-0"
+                            style={{ background: pr.color }}
+                          />
                           {p.label}
                         </Link>
                       </td>
                       <td className="px-4 py-3 text-slate-600">{p.type}</td>
-                      <td className="px-4 py-3 text-slate-700 leading-relaxed">{p.issue}</td>
+                      <td className="px-4 py-3 text-slate-700 leading-relaxed">
+                        {p.issue}
+                      </td>
                     </tr>
                   );
                 })}
@@ -189,12 +238,12 @@ export default function ESSDetail() {
                 synthetic materials and plastics take approximately 800 years to
                 fully decompose. Annually, 18,000 products wash up on beaches
                 worldwide, contributing to the death of approximately 100,000
-                marine animals — seabirds, fish, turtles, and mammals — due to
-                plastics and chemicals. An additional 2 billion items are flushed
-                down UK toilets each year, causing plumbing blockages and
-                contaminating municipal wastewater systems. Used products cannot
-                be recycled due to mixed synthetic and natural materials combined
-                with hygiene risks.
+                marine animals (seabirds, fish, turtles, and mammals) due to
+                plastics and chemicals. An additional 2 billion items are
+                flushed down UK toilets each year, causing plumbing blockages
+                and contaminating municipal wastewater systems. Used products
+                cannot be recycled due to mixed synthetic and natural materials
+                combined with hygiene risks.
               </p>
             </div>
 

@@ -43,16 +43,16 @@ export default function Home() {
             Millions of women use menstrual products daily without full
             knowledge of their chemical composition, bacterial safety, or
             environmental footprint. This project addresses that gap through
-            rigorous cross-disciplinary laboratory analysis.
+            rigorous cross-disciplinary analysis.
           </p>
         </div>
 
         {/* Research Question */}
-        <div className="bg-amber-50 border border-amber-200 rounded-2xl p-8 mb-16">
-          <h2 className="text-sm font-semibold text-amber-600 uppercase tracking-widest mb-2">
+        <div className="max-w-3xl mx-auto mb-16">
+          <h2 className="text-sm font-semibold text-amber-600 uppercase tracking-widest mb-4 text-center">
             Research Question
           </h2>
-          <p className="text-xl font-bold text-slate-950 leading-relaxed">
+          <p className="text-2xl sm:text-3xl font-bold text-slate-950 leading-snug text-center">
             Which type of menstrual product best minimizes health risks and
             environmental impact across biological, chemical, physical, and
             environmental dimensions?
@@ -65,10 +65,10 @@ export default function Home() {
             Our Aim
           </h2>
           <p className="text-base text-slate-700 leading-relaxed">
-            This project aims to compare menstrual products across five
-            scientific disciplines to determine which product type minimizes
-            health and environmental risks, and to recommend safer options for
-            women.
+            This project aims to compare menstrual products across four
+            scientific disciplines and a cost analysis to determine which
+            product type minimizes health and environmental risks, and to
+            recommend safer options for women.
           </p>
         </div>
 
@@ -78,8 +78,8 @@ export default function Home() {
             Want the most suitable menstrual product for yourself?
           </h2>
           <p className="text-rose-100 mb-6 text-base">
-            Set your priorities across safety, chemistry, performance, and
-            environment — our tool ranks all products for you.
+            Set your priorities across safety, chemistry, performance,
+            environment, and cost. Our tool ranks all products for you.
           </p>
           <Link
             to="/recommend"
@@ -107,7 +107,9 @@ export default function Home() {
                 to={axisSlug[key] || "/sciences"}
                 className="border border-slate-200 rounded-xl p-6 shadow-sm hover:border-rose-300 hover:bg-rose-50/40 hover:-translate-y-0.5 hover:shadow-md transition-all duration-200 block focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-rose-500 focus-visible:ring-offset-2"
               >
-                <h3 className="text-lg font-bold text-slate-950 mb-1">{label}</h3>
+                <h3 className="text-lg font-bold text-slate-950 mb-1">
+                  {label}
+                </h3>
                 <p className="text-base text-slate-700">{description}</p>
               </Link>
             ));
