@@ -1,11 +1,33 @@
 import { useParams, Link } from 'react-router-dom'
-import { products, axes, productTypeLabels, type ProductKey } from '../data/products'
+import { products, axes, subMetrics, productTypeLabels, type ProductKey, type SubMetricKey } from '../data/products'
 import { RadarChart as BklitRadarChart } from "../components/charts/radar-chart"
 import { RadarGrid } from "../components/charts/radar-grid"
 import { RadarAxis } from "../components/charts/radar-axis"
 import { RadarLabels } from "../components/charts/radar-labels"
 import { RadarArea } from "../components/charts/radar-area"
 import { RadarTooltip } from "../components/charts/radar-tooltip"
+
+const productKeys = Object.keys(products) as ProductKey[]
+
+function getRaw(k: ProductKey, key: SubMetricKey): number | null {
+  if (key === 'capacity') return products[k].scores.capacity
+  if (key === 'rate') return products[k].scores.rate
+  return products[k].subMetrics[key]
+}
+
+const lowerBetterKeys: SubMetricKey[] = ['tssRisk', 'chemicalExposure', 'environmentalImpact', 'annualCost']
+
+function normVal(k: ProductKey, key: SubMetricKey): number {
+  const vals = productKeys.map(pk => getRaw(pk, key)).filter((v): v is number => v !== null)
+  const raw = getRaw(k, key)
+  if (raw === null || vals.length < 2) return 0
+  if (key === 'capacity' || key === 'rate' || key === 'skinIrritation') return raw
+  const mn = Math.min(...vals)
+  const mx = Math.max(...vals)
+  if (mn === mx) return 5
+  const r = (raw - mn) / (mx - mn)
+  return lowerBetterKeys.includes(key) ? (1 - r) * 10 : r * 10
+}
 
 export default function ProductDetail() {
   const { id } = useParams<{ id: string }>()
@@ -89,40 +111,36 @@ export default function ProductDetail() {
         {/* Radar + Quick Stats side by side */}
         <div className="grid grid-cols-3 gap-8 mb-14">
           {/* Radar chart - takes 2/3 */}
-          <div className="col-span-2 border border-slate-200 rounded-2xl p-8 shadow-sm">
-            <h2 className="text-xl font-bold text-slate-950 mb-1">Score Profile</h2>
+          <div className="col-span-2 border border-slate-200 rounded-2xl p-6 shadow-sm flex flex-col items-center">
+            <h2 className="text-xl font-bold text-slate-950 mb-1 self-start">Score Profile</h2>
             {hasAnyPendingScore && (
-              <p className="text-sm text-amber-600 mb-4 font-medium">Axes with no data yet are shown as 0</p>
+              <p className="text-sm text-amber-600 mb-4 font-medium self-start">Axes with no data yet are shown as 0</p>
             )}
-            <div className="flex justify-center">
-              <BklitRadarChart data={bklitData} metrics={axes.map(a => ({ key: a.key, label: a.label }))} size={460}>
-                <RadarGrid />
-                <RadarAxis />
-                <RadarLabels offset={30} fontSize={13} />
-                <RadarArea index={0} />
-                <RadarTooltip />
-              </BklitRadarChart>
-            </div>
+            <BklitRadarChart data={bklitData} metrics={axes.map(a => ({ key: a.key, label: a.label }))} size={480}>
+              <RadarGrid />
+              <RadarAxis />
+              <RadarLabels offset={30} fontSize={13} />
+              <RadarArea index={0} />
+              <RadarTooltip />
+            </BklitRadarChart>
           </div>
 
-          {/* Quick stats - takes 1/3 */}
-          <div className="space-y-4">
-            {axes.map(({ key, label, description }) => (
-              <div key={key} className="border border-slate-200 rounded-xl p-5 shadow-sm">
-                <div className="flex justify-between items-start mb-2">
-                  <div>
-                    <h3 className="font-bold text-slate-950 text-base">{label}</h3>
-                    <p className="text-sm text-slate-600 mt-0.5">{description}</p>
+          {/* Specific measurements - takes 1/3 */}
+          <div className="space-y-3">
+            {subMetrics.map(({ key, label, description }) => {
+              const val = normVal(productKeys.find(k => k === (id as ProductKey))!, key);
+              return (
+                <div key={key} className="border border-slate-200 rounded-xl p-4 shadow-sm">
+                  <div className="flex justify-between items-baseline mb-1">
+                    <p className="font-bold text-slate-950 text-sm">{label}</p>
+                    <span className="text-sm font-bold text-slate-900 ml-2 flex-shrink-0">
+                      {val.toFixed(1)}
+                    </span>
                   </div>
-                  <span className={`text-lg font-bold ml-4 flex-shrink-0 ${
-                    product.scores[key] === null ? 'text-slate-400' : 'text-slate-900'
-                  }`}>
-                    {product.scores[key] !== null ? product.scores[key]!.toFixed(1) : '—'}
-                  </span>
+                  <p className="text-xs text-slate-500">{description}</p>
                 </div>
-                <p className="text-base text-slate-700 leading-relaxed">{product.details[key]}</p>
-              </div>
-            ))}
+              );
+            })}
           </div>
         </div>
 
