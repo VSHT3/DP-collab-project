@@ -206,13 +206,6 @@ export default function Home() {
             Sources
           </h2>
           <div className="border border-slate-200 rounded-2xl p-6 sm:p-8 shadow-sm">
-            <div className="mb-4 sm:mb-6">
-              <h3 className="text-sm font-bold text-slate-700 uppercase tracking-wider mb-2">Project Documents</h3>
-              <ul className="list-disc list-inside space-y-1 text-sm text-slate-700">
-                <li>Experimental Methods and Data</li>
-                <li>Health Research Review</li>
-              </ul>
-            </div>
             <div className="border-t border-slate-100 pt-4 sm:pt-6">
               <h3 className="text-sm font-bold text-slate-700 uppercase tracking-wider mb-2">Web Sources</h3>
               <ul className="list-disc list-inside space-y-1.5 text-sm text-slate-700">
