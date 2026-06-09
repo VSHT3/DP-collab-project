@@ -3,6 +3,7 @@ import { subjects } from '../data/sciences'
 import BiologyDetail from './BiologyDetail'
 import ChemistryDetail from './ChemistryDetail'
 import ESSDetail from './ESSDetail'
+import PhysicsDetail from './PhysicsDetail'
 
 export default function ScienceDetail() {
   const { slug } = useParams<{ slug: string }>()
@@ -17,6 +18,10 @@ export default function ScienceDetail() {
 
   if (slug === 'environment') {
     return <ESSDetail />
+  }
+
+  if (slug === 'physics') {
+    return <PhysicsDetail />
   }
 
   const subject = subjects.find(s => s.slug === slug)
