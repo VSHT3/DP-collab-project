@@ -56,6 +56,20 @@ function ScatterPlot({
   const xScale = (v: number) => pad.left + (v / 10) * innerW;
   const yScale = (v: number) => pad.top + innerH - (v / 10) * innerH;
 
+  // regression line
+  const xs = data.map(d => d.x);
+  const ys = data.map(d => d.y);
+  const meanX = xs.reduce((a, b) => a + b, 0) / xs.length;
+  const meanY = ys.reduce((a, b) => a + b, 0) / ys.length;
+  const stdX = Math.sqrt(xs.reduce((s, x) => s + (x - meanX) ** 2, 0) / xs.length);
+  const stdY = Math.sqrt(ys.reduce((s, y) => s + (y - meanY) ** 2, 0) / ys.length);
+  const slope = stdX > 0 ? r * (stdY / stdX) : 0;
+  const intercept = meanY - slope * meanX;
+  const xMin = Math.min(...xs);
+  const xMax = Math.max(...xs);
+  const lineY1 = intercept + slope * xMin;
+  const lineY2 = intercept + slope * xMax;
+
   return (
     <div>
       <svg
@@ -107,13 +121,25 @@ function ScatterPlot({
           </g>
         ))}
 
+        {/* Regression line */}
+        <line
+          x1={xScale(xMin)}
+          y1={yScale(lineY1)}
+          x2={xScale(xMax)}
+          y2={yScale(lineY2)}
+          stroke={r >= 0 ? "#e8738a" : "#3b82f6"}
+          strokeWidth={2}
+          strokeDasharray="6,4"
+          opacity={0.7}
+        />
+
         {/* Axis labels */}
         <text
           x={pad.left + innerW / 2}
           y={h - 6}
           textAnchor="middle"
           fill="#334155"
-          fontSize={14}
+          fontSize={16}
           fontWeight={600}
         >
           {xLabel}
@@ -123,7 +149,7 @@ function ScatterPlot({
           y={pad.top + innerH / 2}
           textAnchor="middle"
           fill="#334155"
-          fontSize={14}
+          fontSize={16}
           fontWeight={600}
           transform={`rotate(-90, 12, ${pad.top + innerH / 2})`}
         >
@@ -176,10 +202,8 @@ function ScatterPlot({
           );
         })}
       </svg>
-      <p className="text-sm text-slate-600 mt-3">
-        Pearson r = <strong className="text-slate-900">{r.toFixed(3)}</strong>
-        {" · "}
-        {data.length} products with data on both axes
+      <p className="text-sm text-center font-medium mt-3">
+        Pearson r = <strong className={`text-base ${r >= 0 ? "text-rose-500" : "text-blue-600"}`}>{r.toFixed(3)}</strong>
       </p>
     </div>
   );
@@ -251,8 +275,8 @@ export default function DataResults() {
   const visibleKeys = productKeys.filter((k) => visibleProducts.has(k));
 
   function getSubMetric(k: ProductKey, key: SubMetricKey): number | null {
-    if (key === "capacity") return products[k].scores.capacity;
-    if (key === "rate") return products[k].scores.rate;
+    if (key === "capacity") return products[k].capacityScore;
+    if (key === "rate") return products[k].rateScore;
     return products[k].subMetrics[key];
   }
 
@@ -347,7 +371,7 @@ export default function DataResults() {
               Overall Scores
             </h2>
             <p className="text-sm sm:text-base text-slate-700 mb-4">
-              Safety, Chemistry, Performance, Environment, Cost
+              Safety, Comfort, Performance, Environment, Cost
             </p>
             <div className="flex justify-center">
               <BklitRadarChart
@@ -403,10 +427,17 @@ export default function DataResults() {
               value: products[k].scores[key] ?? 0,
               color: products[k].color,
             }));
+            const compoundStyle: Record<string, string> = {
+              safety: "border-rose-200 bg-rose-50",
+              comfort: "border-amber-200 bg-amber-50",
+              performance: "border-blue-200 bg-blue-50",
+              environment: "border-emerald-200 bg-emerald-50",
+              cost: "border-violet-200 bg-violet-50",
+            };
             return (
               <div
                 key={key}
-                className="border border-slate-200 rounded-2xl p-6 sm:p-10 shadow-sm"
+                className={`border-2 rounded-2xl p-6 sm:p-10 shadow-sm ${compoundStyle[key] || "border-slate-200"}`}
               >
                 <h3 className="text-base sm:text-lg font-bold text-slate-950 mb-1">
                   {label}
@@ -418,26 +449,61 @@ export default function DataResults() {
           })}
         </div>
 
+        {/* Legend */}
+        <div className="flex flex-wrap gap-2 mb-3 sm:mb-4">
+          {[
+            { label: "Safety", color: "bg-rose-100 border-rose-300 text-rose-700" },
+            { label: "Comfort", color: "bg-amber-100 border-amber-300 text-amber-700" },
+            { label: "Performance", color: "bg-blue-100 border-blue-300 text-blue-700" },
+            { label: "Environment", color: "bg-emerald-100 border-emerald-300 text-emerald-700" },
+            { label: "Cost", color: "bg-violet-100 border-violet-300 text-violet-700" },
+          ].map(({ label, color }) => (
+            <span key={label} className={`text-xs font-medium px-3 py-1 rounded-full border ${color}`}>
+              {label}
+            </span>
+          ))}
+        </div>
+
         {/* Per-axis bar charts — specific measurements */}
         <h2 className="text-lg sm:text-xl font-bold text-slate-950 mb-3 sm:mb-4">
           Specific Measurements
         </h2>
         <div className="grid sm:grid-cols-2 gap-4 sm:gap-6 mb-8 sm:mb-10">
-          {subMetrics.map(({ key, label, description }) => {
+          {subMetrics.map(({ key, label, description, compound }) => {
+            const allVals = productKeys.map((k) => getSubMetric(k, key));
             const barData: SimpleBarDatum[] = productKeys.map((k) => {
-              const val = getSubMetric(k, key);
+              const val = normalizeSubMetric(key, getSubMetric(k, key), allVals);
               return {
                 name: products[k].label,
-                value: val ?? 0,
+                value: isNaN(val) ? 0 : val,
                 color: products[k].color,
               };
             });
+            const compoundStyle: Record<string, string> = {
+              safety: "border-rose-200 bg-rose-50",
+              comfort: "border-amber-200 bg-amber-50",
+              performance: "border-blue-200 bg-blue-50",
+              environment: "border-emerald-200 bg-emerald-50",
+              cost: "border-violet-200 bg-violet-50",
+            };
+            const compoundLabel: Record<string, string> = {
+              safety: "Safety",
+              comfort: "Comfort",
+              performance: "Performance",
+              environment: "Environment",
+              cost: "Cost",
+            };
             return (
               <div
                 key={key}
-                className="border border-slate-200 rounded-2xl p-6 sm:p-10 shadow-sm"
+                className={`border-2 rounded-2xl p-6 sm:p-10 shadow-sm ${compoundStyle[compound] || "border-slate-200"}`}
               >
-                <h3 className="text-base sm:text-lg font-bold text-slate-950 mb-1">
+                <div className="flex items-center gap-2 mb-1">
+                  <span className="text-xs font-semibold uppercase tracking-wider text-slate-400">
+                    {compoundLabel[compound] || compound}
+                  </span>
+                </div>
+                <h3 className="text-base sm:text-lg font-bold text-slate-950 mb-0.5">
                   {label}
                 </h3>
                 <p className="text-xs sm:text-sm text-slate-700 mb-4">{description}</p>
@@ -531,7 +597,7 @@ export default function DataResults() {
               mean · min · max · σ across all products
             </span>
           </div>
-          <div className="p-4 sm:p-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
+          <div className="p-3 sm:p-6 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-2 sm:gap-4">
             {axes.map(({ key, label }) => {
               const values = productKeys
                 .map((k) => products[k].scores[key])
@@ -546,10 +612,10 @@ export default function DataResults() {
               return (
                 <div
                   key={key}
-                  className="border border-slate-200 rounded-xl p-5 bg-white hover:shadow-sm transition-shadow duration-200"
+                  className="border border-slate-200 rounded-xl p-3 sm:p-4 bg-white hover:shadow-sm transition-shadow duration-200"
                 >
-                  <p className="text-sm font-bold text-slate-800 mb-3">{label}</p>
-                  <div className="grid grid-cols-2 gap-x-4 gap-y-1 text-sm">
+                  <p className="text-xs sm:text-sm font-bold text-slate-800 mb-2">{label}</p>
+                  <div className="grid grid-cols-2 gap-x-3 gap-y-0.5 text-xs sm:text-sm">
                     <span className="text-slate-500">Mean</span>
                     <span className="font-semibold text-slate-900 text-right">{mean.toFixed(2)}</span>
                     <span className="text-slate-500">Min</span>
@@ -559,9 +625,6 @@ export default function DataResults() {
                     <span className="text-slate-500">σ</span>
                     <span className="font-semibold text-slate-900 text-right">{std.toFixed(2)}</span>
                   </div>
-                  <p className="text-xs text-slate-400 mt-2">
-                    n = {values.length} of {productKeys.length}
-                  </p>
                 </div>
               );
             })}
@@ -578,15 +641,15 @@ export default function DataResults() {
             normalised 0–10. Each dot is one product.
           </p>
 
-          <div className="flex gap-10 mb-6 flex-wrap">
+          <div className="mb-6 space-y-3 sm:space-y-4">
             {(["x", "y"] as const).map((axis) => {
               const selected = axis === "x" ? xAxis : yAxis;
               return (
                 <div key={axis}>
-                  <label className="text-sm font-bold text-slate-800 uppercase tracking-wider block mb-2">
+                  <label className="text-base font-bold text-slate-800 uppercase tracking-wider block mb-2">
                     {axis.toUpperCase()} Axis
                   </label>
-                  <div className="flex gap-2 flex-wrap">
+                  <div className="flex gap-1 overflow-x-auto pb-1">
                     {allMetricKeys.map((key) => {
                       const label = axes.find(a => a.key === key)?.label ?? subMetrics.find(sm => sm.key === key)?.label ?? key;
                       const hasData = productKeys.some(
@@ -599,11 +662,11 @@ export default function DataResults() {
                           onClick={() =>
                             axis === "x" ? setXAxis(key) : setYAxis(key)
                           }
-                          className={`px-3 py-1.5 rounded-lg text-sm border transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-rose-500 ${
+                          className={`px-2 py-1 rounded-md text-xs border transition-all duration-200 whitespace-nowrap flex-shrink-0 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-rose-500 ${
                             selected === key
                               ? "bg-rose-500 text-white border-rose-500"
                               : hasData
-                                ? "border-slate-300 text-slate-700 hover:border-rose-300"
+                                ? "border-slate-300 text-slate-600 hover:border-rose-300 hover:text-rose-600"
                                 : "border-slate-200 text-slate-400 cursor-not-allowed"
                           }`}
                         >
@@ -650,12 +713,36 @@ export default function DataResults() {
             const yLabel = axes.find((a) => a.key === yAxis)?.label ?? subMetrics.find(sm => sm.key === yAxis)?.label ?? yAxis;
 
             return (
-              <ScatterPlot
-                data={scatterData}
-                xLabel={xLabel}
-                yLabel={yLabel}
-                r={r}
-              />
+              <>
+                <ScatterPlot
+                  data={scatterData}
+                  xLabel={xLabel}
+                  yLabel={yLabel}
+                  r={r}
+                />
+                <div className="flex flex-wrap gap-2 mt-4">
+                  <span className="text-xs text-slate-400 font-medium self-center mr-1">Try:</span>
+                  {[
+                    { x: "safety", y: "performance", desc: "Safer = better absorption?" },
+                    { x: "cost", y: "performance", desc: "Cheaper = lower performance?" },
+                    { x: "performance", y: "environment", desc: "Performance vs Planet" },
+                    { x: "capacity", y: "rate", desc: "Holds more absorbs slower?" },
+                    { x: "cost", y: "environment", desc: "Cheap and green?" },
+                  ].map(({ x, y, desc }) => (
+                    <button
+                      key={`${x}-${y}`}
+                      onClick={() => { setXAxis(x); setYAxis(y); }}
+                      className={`px-2 py-1 rounded-md text-xs border transition-colors ${
+                        xAxis === x && yAxis === y
+                          ? "bg-rose-500 text-white border-rose-500"
+                          : "border-slate-300 text-slate-600 hover:border-rose-300"
+                      }`}
+                    >
+                      {desc}
+                    </button>
+                  ))}
+                </div>
+              </>
             );
           })()}
         </div>

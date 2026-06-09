@@ -129,7 +129,7 @@ export default function Home() {
           {(() => {
             const axisSlug: Record<string, string> = {
               safety: "/sciences/biology",
-              chemistry: "/sciences/chemistry",
+              comfort: "/sciences/biology",
               performance: "/sciences/physics",
               environment: "/sciences/environment",
             };

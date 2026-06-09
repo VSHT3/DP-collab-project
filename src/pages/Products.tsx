@@ -23,10 +23,6 @@ const typeDescriptions: Record<ProductType, string> = {
     "Inserted cotton/rayon plugs that absorb fluid internally. Compact and discreet but limited by insertion volume.",
 };
 
-const previewAxes = axes.filter(
-  (a) => a.key !== "capacity" && a.key !== "rate",
-);
-
 const allKeys = Object.keys(products) as ProductKey[];
 
 function ScoreCell({ value }: { value: number | null }) {
@@ -109,7 +105,7 @@ function ProductCard({ k }: { k: ProductKey }) {
             </p>
           )}
           <div className="grid grid-cols-2 sm:grid-cols-5 gap-x-4 sm:gap-x-6 gap-y-2 text-sm">
-            {previewAxes.map(({ key, label }) => (
+            {axes.map(({ key, label }) => (
               <div key={key} className="min-w-0">
                 <p className="text-xs text-slate-500 mb-0.5 whitespace-nowrap">
                   {label}

@@ -11,8 +11,8 @@ import { RadarTooltip } from "../components/charts/radar-tooltip"
 const productKeys = Object.keys(products) as ProductKey[]
 
 function getRaw(k: ProductKey, key: SubMetricKey): number | null {
-  if (key === 'capacity') return products[k].scores.capacity
-  if (key === 'rate') return products[k].scores.rate
+  if (key === 'capacity') return products[k].capacityScore
+  if (key === 'rate') return products[k].rateScore
   return products[k].subMetrics[key]
 }
 

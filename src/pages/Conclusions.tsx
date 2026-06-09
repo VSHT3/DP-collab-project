@@ -1,23 +1,23 @@
 import { productTypeRankings, products, type ProductKey } from "../data/products";
 
-function computeOverallScores(): { key: ProductKey; score: number; safety: number; chemistry: number; performance: number; environment: number; cost: number }[] {
+function computeOverallScores(): { key: ProductKey; score: number; safety: number; comfort: number; performance: number; environment: number; cost: number }[] {
   const keys = Object.keys(products) as ProductKey[];
   return keys
     .map((key) => {
       const s = products[key].scores;
       const safety = s.safety ?? 0;
-      const chemistry = s.chemistry ?? 0;
+      const comfort = s.comfort ?? 0;
       const perf = s.performance ?? 0;
       const env = s.environment ?? 0;
       const cost = s.cost ?? 0;
       return {
         key,
         safety,
-        chemistry,
+        comfort,
         performance: perf,
         environment: env,
         cost,
-        score: parseFloat(((safety + chemistry + perf + env + cost) / 5).toFixed(2)),
+        score: parseFloat(((safety + comfort + perf + env + cost) / 5).toFixed(2)),
       };
     })
     .sort((a, b) => b.score - a.score);
@@ -52,11 +52,11 @@ export default function Conclusions() {
           {products[winner.key].label}
         </p>
         <p className="text-base sm:text-lg text-slate-600 mb-5 sm:mb-6">
-          Weighted equally across all five evaluation axes: Safety, Chemistry,
+          Weighted equally across all five evaluation axes: Safety, Comfort,
           Performance, Environment, and Cost.
         </p>
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 mb-6 sm:mb-8">
-          {overall.map(({ key, safety, chemistry, performance, environment: env, cost: costScore }) => (
+          {overall.map(({ key, safety, comfort, performance, environment: env, cost: costScore }) => (
             <div key={key} className="border border-slate-200 rounded-xl p-4 text-center shadow-sm">
               <span
                 className="inline-block w-3 h-3 rounded-full mb-2"
@@ -66,7 +66,7 @@ export default function Conclusions() {
                 {products[key].label}
               </p>
               <p className="text-xs text-slate-500">
-                S {safety.toFixed(1)} · C {chemistry.toFixed(1)} · P {performance.toFixed(1)} · E {env.toFixed(1)} · € {costScore.toFixed(1)}
+                S {safety.toFixed(1)} · C {comfort.toFixed(1)} · P {performance.toFixed(1)} · E {env.toFixed(1)} · € {costScore.toFixed(1)}
               </p>
             </div>
           ))}
@@ -244,7 +244,7 @@ export default function Conclusions() {
           associated with Toxic Shock Syndrome (TSS), caused by <em>Staphylococcus aureus</em> toxin release. A 2024 study detected 16 heavy metals, including lead, arsenic, and cadmium, across all 14 tampon brands tested (Shearston et al., <em>Environment International</em>). Meanwhile, a 2025 Notre Dame study found PFAS &quot;forever chemicals&quot; in 33% of reusable period products at parts-per-million levels (Wicks et al., <em>EST Letters</em>).
         </p>
         <p className="text-sm sm:text-base text-slate-700 leading-relaxed">
-          No single product excels across all four axes. The optimal choice depends on user priorities: performance (commercial pads), safety and chemistry (organic pads), or environmental impact (reusable cloth).
+          No single product excels across all axes. The optimal choice depends on user priorities: performance (commercial pads), safety and comfort (organic pads), or environmental impact (reusable cloth).
         </p>
       </div>
 
@@ -261,11 +261,11 @@ export default function Conclusions() {
         </p>
         <ul className="space-y-3 text-sm sm:text-base text-slate-700">
           {[
-            "Organic cotton top layer (safety + chemistry: low bacterial growth, no synthetic fibres against skin, no fragrance or dye exposure)",
+            "Organic cotton top layer (safety + comfort: low bacterial growth, no synthetic fibres against skin, no fragrance or dye exposure)",
             "High-absorbency polymer core (performance: maximum capacity like Naturella, but with faster wicking like Always Platinum)",
             "Biodegradable outer shell (environment: reduced decomposition time vs conventional polyethylene film)",
             "Reusable or compostable packaging (environment: lower CO₂ footprint per use)",
-            "No fragrance additives or chlorine bleaching (chemistry: eliminates dioxin and phthalate risks found in commercial products)",
+            "No fragrance additives or chlorine bleaching (safety: eliminates dioxin and phthalate risks found in commercial products)",
             "PFAS-free waterproofing if reusable (environment: avoids the 25–33% of reusable products found with intentionally added PFAS per Wicks et al., 2025)",
           ].map((point, i) => (
             <li key={i} className="flex items-start gap-2">

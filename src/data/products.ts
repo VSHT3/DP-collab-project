@@ -24,18 +24,14 @@ export interface ProductData {
   image: string;
   scores: {
     safety: number | null;
-    chemistry: number | null;
-    capacity: number | null;
-    rate: number | null;
+    comfort: number | null;
     performance: number | null;
     environment: number | null;
     cost: number | null;
   };
   details: {
     safety: string;
-    chemistry: string;
-    capacity: string;
-    rate: string;
+    comfort: string;
     performance: string;
     environment: string;
     cost: string;
@@ -47,6 +43,9 @@ export interface ProductData {
     environmentalImpact: number | null;
     annualCost: number | null;
   };
+  capacityScore: number;
+  rateScore: number;
+  capacityRaw: number;
   absorptionRate: number | null;
   absorptionRateRank: number | null;
   absorptionRateTrials: [number, number, number] | null;
@@ -62,21 +61,17 @@ export const products: Record<ProductKey, ProductData> = {
     color: "#2d8a4e",
     image: "/pictures/products/naturella.jpeg",
     scores: {
-      safety: 5.0,
-      chemistry: 4.0,
-      capacity: 10.0,
-      rate: 1.75,
-      performance: 5.88,
+      safety: null,
+      comfort: null,
+      performance: null,
       environment: null,
       cost: null,
     },
     details: {
       safety:
-        "Moderate bacterial growth — synthetic topsheet traps moisture, creating warm humid microenvironment for bacterial proliferation (Clue, 2024; FDA Guidance, 2025)",
-      chemistry:
-        "Moderate chemical exposure — contains fragrance with phthalates (endocrine disruptors linked to hormone disruption and fertility effects); VOCs and parabens from synthetic materials and adhesives (Brookings, 2024; Marcelis et al., 2021; PubMed 41666673)",
-      capacity: "Absorption capacity: 16.0 g/g (rank 1 of 7)",
-      rate: "Absorption rate: 44.23 s/5 mL (rank 7 of 7)",
+        "Moderate safety risk — synthetic topsheet traps moisture creating bacterial growth conditions; contains fragrance with phthalates (endocrine disruptors) and VOCs from synthetic materials and adhesives (Clue, 2024; FDA Guidance, 2025; Brookings, 2024; Marcelis et al., 2021)",
+      comfort:
+        "Moderate skin comfort — synthetic topsheet and adhesives may cause contact dermatitis in sensitive individuals; fragrance adds irritation risk (Score: 5.0/10)",
       performance: "Computed from capacity and rate scores",
       environment: "",
       cost: "",
@@ -88,6 +83,9 @@ export const products: Record<ProductKey, ProductData> = {
       environmentalImpact: 8,
       annualCost: null,
     },
+    capacityScore: 10.0,
+    rateScore: 1.75,
+    capacityRaw: 16.0,
     absorptionRate: 44.23,
     absorptionRateRank: 7,
     absorptionRateTrials: [42.27, 44.63, 45.78],
@@ -101,21 +99,17 @@ export const products: Record<ProductKey, ProductData> = {
     color: "#4a7dc4",
     image: "/pictures/products/always plat.jpeg",
     scores: {
-      safety: 5.0,
-      chemistry: 4.0,
-      capacity: 7.1,
-      rate: 10.0,
-      performance: 8.55,
+      safety: null,
+      comfort: null,
+      performance: null,
       environment: null,
       cost: null,
     },
     details: {
       safety:
-        "Moderate bacterial growth — polyethylene/polypropylene topsheet traps moisture against skin surface, creating warm moist environment (Clue, 2024)",
-      chemistry:
-        "Medium chemical exposure — plastics and superabsorbent polymers release VOCs and microplastics; phthalates and parabens from synthetic materials; endocrine disruptor risk (Colorado University, 2026; ScienceDirect S0890623818302259)",
-      capacity: "Absorption capacity: 11.3 g/g (rank 2 of 7)",
-      rate: "Absorption rate: 7.76 s/5 mL (rank 1 of 7)",
+        "Moderate safety risk — polyethylene/polypropylene topsheet traps moisture creating bacterial growth environment; plastics and superabsorbent polymers release VOCs and microplastics; phthalates and parabens from synthetic materials (Clue, 2024; Colorado University, 2026; ScienceDirect S0890623818302259)",
+      comfort:
+        "Moderate skin comfort — synthetic plastic topsheet can feel less breathable; adhesives may irritate sensitive skin (Score: 5.0/10)",
       performance: "Computed from capacity and rate scores",
       environment: "",
       cost: "",
@@ -127,6 +121,9 @@ export const products: Record<ProductKey, ProductData> = {
       environmentalImpact: 8,
       annualCost: null,
     },
+    capacityScore: 7.1,
+    rateScore: 10.0,
+    capacityRaw: 11.3,
     absorptionRate: 7.76,
     absorptionRateRank: 1,
     absorptionRateTrials: [6.89, 8.65, 7.74],
@@ -140,21 +137,17 @@ export const products: Record<ProductKey, ProductData> = {
     color: "#3a9b9b",
     image: "/pictures/products/ria ultra.jpeg",
     scores: {
-      safety: 5.0,
-      chemistry: 3.5,
-      capacity: 5.4,
-      rate: 5.65,
-      performance: 5.53,
+      safety: null,
+      comfort: null,
+      performance: null,
       environment: null,
       cost: null,
     },
     details: {
       safety:
-        "Moderate bacterial growth — external wear avoids vaginal introduction but synthetic materials retain surface moisture (Clue, 2024)",
-      chemistry:
-        "Medium-high chemical exposure — budget product with less ingredient transparency; synthetic materials likely contain VOCs, phthalates, and endocrine-disrupting additives; minimal disclosure of chemical composition (Brookings, 2024)",
-      capacity: "Absorption capacity: 8.6 g/g (rank 3 of 7)",
-      rate: "Absorption rate: 13.73 s/5 mL (rank 5 of 7)",
+        "Moderate safety risk — external wear avoids vaginal bacterial introduction but synthetic materials retain surface moisture; budget product with less ingredient transparency, likely contains VOCs, phthalates, and endocrine-disrupting additives (Clue, 2024; Brookings, 2024)",
+      comfort:
+        "Moderate skin comfort — synthetic materials may cause irritation; minimal ingredient disclosure makes full assessment difficult (Score: 5.0/10)",
       performance: "Computed from capacity and rate scores",
       environment: "",
       cost: "",
@@ -166,6 +159,9 @@ export const products: Record<ProductKey, ProductData> = {
       environmentalImpact: 8,
       annualCost: null,
     },
+    capacityScore: 5.4,
+    rateScore: 5.65,
+    capacityRaw: 8.6,
     absorptionRate: 13.73,
     absorptionRateRank: 5,
     absorptionRateTrials: [13.35, 13.72, 14.13],
@@ -179,22 +175,17 @@ export const products: Record<ProductKey, ProductData> = {
     color: "#b5569e",
     image: "/pictures/products/ria tampon.jpeg",
     scores: {
-      safety: 2.5,
-      chemistry: 2.5,
-      capacity: 5.0,
-      rate: 6.1,
-      performance: 5.55,
+      safety: null,
+      comfort: null,
+      performance: null,
       environment: null,
       cost: null,
     },
     details: {
       safety:
-        "Highest bacterial growth risk — internal use introduces oxygen into vagina, promoting S. aureus proliferation; associated with Toxic Shock Syndrome (TSS) (Clue, 2024; Schlievert & Blomster, 1983)",
-      chemistry:
-        "High chemical exposure — vaginal epithelial tissue absorbs chemicals more readily than skin, amplifying risk from heavy metals (Pb, As, Cd) detected in all tested tampon brands; dioxins from chlorine bleaching; rayon fibers (Shearston et al., 2024; Colorado University, 2026; Le Monde, 2024)",
-      capacity:
-        "Absorption capacity: 8.0 g/g (rank 4–5 of 7, tied with o.b. Tampon)",
-      rate: "Absorption rate: 12.73 s/5 mL (rank 4 of 7)",
+        "Highest health risk — internal use introduces oxygen into vagina promoting S. aureus proliferation (TSS risk); vaginal epithelium absorbs chemicals more readily than skin; heavy metals (Pb, As, Cd) detected across tampon brands; dioxins from chlorine bleaching; rayon fibers amplify chemical exposure (Clue, 2024; Schlievert & Blomster, 1983; Shearston et al., 2024; Colorado University, 2026; Le Monde, 2024)",
+      comfort:
+        "Lower skin comfort — internal insertion can cause vaginal dryness and micro-abrasions; rayon fibers less soft than cotton (Score: 4.0/10)",
       performance: "Computed from capacity and rate scores",
       environment: "",
       cost: "",
@@ -206,6 +197,9 @@ export const products: Record<ProductKey, ProductData> = {
       environmentalImpact: 5,
       annualCost: null,
     },
+    capacityScore: 5.0,
+    rateScore: 6.1,
+    capacityRaw: 8.0,
     absorptionRate: 12.73,
     absorptionRateRank: 4,
     absorptionRateTrials: [13.48, 11.7, 13.02],
@@ -219,22 +213,17 @@ export const products: Record<ProductKey, ProductData> = {
     color: "#7c6db8",
     image: "/pictures/products/ob.jpeg",
     scores: {
-      safety: 2.5,
-      chemistry: 3.0,
-      capacity: 5.0,
-      rate: 5.52,
-      performance: 5.26,
+      safety: null,
+      comfort: null,
+      performance: null,
       environment: null,
       cost: null,
     },
     details: {
       safety:
-        "Highest bacterial growth risk — internal use introduces oxygen for S. aureus; TSS association (Clue, 2024; CDC)",
-      chemistry:
-        "High chemical exposure — vaginal epithelial tissue absorbs chemicals more readily than skin; heavy metals (Pb, As, Cd) in all tested brands; dioxins from bleaching; no plastic applicator reduces chemical load vs. applicator tampons (Shearston et al., 2024; Le Monde, 2024)",
-      capacity:
-        "Absorption capacity: 8.0 g/g (rank 4–5 of 7, tied with Ria Tampon)",
-      rate: "Absorption rate: 14.07 s/5 mL (rank 6 of 7)",
+        "Highest health risk — internal use introduces oxygen for S. aureus (TSS); vaginal epithelium absorbs chemicals more readily than skin; heavy metals (Pb, As, Cd) detected across tampon brands; dioxins from bleaching; no plastic applicator slightly reduces total chemical load vs applicator tampons (Clue, 2024; CDC; Shearston et al., 2024; Le Monde, 2024)",
+      comfort:
+        "Lower skin comfort — internal insertion can cause dryness; no applicator means more direct handling but less plastic contact (Score: 4.0/10)",
       performance: "Computed from capacity and rate scores",
       environment: "",
       cost: "",
@@ -246,6 +235,9 @@ export const products: Record<ProductKey, ProductData> = {
       environmentalImpact: 4,
       annualCost: null,
     },
+    capacityScore: 5.0,
+    rateScore: 5.52,
+    capacityRaw: 8.0,
     absorptionRate: 14.07,
     absorptionRateRank: 6,
     absorptionRateTrials: [12.77, 14.61, 14.84],
@@ -259,21 +251,17 @@ export const products: Record<ProductKey, ProductData> = {
     color: "#c97d3a",
     image: "/pictures/products/jessa cotton.jpeg",
     scores: {
-      safety: 7.5,
-      chemistry: 8.0,
-      capacity: 4.9,
-      rate: 9.02,
-      performance: 6.96,
+      safety: null,
+      comfort: null,
+      performance: null,
       environment: null,
       cost: null,
     },
     details: {
       safety:
-        "Lower bacterial growth — organic cotton is breathable, reduces moisture retention; external use eliminates vaginal bacterial introduction (Clue, 2024)",
-      chemistry:
-        "Low chemical exposure — organic-style product with no fragrance, synthetic dyes, or chlorine bleaching; eliminates VOC, phthalate, and endocrine disruptor exposure (Brookings, 2024; FDA Guidance, 2025)",
-      capacity: "Absorption capacity: 7.8 g/g (rank 6 of 7)",
-      rate: "Absorption rate: 8.60 s/5 mL (rank 2 of 7)",
+        "Low health risk — organic cotton is breathable reducing bacterial growth; no fragrance, synthetic dyes or chlorine bleaching; eliminates VOC, phthalate, and endocrine disruptor exposure; external use avoids TSS risk entirely (Clue, 2024; Brookings, 2024; FDA Guidance, 2025)",
+      comfort:
+        "High skin comfort — organic cotton is naturally soft and breathable; no synthetic irritants, fragrances, or chemical residues; ideal for sensitive skin (Score: 7.5/10)",
       performance: "Computed from capacity and rate scores",
       environment: "",
       cost: "",
@@ -285,6 +273,9 @@ export const products: Record<ProductKey, ProductData> = {
       environmentalImpact: 6,
       annualCost: null,
     },
+    capacityScore: 4.9,
+    rateScore: 9.02,
+    capacityRaw: 7.8,
     absorptionRate: 8.6,
     absorptionRateRank: 2,
     absorptionRateTrials: [10.48, 7.73, 7.6],
@@ -298,22 +289,17 @@ export const products: Record<ProductKey, ProductData> = {
     color: "#c94d58",
     image: "/pictures/products/jessa nature.jpeg",
     scores: {
-      safety: 8.5,
-      chemistry: 6.5,
-      capacity: 1.6,
-      rate: 7.7,
-      performance: 4.65,
+      safety: null,
+      comfort: null,
+      performance: null,
       environment: null,
       cost: null,
     },
     details: {
       safety:
-        "Variable bacterial growth — natural cotton cloth is highly breathable; external use; risk depends on washing hygiene and drying conditions (Clue, 2024; Healthline, 2022)",
-      chemistry:
-        "Variable chemical exposure — natural cotton with no synthetic additives; PFAS risk from chemical leak-proof layers (25% of reusable pads found with PFAS — Wicks et al., 2025); detergent residue possible (Time, 2023)",
-      capacity:
-        "Absorption capacity: 2.5 g/g (rank 7 of 7). Reusable — low capacity by design.",
-      rate: "Absorption rate: 10.08 s/5 mL (rank 3 of 7)",
+        "Variable health risk — natural cotton highly breathable with good bacterial profile; external use only so no TSS risk; PFAS risk from waterproof layers (25% of reusable pads contain PFAS — Wicks et al., 2025); safety depends heavily on washing hygiene and detergent choice (Clue, 2024; Healthline, 2022; Time, 2023)",
+      comfort:
+        "High skin comfort — natural cotton fabric is soft and breathable; no adhesives needed; comfortable for extended wear (Score: 7.5/10)",
       performance: "Computed from capacity and rate scores",
       environment: "",
       cost: "",
@@ -325,6 +311,9 @@ export const products: Record<ProductKey, ProductData> = {
       environmentalImpact: 2,
       annualCost: null,
     },
+    capacityScore: 1.6,
+    rateScore: 7.7,
+    capacityRaw: 2.5,
     absorptionRate: 10.08,
     absorptionRateRank: 3,
     absorptionRateTrials: [8.87, 10.87, 10.52],
@@ -333,10 +322,10 @@ export const products: Record<ProductKey, ProductData> = {
 };
 
 // -- Recompute composite scores from sub-metrics --
-// Safety = avg of tssRisk (lowerBetter) + skinIrritation (higher = better, use as-is)
-// Chemistry = chemicalExposure normalized (lowerBetter: less exposure = higher score)
+// Safety = avg of tssRisk_norm + chemicalExposure_norm (both lowerBetter: bodily harm)
+// Comfort = skinIrritation as-is (already 0-10, higher = better)
+// Performance = avg of capacityScore + rateScore (already scores)
 // Environment = environmentalImpact normalized (lowerBetter: less impact = higher score)
-// Performance = avg of capacity + rate (both already scores)
 
 const __allKeys = Object.keys(products) as ProductKey[];
 
@@ -368,24 +357,22 @@ const __envVals = __vals("environmentalImpact");
 for (const _k of __allKeys) {
   const _p = products[_k];
 
-  // Safety: avg of tssRisk (lowerBetter) + skinIrritation (higher = better)
+  // Safety: avg of tssRisk (lowerBetter) + chemicalExposure (lowerBetter)
   const tss = __norm(_p.subMetrics.tssRisk, __tssVals, true);
-  const skin = _p.subMetrics.skinIrritation ?? 0;
-  _p.scores.safety = parseFloat(((tss + skin) / 2).toFixed(2));
+  const chem = __norm(_p.subMetrics.chemicalExposure, __chemVals, true);
+  _p.scores.safety = parseFloat(((tss + chem) / 2).toFixed(2));
 
-  // Chemistry: chemicalExposure (lowerBetter: less exposure = higher score)
-  _p.scores.chemistry = parseFloat(
-    __norm(_p.subMetrics.chemicalExposure, __chemVals, true).toFixed(2),
-  );
+  // Comfort: skinIrritation as-is (already 0-10, higher = better)
+  _p.scores.comfort = parseFloat((_p.subMetrics.skinIrritation ?? 0).toFixed(2));
 
   // Environment: environmentalImpact (lowerBetter: less impact = higher score)
   _p.scores.environment = parseFloat(
     __norm(_p.subMetrics.environmentalImpact, __envVals, true).toFixed(2),
   );
 
-  // Performance: avg of capacity + rate (already scores)
+  // Performance: avg of capacityScore + rateScore (already scores)
   _p.scores.performance = parseFloat(
-    (((_p.scores.capacity ?? 0) + (_p.scores.rate ?? 0)) / 2).toFixed(2),
+    (((_p.capacityScore) + (_p.rateScore)) / 2).toFixed(2),
   );
 }
 
@@ -413,7 +400,9 @@ for (const _k of __allKeys) {
 const __annualVals = __vals("annualCost");
 for (const _k of __allKeys) {
   const _p = products[_k];
-  _p.scores.cost = __norm(_p.subMetrics.annualCost, __annualVals, true);
+  _p.scores.cost = parseFloat(
+    __norm(_p.subMetrics.annualCost, __annualVals, true).toFixed(2),
+  );
 
   const annualDisplay =
     _p.subMetrics.annualCost !== null
@@ -435,80 +424,72 @@ export const axes = [
   {
     key: "safety",
     label: "Safety",
-    description: "TSS risk level and skin irritation potential, biology",
+    description: "Health risk from TSS, bacterial growth, and chemical exposure (Biology + Chemistry)",
   },
   {
-    key: "chemistry",
-    label: "Chemistry",
-    description:
-      "Chemical exposure (VOCs, phthalates, heavy metals, bleaching residues), chemistry.",
-  },
-  {
-    key: "capacity",
-    label: "Absorption Capacity",
-    description: "Fluid held per gram of dry product, physics exp 1.",
-  },
-  {
-    key: "rate",
-    label: "Absorption Rate",
-    description: "Time to absorb 5 mL of simulated fluid, physics exp 2.",
+    key: "comfort",
+    label: "Comfort",
+    description: "Skin irritation potential, breathability, and material feel (Biology)",
   },
   {
     key: "performance",
     label: "Performance",
-    description: "Composite of capacity and rate scores, physics.",
+    description: "Composite of absorption capacity and rate, physics lab experiments",
   },
   {
     key: "environment",
     label: "Environment",
-    description:
-      "Waste volume, plastic content, and reusability per product, ESS.",
+    description: "Waste volume, plastic content, and reusability per product (ESS)",
   },
   {
     key: "cost",
     label: "Cost",
-    description:
-      "Annual cost based on ~22 products per cycle × 13 cycles/year.",
+    description: "Annual cost based on ~22 products per cycle × 13 cycles/year",
   },
 ] as const;
 
 export type AxisKey = (typeof axes)[number]["key"];
 
 export const mainAxes = axes.filter((a) =>
-  ["safety", "chemistry", "performance", "environment", "cost"].includes(a.key),
+  ["safety", "comfort", "performance", "environment", "cost"].includes(a.key),
 );
 
 export const subMetrics = [
   {
     key: "tssRisk" as const,
     label: "TSS Safety",
-    description: "Freedom from Toxic Shock Syndrome risk (Biology, inverted)",
+    description:
+      "Freedom from Toxic Shock Syndrome risk (Biology, higher = better)",
     unit: "score",
     lowerBetter: true,
-  },
-  {
-    key: "skinIrritation" as const,
-    label: "Skin Comfort",
-    description:
-      "Low dermatitis risk from materials (Biology, already inverted: higher = better)",
-    unit: "score",
-    lowerBetter: false,
+    compound: "safety" as const,
   },
   {
     key: "chemicalExposure" as const,
     label: "Chemical Safety",
     description:
-      "Low exposure to VOCs, phthalates, heavy metals, bleaching residues (Chemistry, inverted: higher = safer)",
+      "Low exposure to VOCs, phthalates, heavy metals, bleaching residues (Chemistry, higher = safer)",
     unit: "score",
     lowerBetter: true,
+    compound: "safety" as const,
+  },
+  {
+    key: "skinIrritation" as const,
+    label: "Skin Comfort",
+    description:
+      "Low dermatitis risk from materials (Biology, higher = better)",
+    unit: "score",
+    lowerBetter: false,
+    compound: "comfort" as const,
   },
   {
     key: "environmentalImpact" as const,
     label: "Eco-Friendliness",
     description:
-      "Low waste, biodegradability, and resource use (ESS, inverted: higher = better)",
+      "Low waste, biodegradability, and resource use (ESS, higher = better)",
     unit: "score",
     lowerBetter: true,
+    compound: "environment" as const,
   },
   {
     key: "capacity" as const,
@@ -516,6 +497,7 @@ export const subMetrics = [
     description: "Fluid held per gram of dry product (Physics Exp 1)",
     unit: "g/g",
     lowerBetter: false,
+    compound: "performance" as const,
   },
   {
     key: "rate" as const,
@@ -523,6 +505,7 @@ export const subMetrics = [
     description: "Time to absorb 5 mL (Physics Exp 2, seconds)",
     unit: "s/5 mL",
     lowerBetter: true,
+    compound: "performance" as const,
   },
   {
     key: "annualCost" as const,
@@ -531,6 +514,7 @@ export const subMetrics = [
       "Estimated yearly spend based on 22 products/cycle × 13 cycles/year",
     unit: "€",
     lowerBetter: true,
+    compound: "cost" as const,
   },
 ];
 

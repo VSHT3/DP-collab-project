@@ -6,13 +6,34 @@ type Weights = Record<AxisKey, number>
 
 const defaultWeights: Weights = {
   safety: 5,
-  chemistry: 5,
-  capacity: 5,
-  rate: 5,
+  comfort: 5,
   performance: 5,
   environment: 5,
   cost: 5,
 }
+
+const presets: { label: string; desc: string; weights: Weights }[] = [
+  {
+    label: "Balanced",
+    desc: "All axes equal",
+    weights: { safety: 5, comfort: 5, performance: 5, environment: 5, cost: 5 },
+  },
+  {
+    label: "Health First",
+    desc: "Safety + Comfort first",
+    weights: { safety: 10, comfort: 9, performance: 5, environment: 2, cost: 2 },
+  },
+  {
+    label: "Performance",
+    desc: "Absorption matters most",
+    weights: { safety: 1, comfort: 1, performance: 10, environment: 1, cost: 1 },
+  },
+  {
+    label: "Eco & Budget",
+    desc: "Environment + Cost first",
+    weights: { safety: 2, comfort: 2, performance: 2, environment: 10, cost: 10 },
+  },
+]
 
 function computeScores(weights: Weights): { key: ProductKey; score: number; hasPending: boolean }[] {
   const totalWeight = mainAxes.reduce((sum, a) => sum + weights[a.key], 0) || 1
@@ -30,6 +51,7 @@ function computeScores(weights: Weights): { key: ProductKey; score: number; hasP
 
 export default function Recommend() {
   const [weights, setWeights] = useState<Weights>(defaultWeights)
+  const [activePreset, setActivePreset] = useState<string | null>(null)
 
   const ranked = computeScores(weights)
   const winner = ranked[0]
@@ -53,7 +75,29 @@ export default function Recommend() {
       </div>
 
       <div className="border border-slate-200 rounded-2xl p-6 sm:p-8 shadow-sm mb-6 sm:mb-8">
-        <h2 className="text-lg sm:text-xl font-bold text-slate-950 mb-4 sm:mb-6">Set Your Priorities</h2>
+        <h2 className="text-lg sm:text-xl font-bold text-slate-950 mb-3">Set Your Priorities</h2>
+        <div className="flex flex-wrap gap-2 mb-5 sm:mb-6">
+          {presets.map(({ label, desc, weights: pw }) => {
+            const isActive = activePreset === label
+            return (
+              <button
+                key={label}
+                onClick={() => {
+                  setWeights(pw)
+                  setActivePreset(label)
+                }}
+                className={`px-3 py-1.5 rounded-lg text-xs font-semibold border transition-all duration-200 ${
+                  isActive
+                    ? "bg-rose-500 text-white border-rose-500"
+                    : "bg-white text-slate-700 border-slate-300 hover:border-rose-300 hover:text-rose-600"
+                }`}
+                title={desc}
+              >
+                {label}
+              </button>
+            )
+          })}
+        </div>
         <div className="space-y-5 sm:space-y-6">
           {mainAxes.map(({ key, label, description }) => (
             <div key={key}>
@@ -71,7 +115,7 @@ export default function Recommend() {
                 min={0}
                 max={10}
                 value={weights[key]}
-                onChange={e => setWeights(w => ({ ...w, [key]: Number(e.target.value) }))}
+                onChange={e => { setWeights(w => ({ ...w, [key]: Number(e.target.value) })); setActivePreset(null) }}
                 className="w-full accent-rose-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-rose-500 focus-visible:ring-offset-2"
               />
               <div className="flex justify-between text-sm text-slate-500 mt-0.5">
