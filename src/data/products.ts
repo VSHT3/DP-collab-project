@@ -424,7 +424,7 @@ export const axes = [
   {
     key: "safety",
     label: "Safety",
-    description: "Health risk from TSS, bacterial growth, and chemical exposure (Biology + Chemistry)",
+    description: "Health risk from TSS, bacterial growth, and chemical exposure (Biology, Chemistry)",
   },
   {
     key: "comfort",
@@ -434,7 +434,7 @@ export const axes = [
   {
     key: "performance",
     label: "Performance",
-    description: "Composite of absorption capacity and rate, physics lab experiments",
+    description: "Composite of absorption capacity and rate from lab experiments (Physics)",
   },
   {
     key: "environment",
@@ -444,7 +444,7 @@ export const axes = [
   {
     key: "cost",
     label: "Cost",
-    description: "Annual cost based on ~22 products per cycle × 13 cycles/year",
+    description: "Annual cost based on ~22 products per cycle × 13 cycles per year (CS)",
   },
 ] as const;
 

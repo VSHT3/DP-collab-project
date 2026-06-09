@@ -55,7 +55,7 @@ export default function About() {
                   <img
                     src={image}
                     alt={name}
-                    className={`w-full h-full object-cover ${image === "/pictures/ela.jpeg" ? "scale-[3] origin-top" : image === "/pictures/alex.png" ? "scale-150 translate-x-1 -translate-y-1" : image === "/pictures/milana.jpeg" ? "scale-150 translate-y-3" : ""}`}
+                    className={`w-full h-full object-cover ${image === "/pictures/ela.jpeg" ? "scale-[1.75] translate-x-4" : image === "/pictures/alex.png" ? "scale-150 translate-x-1 -translate-y-1" : image === "/pictures/milana.jpeg" ? "scale-150 translate-y-3" : ""}`}
                   />
                 ) : (
                   <span className="text-2xl font-bold text-rose-500">

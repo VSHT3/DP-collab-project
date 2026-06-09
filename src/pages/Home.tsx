@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { galleryImages, mainAxes } from "../data/products";
+import { galleryImages } from "../data/products";
 
 function useInView() {
   const ref = useRef<HTMLDivElement>(null)
@@ -84,23 +84,23 @@ export default function Home() {
             Research Question
           </h2>
           <p className="text-2xl sm:text-4xl font-bold text-slate-950 leading-snug text-center">
-            {(
-              "Which type of menstrual product best minimizes health risks and environmental impact across biological, chemical, physical, and environmental dimensions?"
-                .split("")
-                .map((ch, i) =>
-                  ch === " " ? (
-                    <span key={i}> </span>
-                  ) : (
+            {"Which type of menstrual product best minimizes health risks and environmental impact across biological, chemical, physical, and environmental dimensions?"
+              .split(" ")
+              .map((word, wi, arr) => [
+                <span key={wi} className="whitespace-nowrap inline-block">
+                  {word.split("").map((ch, ci) => (
                     <span
-                      key={i}
+                      key={ci}
                       className="inline-block"
-                      style={{ animation: rq.inView ? `letter-wave 4s ease-in-out ${i * 0.05}s infinite` : 'none' }}
+                      style={{ animation: rq.inView ? `letter-wave 4s ease-in-out ${(wi * 6 + ci) * 0.05}s infinite` : 'none' }}
                     >
                       {ch}
                     </span>
-                  )
-                )
-            )}
+                  ))}
+                </span>,
+                wi < arr.length - 1 ? " " : null,
+              ])
+            }
           </p>
         </div>
 
@@ -126,26 +126,24 @@ export default function Home() {
           Our Evaluation Axes
         </h2>
         <div className="grid sm:grid-cols-2 xl:grid-cols-5 gap-4 sm:gap-6 mb-10 sm:mb-16">
-          {(() => {
-            const axisSlug: Record<string, string> = {
-              safety: "/sciences/biology",
-              comfort: "/sciences/biology",
-              performance: "/sciences/physics",
-              environment: "/sciences/environment",
-            };
-            return mainAxes.map(({ key, label, description }) => (
-              <Link
-                key={key}
-                to={axisSlug[key] || "/sciences"}
-                className="border border-slate-200 rounded-xl p-5 sm:p-6 shadow-sm hover:border-rose-300 hover:bg-rose-50/40 hover:-translate-y-0.5 hover:shadow-md transition-all duration-200 block focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-rose-500 focus-visible:ring-offset-2"
-              >
-                <h3 className="text-base sm:text-lg font-bold text-slate-950 mb-1">
-                  {label}
-                </h3>
-                <p className="text-sm sm:text-base text-slate-700">{description}</p>
-              </Link>
-            ));
-          })()}
+          {[
+            { label: "Biology", desc: "TSS risk, bacterial growth, skin irritation, and chemical exposure assessment through literature review", to: "/sciences/biology" },
+            { label: "Chemistry", desc: "Chemical composition analysis: VOCs, phthalates, heavy metals, bleaching residues, and endocrine disruptors", to: "/sciences/chemistry" },
+            { label: "Physics", desc: "Hands-on lab experiments measuring absorption capacity (g/g) and absorption rate (s/5 mL)", to: "/sciences/physics" },
+            { label: "ESS", desc: "Waste volume, decomposition timelines, marine pollution, and reusability analysis", to: "/sciences/environment" },
+            { label: "CS", desc: "Website, interactive recommendation tool, data analysis, statistics, and source gathering", to: "/about" },
+          ].map((item) => (
+            <Link
+              key={item.label}
+              to={item.to}
+              className="border border-slate-200 rounded-xl p-5 sm:p-6 shadow-sm hover:border-rose-300 hover:bg-rose-50/40 hover:-translate-y-0.5 hover:shadow-md transition-all duration-200 block focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-rose-500 focus-visible:ring-offset-2"
+            >
+              <h3 className="text-base sm:text-lg font-bold text-slate-950 mb-1">
+                {item.label}
+              </h3>
+              <p className="text-sm sm:text-base text-slate-700">{item.desc}</p>
+            </Link>
+          ))}
         </div>
 
         {/* Gallery */}
