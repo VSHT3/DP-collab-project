@@ -537,6 +537,7 @@ export const galleryImages: string[] = [
   ),
   "/pictures/anicka.jpeg",
   "/pictures/ela.jpeg",
+  "/pictures/milana.jpeg",
 ];
 
 export const brandCoverage = [

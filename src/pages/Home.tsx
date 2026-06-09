@@ -121,6 +121,19 @@ export default function Home() {
           </Link>
         </div>
 
+        {/* QR Code */}
+        <div className="flex justify-center mb-10 sm:mb-16">
+          <div className="border border-slate-200 rounded-2xl p-6 shadow-sm text-center">
+            <p className="text-sm font-semibold text-slate-700 mb-3">Scan to visit</p>
+            <img
+              src={`https://api.qrserver.com/v1/create-qr-code/?size=160x160&data=https://dp-collab-project.vercel.app/`}
+              alt="QR code to project site"
+              className="w-40 h-40 mx-auto"
+            />
+            <p className="text-xs text-slate-500 mt-2">dp-collab-project.vercel.app</p>
+          </div>
+        </div>
+
         {/* Main Axes */}
         <h2 className="text-xl sm:text-2xl font-bold text-slate-950 mb-4 sm:mb-6">
           Our Evaluation Axes
@@ -187,7 +200,36 @@ export default function Home() {
           </div>
         </div>
 
-        {/* Lightbox */}
+        {/* Sources */}
+        <div className="max-w-5xl mx-auto mb-16 sm:mb-20">
+          <h2 className="text-xl sm:text-2xl font-bold text-slate-950 mb-4 sm:mb-6 text-center">
+            Sources
+          </h2>
+          <div className="border border-slate-200 rounded-2xl p-6 sm:p-8 shadow-sm space-y-3 sm:space-y-4">
+            <div>
+              <h3 className="text-sm font-bold text-slate-700 uppercase tracking-wider mb-2">Project Documents</h3>
+              <ul className="list-disc list-inside space-y-1 text-sm text-slate-700">
+                <li>Experimental Methods and Data</li>
+                <li>Health Research Review</li>
+              </ul>
+            </div>
+            <div className="border-t border-slate-100 pt-3 sm:pt-4">
+              <h3 className="text-sm font-bold text-slate-700 uppercase tracking-wider mb-2">Web Sources</h3>
+              <ul className="list-disc list-inside space-y-1 text-sm text-slate-700">
+                <li><a href="https://hsph.harvard.edu/research/apple-womens-health-study/study-updates/menstrual-hygiene-products-pads-and-tampons-are-the-go-to-choice/" className="text-rose-500 hover:underline break-all" target="_blank" rel="noopener noreferrer">Harvard Apple Women&apos;s Health Study — Menstrual Hygiene Products</a></li>
+                <li><a href="https://www.businesswaste.co.uk/waste-facts/sanitary-waste-facts/" className="text-rose-500 hover:underline break-all" target="_blank" rel="noopener noreferrer">BusinessWaste — Sanitary Waste Facts</a></li>
+                <li><a href="https://m.statisticstimes.com/demographics/world-sex-ratio.php" className="text-rose-500 hover:underline break-all" target="_blank" rel="noopener noreferrer">Statistics Times — World Sex Ratio</a></li>
+                <li><a href="https://www.sciencedirect.com/science/article/pii/S2666789422000277" className="text-rose-500 hover:underline break-all" target="_blank" rel="noopener noreferrer">ScienceDirect — Menstrual Product Waste Review</a></li>
+                <li><a href="https://www.hoffmannbros.com/can-i-flush/sanitary-pads" className="text-rose-500 hover:underline break-all" target="_blank" rel="noopener noreferrer">Hoffmann Bros — Can I Flush Sanitary Pads</a></li>
+                <li><a href="https://www.nlwa.gov.uk/whatcanwerecycle/sanitary-products" className="text-rose-500 hover:underline break-all" target="_blank" rel="noopener noreferrer">NLWA — Sanitary Products Recycling</a></li>
+                <li><a href="https://thebetterindia.com/237000/sanitary-pads-waste-recycling-ecofriendly-disposal-landfills-burning-ros174/" className="text-rose-500 hover:underline break-all" target="_blank" rel="noopener noreferrer">The Better India — Sanitary Pads Waste and Recycling</a></li>
+                <li><a href="https://www.wwf.org.uk/challenges/sustainable-sanitary-products" className="text-rose-500 hover:underline break-all" target="_blank" rel="noopener noreferrer">WWF UK — Sustainable Sanitary Products</a></li>
+                <li><a href="https://www.nationalgeographic.com/environment/article/how-tampons-pads-became-unsustainable-story-of-plastic" className="text-rose-500 hover:underline break-all" target="_blank" rel="noopener noreferrer">National Geographic — How Tampons and Pads Became Unsustainable</a></li>
+                <li><a href="https://www.researchgate.net/publication/361474323_Experimental_Investigation_of_Blood_Mimicking_Fluid_Viscosity_for_Application_in_3D-Printed_Medical_Simulator" className="text-rose-500 hover:underline break-all" target="_blank" rel="noopener noreferrer">ResearchGate — Blood Mimicking Fluid Viscosity</a></li>
+              </ul>
+            </div>
+          </div>
+        </div>
         {lightbox && (
           <div
             className="fixed inset-0 z-50 bg-black/80 flex items-center justify-center p-4"

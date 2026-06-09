@@ -79,11 +79,11 @@ export default function PhysicsDetail() {
             <h2 className="text-xs sm:text-sm font-bold text-slate-700 uppercase tracking-wider mb-3 sm:mb-4">Materials</h2>
             <ul className="list-disc list-inside space-y-1 text-sm sm:text-base text-slate-700">
               <li>4 product types (7 products total: 3 commercial pads, 1 organic pad, 1 reusable cloth pad, 2 tampons)</li>
-              <li>Digital scale (±0.01 g)</li>
+              <li>Digital scale</li>
               <li>Stopwatch (phone)</li>
               <li>Paper towels / A4 paper</li>
               <li>Stirring rod</li>
-              <li>100 mL measuring cylinder</li>
+              <li>250 mL measuring cylinder</li>
               <li>Beaker</li>
               <li>Syringe</li>
               <li>Tap water</li>
