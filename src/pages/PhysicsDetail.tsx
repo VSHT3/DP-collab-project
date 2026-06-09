@@ -115,9 +115,9 @@ export default function PhysicsDetail() {
               "Slowly pour simulated fluid using syringe onto the centre of the product",
               "Stop pouring when fully saturated (fluid starts to pool on surface or run off edges)",
               "Record total volume poured in mL (1 mL fluid ≈ 1 g)",
-              "Carefully lift the wet product — let excess drip for 5 seconds",
+              "Carefully lift the wet product and let excess drip for 5 seconds",
               "Weigh the wet product and record as Wet mass (g)",
-              "Repeat for all 7 products; clean workspace",
+              "Repeat for all 7 products and clean workspace",
             ]}
           />
 
@@ -204,7 +204,7 @@ export default function PhysicsDetail() {
               "Start stopwatch immediately upon pouring",
               "Stop stopwatch when fluid is fully absorbed (no shiny/wet surface visible)",
               "Record time in seconds",
-              "Repeat 3 times per product for an average; clean workspace",
+              "Repeat 3 times per product for an average and clean workspace",
             ]}
           />
 
@@ -254,28 +254,6 @@ export default function PhysicsDetail() {
                 </tbody>
               </table>
             </div>
-          </div>
-
-          {/* Experiment 3: Leakage Pressure */}
-          <div className="border border-slate-200 rounded-2xl p-6 sm:p-8 shadow-sm">
-            <h2 className="text-xs sm:text-sm font-bold text-slate-700 uppercase tracking-wider mb-2 sm:mb-3">Experiment 3 — Leakage Pressure</h2>
-            <p className="text-xs sm:text-sm text-slate-500 mb-3 sm:mb-4 italic">Optional — for stronger analysis. Data not yet collected.</p>
-            <p className="text-sm sm:text-base text-slate-700 mb-3 sm:mb-4">
-              Measures how much weight a saturated product can withstand before leaking — simulating real-world pressure during wear.
-            </p>
-            <ol className="list-decimal list-inside space-y-2 text-sm sm:text-base text-slate-700">
-              <li>Put on gloves</li>
-              <li>Saturate product with 10 mL of simulated fluid (pour onto centre)</li>
-              <li>Place flat board on the desk; put a book under one edge (tilt ~10–15°)</li>
-              <li>Place dry paper towels at the lower edge of the board</li>
-              <li>Place saturated product on board, with its lower edge touching the paper towel</li>
-              <li>Add a small weight (e.g. 100–200 g) gently onto the centre of the product</li>
-              <li>Wait 5 seconds; check if fluid has reached the paper towel</li>
-              <li>If no leak, add more weight (increase by 100–200 g each time)</li>
-              <li>Repeat until fluid first appears on the paper towel</li>
-              <li>Record total mass (g) of all weights added at that moment</li>
-              <li>Repeat 3 times per product with a new saturated pad; skip tampons (not applicable)</li>
-            </ol>
           </div>
 
           <div className="bg-slate-50 border border-slate-200 rounded-2xl p-6 sm:p-8">

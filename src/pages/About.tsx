@@ -6,7 +6,11 @@ const team = [
     image: "/pictures/anicka.jpeg",
   },
   { name: "Ela Sabolová", subject: "Biology", image: "/pictures/ela.jpeg" },
-  { name: "Milana Golubková", subject: "Environmental Systems and Societies", image: "/pictures/milana.jpeg" },
+  {
+    name: "Milana Golubková",
+    subject: "Environmental Systems and Societies",
+    image: "/pictures/milana.jpeg",
+  },
   {
     name: "Alexander Hvezdoň Štefko",
     subject: "Computer Science",
@@ -42,14 +46,16 @@ export default function About() {
                 <h3 className="text-base sm:text-lg font-bold text-slate-950 mb-1">
                   {name}
                 </h3>
-                <p className="text-sm sm:text-base text-rose-500 font-medium">{subject}</p>
+                <p className="text-sm sm:text-base text-rose-500 font-medium">
+                  {subject}
+                </p>
               </div>
               <div className="w-20 h-20 shrink-0 rounded-full bg-rose-50 flex items-center justify-center overflow-hidden">
                 {image ? (
                   <img
                     src={image}
                     alt={name}
-                    className={`w-full h-full object-cover ${image === "/pictures/ela.jpeg" ? "scale-[3] origin-top" : image === "/pictures/alex.png" ? "scale-150 translate-x-1 -translate-y-1" : ""}`}
+                    className={`w-full h-full object-cover ${image === "/pictures/ela.jpeg" ? "scale-[3] origin-top" : image === "/pictures/alex.png" ? "scale-150 translate-x-1 -translate-y-1" : image === "/pictures/milana.jpeg" ? "scale-150 translate-y-3" : ""}`}
                   />
                 ) : (
                   <span className="text-2xl font-bold text-rose-500">
@@ -72,10 +78,10 @@ export default function About() {
           <p className="text-sm sm:text-base text-slate-700 leading-relaxed">
             This IB Collaborative Science project investigates menstrual
             products across Biology, Chemistry, Physics, and Environmental
-            Science. Physics involved hands-on laboratory experiments
-            measuring absorption capacity and rate for all seven products. The
-            Biology, Chemistry, and Environmental Science assessments are based
-            on published literature review and peer-reviewed scientific studies.
+            Science. Physics involved hands-on laboratory experiments measuring
+            absorption capacity and rate for all seven products. The Biology,
+            Chemistry, and Environmental Science assessments are based on
+            published literature review and peer-reviewed scientific studies.
             Computer Science contributed the interactive web platform, data
             processing, and statistical analysis that makes the findings
             accessible. The results are presented here alongside an interactive
