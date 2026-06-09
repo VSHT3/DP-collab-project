@@ -535,8 +535,6 @@ export const galleryImages: string[] = [
     (n) =>
       `/pictures/lab-${String(n).padStart(2, "0")}${n >= 18 ? ".jpeg" : ".jpg"}`,
   ),
-  "/pictures/anicka.jpeg",
-  "/pictures/ela.jpeg",
   "/pictures/milana.jpeg",
 ];
 
