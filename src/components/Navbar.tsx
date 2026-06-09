@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { NavLink, Link } from 'react-router-dom'
 import { subjects } from '../data/sciences'
 
@@ -11,9 +12,12 @@ const links = [
 ]
 
 export default function Navbar() {
+  const [open, setOpen] = useState(false)
+
   return (
     <header className="sticky top-0 z-50 bg-white/90 backdrop-blur border-b border-slate-200">
-      <nav className="max-w-7xl mx-auto px-8 lg:px-16 h-14 flex items-center justify-center">
+      {/* Desktop nav */}
+      <nav className="max-w-7xl mx-auto px-8 lg:px-16 h-14 hidden lg:flex items-center justify-center">
         <ul className="flex gap-1 flex-wrap items-center">
 
           {/* Home */}
@@ -89,6 +93,66 @@ export default function Navbar() {
 
         </ul>
       </nav>
+
+      {/* Mobile nav */}
+      <nav className="lg:hidden flex items-center justify-between px-4 h-14">
+        <Link to="/" className="text-base font-bold text-slate-950">
+          DP Collab
+        </Link>
+        <button
+          onClick={() => setOpen(!open)}
+          className="p-2 rounded-md text-slate-700 hover:bg-slate-100 transition-colors"
+          aria-label="Toggle menu"
+        >
+          {open ? (
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          ) : (
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+            </svg>
+          )}
+        </button>
+      </nav>
+
+      {/* Mobile menu panel */}
+      {open && (
+        <div className="lg:hidden border-t border-slate-200 bg-white">
+          <div className="px-4 py-3 space-y-1">
+            <MobileLink to="/" end label="Home" onClick={() => setOpen(false)} />
+            <MobileLink to="/sciences" label="Sciences" onClick={() => setOpen(false)} />
+            <div className="ml-4 border-l-2 border-slate-100 pl-3 space-y-1">
+              <MobileLink to="/sciences" label="Overview" onClick={() => setOpen(false)} subtle />
+              {subjects.map(({ slug, emoji, label }) => (
+                <MobileLink key={slug} to={`/sciences/${slug}`} label={`${emoji} ${label}`} onClick={() => setOpen(false)} subtle />
+              ))}
+            </div>
+            {links.slice(1).map(({ to, label }) => (
+              <MobileLink key={to} to={to} label={label} onClick={() => setOpen(false)} />
+            ))}
+          </div>
+        </div>
+      )}
     </header>
+  )
+}
+
+function MobileLink({ to, label, end, subtle, onClick }: { to: string; label: string; end?: boolean; subtle?: boolean; onClick: () => void }) {
+  return (
+    <NavLink
+      to={to}
+      end={end}
+      onClick={onClick}
+      className={({ isActive }) =>
+        `block px-3 py-2 rounded-md text-base font-medium transition-colors ${
+          subtle
+            ? isActive ? 'text-rose-600' : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50'
+            : isActive ? 'bg-rose-50 text-rose-600' : 'text-slate-700 hover:text-slate-950 hover:bg-slate-50'
+        }`
+      }
+    >
+      {label}
+    </NavLink>
   )
 }
