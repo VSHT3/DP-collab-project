@@ -66,7 +66,7 @@ export default function Conclusions() {
                 {products[key].label}
               </p>
               <p className="text-xs text-slate-500">
-                S {safety.toFixed(1)} · C {chemistry.toFixed(1)} · P {performance.toFixed(1)} · E {env.toFixed(1)} · $ {costScore.toFixed(1)}
+                S {safety.toFixed(1)} · C {chemistry.toFixed(1)} · P {performance.toFixed(1)} · E {env.toFixed(1)} · € {costScore.toFixed(1)}
               </p>
             </div>
           ))}

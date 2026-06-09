@@ -1,9 +1,26 @@
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { galleryImages, mainAxes } from "../data/products";
 
+function useInView() {
+  const ref = useRef<HTMLDivElement>(null)
+  const [inView, setInView] = useState(false)
+  useEffect(() => {
+    const el = ref.current
+    if (!el) return
+    const obs = new IntersectionObserver(
+      ([entry]) => { if (entry.isIntersecting) { setInView(true); obs.disconnect() } },
+      { threshold: 0.2 }
+    )
+    obs.observe(el)
+    return () => obs.disconnect()
+  }, [])
+  return { ref, inView }
+}
+
 export default function Home() {
   const [lightbox, setLightbox] = useState<string | null>(null);
+  const rq = useInView()
 
   return (
     <div className="px-4 sm:px-8 lg:px-16 py-10 sm:py-16">
@@ -31,44 +48,59 @@ export default function Home() {
           </div>
         </div>
 
-        {/* Global Issue */}
-        <div className="border border-slate-200 rounded-2xl p-6 sm:p-8 shadow-sm mb-10 sm:mb-16">
-          <h2 className="text-xs sm:text-sm font-semibold text-rose-500 uppercase tracking-widest mb-2">
-            Global Issue
-          </h2>
-          <p className="text-lg sm:text-xl font-bold text-slate-950 leading-relaxed">
-            Global women&apos;s health issues
-          </p>
-          <p className="text-sm sm:text-base text-slate-700 mt-2 sm:mt-3 leading-relaxed">
-            Millions of women use menstrual products daily without full
-            knowledge of their chemical composition, bacterial safety, or
-            environmental footprint. This project addresses that gap through
-            rigorous cross-disciplinary analysis.
-          </p>
+        {/* Global Issue + Our Aim side by side */}
+        <div className="grid sm:grid-cols-2 gap-4 sm:gap-6 mb-10 sm:mb-16">
+          <div className="border border-slate-200 rounded-2xl p-6 sm:p-8 shadow-sm">
+            <h2 className="text-xs sm:text-sm font-semibold text-rose-500 uppercase tracking-widest mb-2">
+              Global Issue
+            </h2>
+            <p className="text-lg sm:text-xl font-bold text-slate-950 leading-relaxed">
+              Global women&apos;s health issues
+            </p>
+            <p className="text-sm sm:text-base text-slate-700 mt-2 sm:mt-3 leading-relaxed">
+              Millions of women use menstrual products daily without full
+              knowledge of their chemical composition, bacterial safety, or
+              environmental footprint. This project addresses that gap through
+              rigorous cross-disciplinary analysis.
+            </p>
+          </div>
+
+          <div className="bg-rose-50 rounded-2xl p-6 sm:p-8">
+            <h2 className="text-xs sm:text-sm font-semibold text-rose-500 uppercase tracking-widest mb-2">
+              Our Aim
+            </h2>
+            <p className="text-sm sm:text-base text-slate-700 leading-relaxed">
+              This project aims to compare menstrual products across four
+              scientific disciplines and a cost analysis to determine which
+              product type minimizes health and environmental risks, and to
+              recommend safer options for women.
+            </p>
+          </div>
         </div>
 
         {/* Research Question */}
-        <div className="max-w-3xl mx-auto mb-10 sm:mb-16">
-          <h2 className="text-xs sm:text-sm font-semibold text-amber-600 uppercase tracking-widest mb-3 sm:mb-4 text-center">
+        <div ref={rq.ref} className={`max-w-4xl mx-auto mb-10 sm:mb-16 transition-all duration-700 ${rq.inView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
+          <h2 className="text-sm sm:text-base font-semibold text-amber-600 uppercase tracking-widest mb-3 sm:mb-4 text-center">
             Research Question
           </h2>
-          <p className="text-xl sm:text-3xl font-bold text-slate-950 leading-snug text-center">
-            Which type of menstrual product best minimizes health risks and
-            environmental impact across biological, chemical, physical, and
-            environmental dimensions?
-          </p>
-        </div>
-
-        {/* Aim Statement */}
-        <div className="bg-rose-50 rounded-2xl p-6 sm:p-8 mb-10 sm:mb-16">
-          <h2 className="text-xs sm:text-sm font-semibold text-rose-500 uppercase tracking-widest mb-2">
-            Our Aim
-          </h2>
-          <p className="text-sm sm:text-base text-slate-700 leading-relaxed">
-            This project aims to compare menstrual products across four
-            scientific disciplines and a cost analysis to determine which
-            product type minimizes health and environmental risks, and to
-            recommend safer options for women.
+          <p className="text-2xl sm:text-4xl font-bold text-slate-950 leading-snug text-center">
+            {(
+              "Which type of menstrual product best minimizes health risks and environmental impact across biological, chemical, physical, and environmental dimensions?"
+                .split("")
+                .map((ch, i) =>
+                  ch === " " ? (
+                    <span key={i}> </span>
+                  ) : (
+                    <span
+                      key={i}
+                      className="inline-block"
+                      style={{ animation: rq.inView ? `letter-wave 4s ease-in-out ${i * 0.05}s infinite` : 'none' }}
+                    >
+                      {ch}
+                    </span>
+                  )
+                )
+            )}
           </p>
         </div>
 

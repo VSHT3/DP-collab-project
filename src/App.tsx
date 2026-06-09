@@ -20,23 +20,30 @@ function ScrollToTop() {
   return null
 }
 
+function PageTransition() {
+  return (
+    <Routes>
+      <Route path="/"                   element={<Home />} />
+      <Route path="/sciences"           element={<Sciences />} />
+      <Route path="/sciences/:slug"     element={<ScienceDetail />} />
+      <Route path="/products"           element={<Products />} />
+      <Route path="/products/:id"       element={<ProductDetail />} />
+      <Route path="/data"               element={<DataResults />} />
+      <Route path="/recommend"          element={<Recommend />} />
+      <Route path="/conclusions"        element={<Conclusions />} />
+      <Route path="/about"              element={<About />} />
+    </Routes>
+  )
+}
+
 export default function App() {
+  const { pathname } = useLocation()
   return (
     <div className="min-h-screen flex flex-col">
       <Navbar />
-      <main className="flex-1">
+      <main key={pathname} className="page-enter flex-1">
         <ScrollToTop />
-        <Routes>
-          <Route path="/"                   element={<Home />} />
-          <Route path="/sciences"           element={<Sciences />} />
-          <Route path="/sciences/:slug"     element={<ScienceDetail />} />
-          <Route path="/products"           element={<Products />} />
-          <Route path="/products/:id"       element={<ProductDetail />} />
-          <Route path="/data"               element={<DataResults />} />
-          <Route path="/recommend"          element={<Recommend />} />
-          <Route path="/conclusions"        element={<Conclusions />} />
-          <Route path="/about"              element={<About />} />
-        </Routes>
+        <PageTransition />
       </main>
       <Footer />
     </div>
