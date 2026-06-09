@@ -1,3 +1,4 @@
+import { useState, useEffect } from 'react'
 import { useParams, Link } from 'react-router-dom'
 import { products, axes, subMetrics, productTypeLabels, type ProductKey, type SubMetricKey } from '../data/products'
 import { RadarChart as BklitRadarChart } from "../components/charts/radar-chart"
@@ -33,6 +34,15 @@ export default function ProductDetail() {
   const { id } = useParams<{ id: string }>()
   const product = products[id as ProductKey]
 
+  const [chartSize, setChartSize] = useState<number | undefined>(480)
+
+  useEffect(() => {
+    const update = () => setChartSize(window.innerWidth < 640 ? undefined : 480)
+    update()
+    window.addEventListener('resize', update)
+    return () => window.removeEventListener('resize', update)
+  }, [])
+
   if (!product) {
     return (
       <div className="max-w-5xl mx-auto px-6 py-16 text-center">
@@ -53,32 +63,32 @@ export default function ProductDetail() {
   const hasAnyPendingScore = axes.some(a => product.scores[a.key] === null)
 
   return (
-    <div className="px-8 lg:px-16 py-16">
+    <div className="px-4 sm:px-8 lg:px-16 py-10 sm:py-16">
       <div className="max-w-7xl mx-auto">
-        <Link to="/products" className="text-base text-slate-600 hover:text-rose-500 transition-all duration-200 mb-10 inline-block font-medium">
+        <Link to="/products" className="text-sm sm:text-base text-slate-600 hover:text-rose-500 transition-all duration-200 mb-6 sm:mb-10 inline-block font-medium">
           ← Back to Products
         </Link>
 
         {/* Header */}
-        <div className="flex items-start gap-10 mb-14">
-          <div className="w-72 flex-shrink-0">
+        <div className="flex flex-col sm:flex-row sm:items-start gap-6 sm:gap-10 mb-10 sm:mb-14">
+          <div className="w-full sm:w-72 flex-shrink-0">
             <img
               src={product.image}
               alt={product.label}
               className="w-full rounded-xl shadow-md"
             />
           </div>
-          <div className="flex-1 pt-6">
-            <span className="text-sm font-semibold text-slate-600 uppercase tracking-widest block mb-2">
+          <div className="flex-1 pt-2 sm:pt-6">
+            <span className="text-xs sm:text-sm font-semibold text-slate-600 uppercase tracking-widest block mb-1 sm:mb-2">
               {product.brand} · {productTypeLabels[product.type]}
             </span>
-            <h1 className="text-5xl font-bold text-slate-950 mb-3">{product.label}</h1>
+            <h1 className="text-3xl sm:text-5xl font-bold text-slate-950 mb-2 sm:mb-3">{product.label}</h1>
             {product.price !== null
-              ? <p className="text-xl text-slate-700 font-medium">€{product.price.toFixed(2)} per pack</p>
+              ? <p className="text-lg sm:text-xl text-slate-700 font-medium">€{product.price.toFixed(2)} per pack</p>
               : <p className="text-base text-slate-600 mt-2">Price TBD</p>
             }
             {product.price !== null && product.sizes.length > 0 && (
-              <p className="text-sm text-slate-500 mt-1">
+              <p className="text-xs sm:text-sm text-slate-500 mt-1">
                 €{(product.price / product.sizes.reduce((sum, s) => sum + s.pads, 0)).toFixed(2)} per unit · {product.subMetrics.annualCost !== null ? `~€${product.subMetrics.annualCost.toFixed(0)}/year` : ''} (based on ~22 uses × 13 cycles/year)
               </p>
             )}
@@ -109,14 +119,14 @@ export default function ProductDetail() {
         </div>
 
         {/* Radar + Quick Stats side by side */}
-        <div className="grid grid-cols-3 gap-8 mb-14">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 sm:gap-8 mb-10 sm:mb-14">
           {/* Radar chart - takes 2/3 */}
-          <div className="col-span-2 border border-slate-200 rounded-2xl p-6 shadow-sm flex flex-col items-center">
-            <h2 className="text-xl font-bold text-slate-950 mb-1 self-start">Score Profile</h2>
+          <div className="lg:col-span-2 border border-slate-200 rounded-2xl p-4 sm:p-6 shadow-sm flex flex-col items-center">
+            <h2 className="text-lg sm:text-xl font-bold text-slate-950 mb-1 self-start">Score Profile</h2>
             {hasAnyPendingScore && (
-              <p className="text-sm text-amber-600 mb-4 font-medium self-start">Axes with no data yet are shown as 0</p>
+              <p className="text-xs sm:text-sm text-amber-600 mb-4 font-medium self-start">Axes with no data yet are shown as 0</p>
             )}
-            <BklitRadarChart data={bklitData} metrics={axes.map(a => ({ key: a.key, label: a.label }))} size={480}>
+            <BklitRadarChart data={bklitData} metrics={axes.map(a => ({ key: a.key, label: a.label }))} size={chartSize}>
               <RadarGrid />
               <RadarAxis />
               <RadarLabels offset={30} fontSize={13} />
@@ -146,18 +156,18 @@ export default function ProductDetail() {
 
         {/* Absorption rate trials */}
         {product.absorptionRateTrials && product.absorptionRate !== null && (
-          <div className="border border-slate-200 rounded-2xl p-8 shadow-sm mb-14">
-            <h2 className="text-xl font-bold text-slate-950 mb-4">Absorption Rate — Raw Trials</h2>
-            <div className="grid grid-cols-4 gap-6">
+          <div className="border border-slate-200 rounded-2xl p-6 sm:p-8 shadow-sm mb-10 sm:mb-14">
+            <h2 className="text-lg sm:text-xl font-bold text-slate-950 mb-3 sm:mb-4">Absorption Rate — Raw Trials</h2>
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 sm:gap-6">
               {product.absorptionRateTrials.map((t, i) => (
                 <div key={i} className="text-center">
-                  <p className="text-sm text-slate-600 font-medium mb-1">Trial {i + 1}</p>
-                  <p className="text-2xl font-bold text-slate-900">{t.toFixed(2)} s</p>
+                  <p className="text-xs sm:text-sm text-slate-600 font-medium mb-1">Trial {i + 1}</p>
+                  <p className="text-xl sm:text-2xl font-bold text-slate-900">{t.toFixed(2)} s</p>
                 </div>
               ))}
               <div className="text-center">
-                <p className="text-sm text-slate-600 font-medium mb-1">Average</p>
-                <p className="text-2xl font-bold text-slate-900">{product.absorptionRate.toFixed(2)} s</p>
+                <p className="text-xs sm:text-sm text-slate-600 font-medium mb-1">Average</p>
+                <p className="text-xl sm:text-2xl font-bold text-slate-900">{product.absorptionRate.toFixed(2)} s</p>
               </div>
             </div>
           </div>

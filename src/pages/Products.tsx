@@ -68,15 +68,15 @@ function ProductCard({ k }: { k: ProductKey }) {
       to={`/products/${k}`}
       className="group border border-slate-200 rounded-2xl shadow-sm hover:border-rose-300 hover:bg-rose-50/30 hover:-translate-y-0.5 hover:shadow-md transition-all duration-200 block focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-rose-500 focus-visible:ring-offset-2 overflow-hidden"
     >
-      <div className="flex">
-        <div className="w-48 flex-shrink-0">
+      <div className="flex flex-col sm:flex-row">
+        <div className="w-full sm:w-48 flex-shrink-0">
           <img
             src={p.image}
             alt={p.label}
-            className="w-full h-full object-cover group-hover:scale-[1.02] transition-transform duration-200"
+            className="w-full h-48 sm:h-full object-cover group-hover:scale-[1.02] transition-transform duration-200"
           />
         </div>
-        <div className="flex-1 p-6 min-w-0">
+        <div className="flex-1 p-4 sm:p-6 min-w-0">
           <div className="flex items-center gap-2 mb-1">
             <span
               className="w-3 h-3 rounded-full flex-shrink-0"
@@ -91,7 +91,7 @@ function ProductCard({ k }: { k: ProductKey }) {
               </span>
             )}
           </div>
-          <h3 className="text-xl font-bold text-slate-900 mb-4">{p.label}</h3>
+          <h3 className="text-lg sm:text-xl font-bold text-slate-900 mb-3 sm:mb-4">{p.label}</h3>
           {p.sizes.length > 0 && (
             <div className="mb-4 space-y-1">
               {p.sizes.map((s) => (
@@ -108,7 +108,7 @@ function ProductCard({ k }: { k: ProductKey }) {
               per pad
             </p>
           )}
-          <div className="grid grid-cols-5 gap-x-6 gap-y-2 text-sm">
+          <div className="grid grid-cols-2 sm:grid-cols-5 gap-x-4 sm:gap-x-6 gap-y-2 text-sm">
             {previewAxes.map(({ key, label }) => (
               <div key={key} className="min-w-0">
                 <p className="text-xs text-slate-500 mb-0.5 whitespace-nowrap">
@@ -144,16 +144,16 @@ export default function Products() {
   }));
 
   return (
-    <div className="px-8 lg:px-16 py-16">
+    <div className="px-4 sm:px-8 lg:px-16 py-10 sm:py-16">
       <div className="max-w-7xl mx-auto">
         <div className="mb-8">
-          <span className="text-sm font-semibold tracking-widest text-rose-500 uppercase">
+          <span className="text-xs sm:text-sm font-semibold tracking-widest text-rose-500 uppercase">
             Products
           </span>
-          <h1 className="text-4xl font-bold text-slate-950 mt-2 mb-3">
+          <h1 className="text-2xl sm:text-4xl font-bold text-slate-950 mt-1 sm:mt-2 mb-2 sm:mb-3">
             Products Tested
           </h1>
-          <p className="text-lg text-slate-700 whitespace-nowrap">
+          <p className="text-base sm:text-lg text-slate-700 whitespace-normal sm:whitespace-nowrap">
             Seven branded products across four categories. Scores are on a scale
             of 0-10, (higher means better).
           </p>
@@ -186,10 +186,10 @@ export default function Products() {
           <div className="space-y-12">
             {byType.map(({ type, label, keys }) => (
               <section key={type}>
-                <h2 className="text-xl font-bold text-slate-950 mb-1">
+                <h2 className="text-lg sm:text-xl font-bold text-slate-950 mb-1">
                   {label}
                 </h2>
-                <p className="text-base text-slate-600 mb-4">
+                <p className="text-sm sm:text-base text-slate-600 mb-4">
                   {typeDescriptions[type]}
                 </p>
                 <div className="space-y-6">
@@ -203,15 +203,15 @@ export default function Products() {
         )}
 
         {/* Brand Coverage Matrix */}
-        <section className="mt-16">
-          <h2 className="text-xl font-bold text-slate-950 mb-4">
+        <section className="mt-12 sm:mt-16">
+          <h2 className="text-lg sm:text-xl font-bold text-slate-950 mb-3 sm:mb-4">
             Brand Coverage
           </h2>
-          <p className="text-base text-slate-700 mb-6 max-w-3xl">
+          <p className="text-sm sm:text-base text-slate-700 mb-4 sm:mb-6 max-w-3xl">
             Which brands offer which product types. Our study covers five brands
             across all four categories.
           </p>
-          <div className="border border-slate-200 rounded-2xl overflow-hidden shadow-sm">
+          <div className="border border-slate-200 rounded-2xl overflow-hidden shadow-sm overflow-x-auto">
             <table className="w-full text-sm">
               <thead>
                 <tr className="bg-slate-50">

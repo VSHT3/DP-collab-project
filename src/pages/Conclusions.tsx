@@ -28,34 +28,34 @@ export default function Conclusions() {
   const winner = overall[0];
 
   return (
-    <div className="px-8 lg:px-16 py-16">
+    <div className="px-4 sm:px-8 lg:px-16 py-10 sm:py-16">
       <div className="max-w-7xl mx-auto">
-      <div className="mb-12">
-        <span className="text-sm font-semibold tracking-widest text-rose-500 uppercase">
+      <div className="mb-8 sm:mb-12">
+        <span className="text-xs sm:text-sm font-semibold tracking-widest text-rose-500 uppercase">
           Conclusions
         </span>
-        <h1 className="text-4xl font-bold text-slate-950 mt-2 mb-3">
+        <h1 className="text-2xl sm:text-4xl font-bold text-slate-950 mt-1 sm:mt-2 mb-2 sm:mb-3">
           What We Found
         </h1>
-        <p className="text-lg text-slate-700 max-w-3xl">
+        <p className="text-base sm:text-lg text-slate-700 max-w-3xl">
           Summary conclusions drawn from experimental data and literature
           research across Biology, Chemistry, Physics, and Environmental Science.
         </p>
       </div>
 
       {/* Overall Winner */}
-      <div className="border-2 border-rose-200 rounded-2xl p-10 mb-12 bg-gradient-to-br from-rose-50 to-white shadow-sm">
-        <p className="text-sm font-bold text-rose-500 uppercase tracking-wider mb-2">
+      <div className="border-2 border-rose-200 rounded-2xl p-6 sm:p-10 mb-8 sm:mb-12 bg-gradient-to-br from-rose-50 to-white shadow-sm">
+        <p className="text-xs sm:text-sm font-bold text-rose-500 uppercase tracking-wider mb-2">
           Overall Winner
         </p>
-        <p className="text-4xl font-bold text-slate-950 mb-2">
+        <p className="text-2xl sm:text-4xl font-bold text-slate-950 mb-2">
           {products[winner.key].label}
         </p>
-        <p className="text-lg text-slate-600 mb-6">
+        <p className="text-base sm:text-lg text-slate-600 mb-5 sm:mb-6">
           Weighted equally across all five evaluation axes: Safety, Chemistry,
           Performance, Environment, and Cost.
         </p>
-        <div className="grid grid-cols-5 gap-3 mb-8">
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 mb-6 sm:mb-8">
           {overall.map(({ key, safety, chemistry, performance, environment: env, cost: costScore }) => (
             <div key={key} className="border border-slate-200 rounded-xl p-4 text-center shadow-sm">
               <span
@@ -71,7 +71,7 @@ export default function Conclusions() {
             </div>
           ))}
         </div>
-        <p className="text-base text-slate-700 leading-relaxed">
+        <p className="text-sm sm:text-base text-slate-700 leading-relaxed">
           The reusable cloth pad ranks highest overall due to strong safety (8.5)
           and perfect environment (10.0) and cost (10.0) scores, outweighing its
           lower physics performance. The organic cotton pad follows closely as the
@@ -82,11 +82,11 @@ export default function Conclusions() {
       </div>
 
       {/* Literature-backed health findings */}
-      <div className="border border-slate-200 rounded-2xl p-8 shadow-sm mb-12">
-        <h2 className="text-sm font-bold text-slate-800 uppercase tracking-wider mb-6">
+      <div className="border border-slate-200 rounded-2xl p-6 sm:p-8 shadow-sm mb-8 sm:mb-12">
+        <h2 className="text-xs sm:text-sm font-bold text-slate-800 uppercase tracking-wider mb-4 sm:mb-6">
           Key Health Findings from Literature
         </h2>
-        <div className="grid sm:grid-cols-2 gap-6">
+        <div className="grid sm:grid-cols-2 gap-4 sm:gap-6">
           {[
             {
               title: "TSS Risk",
@@ -110,20 +110,20 @@ export default function Conclusions() {
             },
           ].map(({ title, finding, source }) => (
             <div key={title} className="border-l-2 border-rose-300 pl-4">
-              <p className="text-base font-bold text-slate-950 mb-1">{title}</p>
-              <p className="text-base text-slate-700 mb-2">{finding}</p>
-              <p className="text-sm text-slate-500 italic">{source}</p>
+              <p className="text-sm sm:text-base font-bold text-slate-950 mb-1">{title}</p>
+              <p className="text-sm sm:text-base text-slate-700 mb-2">{finding}</p>
+              <p className="text-xs sm:text-sm text-slate-500 italic">{source}</p>
             </div>
           ))}
         </div>
       </div>
 
       {/* Environmental Impact Stats */}
-      <div className="border border-slate-200 rounded-2xl p-8 shadow-sm mb-12">
-        <h2 className="text-sm font-bold text-slate-800 uppercase tracking-wider mb-6">
+      <div className="border border-slate-200 rounded-2xl p-6 sm:p-8 shadow-sm mb-8 sm:mb-12">
+        <h2 className="text-xs sm:text-sm font-bold text-slate-800 uppercase tracking-wider mb-4 sm:mb-6">
           Environmental Impact at Scale
         </h2>
-        <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 sm:gap-4">
           <div className="bg-rose-50 rounded-xl p-5 text-center">
             <p className="text-3xl font-bold text-rose-500">80.85B</p>
             <p className="text-sm text-slate-600 mt-1">
@@ -164,7 +164,7 @@ export default function Conclusions() {
       </div>
 
       {/* Product type rankings */}
-      <div className="border border-slate-200 rounded-2xl overflow-hidden shadow-sm mb-12">
+      <div className="border border-slate-200 rounded-2xl overflow-hidden shadow-sm mb-8 sm:mb-12 overflow-x-auto">
         <div className="px-6 py-4 bg-slate-50">
           <span className="text-sm font-bold text-slate-800 uppercase tracking-wider">
             Product Type Rankings (Physics)
@@ -228,8 +228,8 @@ export default function Conclusions() {
       </div>
 
       {/* Overall finding */}
-      <div className="bg-rose-50 rounded-2xl p-8 mb-10">
-        <h2 className="text-xl font-bold text-slate-950 mb-3">
+      <div className="bg-rose-50 rounded-2xl p-6 sm:p-8 mb-8 sm:mb-10">
+        <h2 className="text-lg sm:text-xl font-bold text-slate-950 mb-2 sm:mb-3">
           Overall Finding
         </h2>
         <p className="text-base text-slate-700 leading-relaxed mb-4">
@@ -238,28 +238,28 @@ export default function Conclusions() {
           rate tells a different story. Always Platinum absorbed 5 mL in just
           7.76 seconds (rank 1), while Naturella took 44.23 seconds (rank 7).
         </p>
-        <p className="text-base text-slate-700 leading-relaxed mb-4">
+        <p className="text-sm sm:text-base text-slate-700 leading-relaxed mb-4">
           Literature research reveals a critical health tradeoff: tampons carry
           the highest bacterial growth risk and are the only product type
           associated with Toxic Shock Syndrome (TSS), caused by <em>Staphylococcus aureus</em> toxin release. A 2024 study detected 16 heavy metals, including lead, arsenic, and cadmium, across all 14 tampon brands tested (Shearston et al., <em>Environment International</em>). Meanwhile, a 2025 Notre Dame study found PFAS &quot;forever chemicals&quot; in 33% of reusable period products at parts-per-million levels (Wicks et al., <em>EST Letters</em>).
         </p>
-        <p className="text-base text-slate-700 leading-relaxed">
+        <p className="text-sm sm:text-base text-slate-700 leading-relaxed">
           No single product excels across all four axes. The optimal choice depends on user priorities: performance (commercial pads), safety and chemistry (organic pads), or environmental impact (reusable cloth).
         </p>
       </div>
 
       {/* Proposed Improved Product */}
-      <div className="border-2 border-rose-200 rounded-2xl p-8 shadow-sm mb-10">
-        <h2 className="text-xl font-bold text-slate-950 mb-1">
+      <div className="border-2 border-rose-200 rounded-2xl p-6 sm:p-8 shadow-sm mb-8 sm:mb-10">
+        <h2 className="text-lg sm:text-xl font-bold text-slate-950 mb-1">
           Proposed Improved Product
         </h2>
-        <p className="text-base text-rose-500 mb-4 font-medium">
+        <p className="text-sm sm:text-base text-rose-500 mb-4 font-medium">
           Design based on our findings
         </p>
-        <p className="text-base text-slate-700 leading-relaxed mb-6">
+        <p className="text-sm sm:text-base text-slate-700 leading-relaxed mb-4 sm:mb-6">
           Based on findings, an ideal product would combine:
         </p>
-        <ul className="space-y-3 text-base text-slate-700">
+        <ul className="space-y-3 text-sm sm:text-base text-slate-700">
           {[
             "Organic cotton top layer (safety + chemistry: low bacterial growth, no synthetic fibres against skin, no fragrance or dye exposure)",
             "High-absorbency polymer core (performance: maximum capacity like Naturella, but with faster wicking like Always Platinum)",
@@ -277,14 +277,14 @@ export default function Conclusions() {
       </div>
 
       {/* Our Conceptual Product */}
-      <div className="border-2 border-slate-200 rounded-2xl p-8 bg-slate-50/50 shadow-sm">
-        <h2 className="text-xl font-bold text-slate-950 mb-1">
+      <div className="border-2 border-slate-200 rounded-2xl p-6 sm:p-8 bg-slate-50/50 shadow-sm">
+        <h2 className="text-lg sm:text-xl font-bold text-slate-950 mb-1">
           Our Conceptual Product
         </h2>
-        <p className="text-base text-slate-600 mb-4">
+        <p className="text-sm sm:text-base text-slate-600 mb-3 sm:mb-4">
           Brand name TBD, designed by our team
         </p>
-        <p className="text-base text-slate-700 leading-relaxed mb-6">
+        <p className="text-sm sm:text-base text-slate-700 leading-relaxed mb-4 sm:mb-6">
           As part of this project, we are designing a conceptual menstrual
           product brand that applies the insights from all four research axes.
           Our product will prioritize:
@@ -319,11 +319,11 @@ export default function Conclusions() {
               <p className="text-sm font-bold text-rose-500 uppercase tracking-wider mb-1">
                 {axis}
               </p>
-              <p className="text-base text-slate-700">{detail}</p>
+               <p className="text-sm sm:text-base text-slate-700">{detail}</p>
             </div>
           ))}
         </div>
-        <p className="text-base text-slate-700 leading-relaxed">
+        <p className="text-sm sm:text-base text-slate-700 leading-relaxed">
           Details, including branding, materials sourcing, pricing strategy,
           and product specifications, will be added once the team finalises the
           concept.

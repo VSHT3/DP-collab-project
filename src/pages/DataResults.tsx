@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { RadarChart as BklitRadarChart } from "../components/charts/radar-chart";
 import { RadarGrid } from "../components/charts/radar-grid";
 import { RadarAxis } from "../components/charts/radar-axis";
@@ -194,6 +194,15 @@ export default function DataResults() {
   const [xAxis, setXAxis] = useState<string>("performance");
   const [yAxis, setYAxis] = useState<string>("environment");
 
+  const [chartSize, setChartSize] = useState<number | undefined>(380)
+
+  useEffect(() => {
+    const update = () => setChartSize(window.innerWidth < 640 ? undefined : 380)
+    update()
+    window.addEventListener('resize', update)
+    return () => window.removeEventListener('resize', update)
+  }, [])
+
   function toggleProduct(k: ProductKey) {
     setVisibleProducts((prev) => {
       const next = new Set(prev);
@@ -295,16 +304,16 @@ export default function DataResults() {
   }));
 
   return (
-    <div className="px-8 lg:px-16 py-16">
+    <div className="px-4 sm:px-8 lg:px-16 py-10 sm:py-16">
       <div className="max-w-7xl mx-auto">
-        <div className="mb-12">
-          <span className="text-sm font-semibold tracking-widest text-rose-500 uppercase">
+        <div className="mb-8 sm:mb-12">
+          <span className="text-xs sm:text-sm font-semibold tracking-widest text-rose-500 uppercase">
             Data & Results
           </span>
-          <h1 className="text-4xl font-bold text-slate-950 mt-2 mb-3">
+          <h1 className="text-2xl sm:text-4xl font-bold text-slate-950 mt-1 sm:mt-2 mb-2 sm:mb-3">
             Findings
           </h1>
-          <p className="text-lg text-slate-700 max-w-3xl">
+          <p className="text-base sm:text-lg text-slate-700 max-w-3xl">
             All scores 0–10 (higher = better). Safety, Chemistry, and
             Environment scores populated from published literature research.
           </p>
@@ -331,20 +340,20 @@ export default function DataResults() {
         </div>
 
         {/* Radar charts — two side by side */}
-        <div className="grid grid-cols-2 gap-10 mb-8">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-10 mb-6 sm:mb-8">
           {/* Left — main axes scores */}
-          <div className="border border-slate-200 rounded-2xl p-10 shadow-sm">
-            <h2 className="text-xl font-bold text-slate-950 mb-1">
+          <div className="border border-slate-200 rounded-2xl p-6 sm:p-10 shadow-sm">
+            <h2 className="text-lg sm:text-xl font-bold text-slate-950 mb-1">
               Overall Scores
             </h2>
-            <p className="text-base text-slate-700 mb-4">
+            <p className="text-sm sm:text-base text-slate-700 mb-4">
               Safety, Chemistry, Performance, Environment, Cost
             </p>
             <div className="flex justify-center">
               <BklitRadarChart
                 data={mainBklitData}
                 metrics={mainAxes}
-                size={380}
+                size={chartSize}
               >
                 <RadarGrid />
                 <RadarAxis />
@@ -358,18 +367,18 @@ export default function DataResults() {
           </div>
 
           {/* Right — specific measurements */}
-          <div className="border border-slate-200 rounded-2xl p-10 shadow-sm">
-            <h2 className="text-xl font-bold text-slate-950 mb-1">
+          <div className="border border-slate-200 rounded-2xl p-6 sm:p-10 shadow-sm">
+            <h2 className="text-lg sm:text-xl font-bold text-slate-950 mb-1">
               Specific Measurements
             </h2>
-            <p className="text-base text-slate-700 mb-4">
+            <p className="text-sm sm:text-base text-slate-700 mb-4">
               Metrics from each science
             </p>
             <div className="flex justify-center">
               <BklitRadarChart
                 data={subBklitData}
                 metrics={subMetrics}
-                size={380}
+                size={chartSize}
               >
                 <RadarGrid />
                 <RadarAxis />
@@ -384,10 +393,10 @@ export default function DataResults() {
         </div>
 
         {/* Per-axis bar charts — main scores */}
-        <h2 className="text-xl font-bold text-slate-950 mb-4">
+        <h2 className="text-lg sm:text-xl font-bold text-slate-950 mb-3 sm:mb-4">
           Score Breakdown
         </h2>
-        <div className="grid sm:grid-cols-2 gap-6 mb-10">
+        <div className="grid sm:grid-cols-2 gap-4 sm:gap-6 mb-8 sm:mb-10">
           {mainAxes.map(({ key, label, description }) => {
             const barData: SimpleBarDatum[] = productKeys.map((k) => ({
               name: products[k].label,
@@ -397,12 +406,12 @@ export default function DataResults() {
             return (
               <div
                 key={key}
-                className="border border-slate-200 rounded-2xl p-10 shadow-sm"
+                className="border border-slate-200 rounded-2xl p-6 sm:p-10 shadow-sm"
               >
-                <h3 className="text-lg font-bold text-slate-950 mb-1">
+                <h3 className="text-base sm:text-lg font-bold text-slate-950 mb-1">
                   {label}
                 </h3>
-                <p className="text-sm text-slate-700 mb-4">{description}</p>
+                <p className="text-xs sm:text-sm text-slate-700 mb-4">{description}</p>
                 <SimpleBars data={barData} domain={[0, 10]} height={280} />
               </div>
             );
@@ -410,10 +419,10 @@ export default function DataResults() {
         </div>
 
         {/* Per-axis bar charts — specific measurements */}
-        <h2 className="text-xl font-bold text-slate-950 mb-4">
+        <h2 className="text-lg sm:text-xl font-bold text-slate-950 mb-3 sm:mb-4">
           Specific Measurements
         </h2>
-        <div className="grid sm:grid-cols-2 gap-6 mb-10">
+        <div className="grid sm:grid-cols-2 gap-4 sm:gap-6 mb-8 sm:mb-10">
           {subMetrics.map(({ key, label, description }) => {
             const barData: SimpleBarDatum[] = productKeys.map((k) => {
               const val = getSubMetric(k, key);
@@ -426,12 +435,12 @@ export default function DataResults() {
             return (
               <div
                 key={key}
-                className="border border-slate-200 rounded-2xl p-10 shadow-sm"
+                className="border border-slate-200 rounded-2xl p-6 sm:p-10 shadow-sm"
               >
-                <h3 className="text-lg font-bold text-slate-950 mb-1">
+                <h3 className="text-base sm:text-lg font-bold text-slate-950 mb-1">
                   {label}
                 </h3>
-                <p className="text-sm text-slate-700 mb-4">{description}</p>
+                <p className="text-xs sm:text-sm text-slate-700 mb-4">{description}</p>
                 <SimpleBars data={barData} height={280} />
               </div>
             );
@@ -439,7 +448,7 @@ export default function DataResults() {
         </div>
 
         {/* Rankings table */}
-        <div className="border border-slate-200 rounded-2xl overflow-hidden shadow-sm mb-10">
+        <div className="border border-slate-200 rounded-2xl overflow-hidden shadow-sm mb-8 sm:mb-10 overflow-x-auto">
           <div className="px-6 py-4 bg-slate-50 flex items-center justify-between">
             <span className="text-sm font-bold text-slate-800 uppercase tracking-wider">
               Rankings
@@ -522,7 +531,7 @@ export default function DataResults() {
               mean · min · max · σ across all products
             </span>
           </div>
-          <div className="p-6 grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          <div className="p-4 sm:p-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
             {axes.map(({ key, label }) => {
               const values = productKeys
                 .map((k) => products[k].scores[key])
@@ -560,11 +569,11 @@ export default function DataResults() {
         </div>
 
         {/* Correlation scatter */}
-        <div className="border border-slate-200 rounded-2xl p-10 shadow-sm mt-10">
-          <h2 className="text-xl font-bold text-slate-950 mb-1">
+        <div className="border border-slate-200 rounded-2xl p-6 sm:p-10 shadow-sm mt-8 sm:mt-10">
+          <h2 className="text-lg sm:text-xl font-bold text-slate-950 mb-1">
             Correlation Explorer
           </h2>
-          <p className="text-base text-slate-700 mb-6">
+          <p className="text-sm sm:text-base text-slate-700 mb-4 sm:mb-6">
             Select two metrics to visualise their relationship. All values
             normalised 0–10. Each dot is one product.
           </p>

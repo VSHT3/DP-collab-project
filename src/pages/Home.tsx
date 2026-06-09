@@ -6,17 +6,17 @@ export default function Home() {
   const [lightbox, setLightbox] = useState<string | null>(null);
 
   return (
-    <div className="px-8 lg:px-16 py-16">
+    <div className="px-4 sm:px-8 lg:px-16 py-10 sm:py-16">
       <div className="max-w-7xl mx-auto">
         {/* Hero */}
-        <div className="text-center mb-20">
-          <span className="inline-block text-sm font-semibold tracking-widest text-rose-500 uppercase mb-4">
+        <div className="text-center mb-12 sm:mb-20">
+          <span className="inline-block text-xs sm:text-sm font-semibold tracking-widest text-rose-500 uppercase mb-3 sm:mb-4">
             IB Collaborative Science Project
           </span>
-          <h1 className="text-5xl sm:text-6xl font-bold text-slate-950 mb-5 leading-tight">
+          <h1 className="text-3xl sm:text-6xl font-bold text-slate-950 mb-4 sm:mb-5 leading-tight">
             Comparing Menstrual Products
           </h1>
-          <p className="text-xl text-slate-700 max-w-3xl mx-auto mb-8">
+          <p className="text-base sm:text-xl text-slate-700 max-w-3xl mx-auto mb-6 sm:mb-8">
             A cross-disciplinary study examining organic pads, commercial pads,
             reusable cloth pads, and tampons through the lenses of Biology,
             Chemistry, Physics, and Environmental Science.
@@ -32,14 +32,14 @@ export default function Home() {
         </div>
 
         {/* Global Issue */}
-        <div className="border border-slate-200 rounded-2xl p-8 shadow-sm mb-16">
-          <h2 className="text-sm font-semibold text-rose-500 uppercase tracking-widest mb-2">
+        <div className="border border-slate-200 rounded-2xl p-6 sm:p-8 shadow-sm mb-10 sm:mb-16">
+          <h2 className="text-xs sm:text-sm font-semibold text-rose-500 uppercase tracking-widest mb-2">
             Global Issue
           </h2>
-          <p className="text-xl font-bold text-slate-950 leading-relaxed">
+          <p className="text-lg sm:text-xl font-bold text-slate-950 leading-relaxed">
             Global women&apos;s health issues
           </p>
-          <p className="text-base text-slate-700 mt-3 leading-relaxed">
+          <p className="text-sm sm:text-base text-slate-700 mt-2 sm:mt-3 leading-relaxed">
             Millions of women use menstrual products daily without full
             knowledge of their chemical composition, bacterial safety, or
             environmental footprint. This project addresses that gap through
@@ -48,11 +48,11 @@ export default function Home() {
         </div>
 
         {/* Research Question */}
-        <div className="max-w-3xl mx-auto mb-16">
-          <h2 className="text-sm font-semibold text-amber-600 uppercase tracking-widest mb-4 text-center">
+        <div className="max-w-3xl mx-auto mb-10 sm:mb-16">
+          <h2 className="text-xs sm:text-sm font-semibold text-amber-600 uppercase tracking-widest mb-3 sm:mb-4 text-center">
             Research Question
           </h2>
-          <p className="text-2xl sm:text-3xl font-bold text-slate-950 leading-snug text-center">
+          <p className="text-xl sm:text-3xl font-bold text-slate-950 leading-snug text-center">
             Which type of menstrual product best minimizes health risks and
             environmental impact across biological, chemical, physical, and
             environmental dimensions?
@@ -60,11 +60,11 @@ export default function Home() {
         </div>
 
         {/* Aim Statement */}
-        <div className="bg-rose-50 rounded-2xl p-8 mb-16">
-          <h2 className="text-sm font-semibold text-rose-500 uppercase tracking-widest mb-2">
+        <div className="bg-rose-50 rounded-2xl p-6 sm:p-8 mb-10 sm:mb-16">
+          <h2 className="text-xs sm:text-sm font-semibold text-rose-500 uppercase tracking-widest mb-2">
             Our Aim
           </h2>
-          <p className="text-base text-slate-700 leading-relaxed">
+          <p className="text-sm sm:text-base text-slate-700 leading-relaxed">
             This project aims to compare menstrual products across four
             scientific disciplines and a cost analysis to determine which
             product type minimizes health and environmental risks, and to
@@ -73,27 +73,27 @@ export default function Home() {
         </div>
 
         {/* CTA Banner */}
-        <div className="bg-rose-500 rounded-2xl p-10 text-center text-white mb-16">
-          <h2 className="text-2xl font-bold mb-3">
+        <div className="bg-rose-500 rounded-2xl p-8 sm:p-10 text-center text-white mb-10 sm:mb-16">
+          <h2 className="text-xl sm:text-2xl font-bold mb-2 sm:mb-3">
             Want the most suitable menstrual product for yourself?
           </h2>
-          <p className="text-rose-100 mb-6 text-base">
+          <p className="text-rose-100 mb-5 sm:mb-6 text-sm sm:text-base">
             Set your priorities across safety, chemistry, performance,
             environment, and cost. Our tool ranks all products for you.
           </p>
           <Link
             to="/recommend"
-            className="inline-block bg-white text-rose-500 font-semibold px-6 py-3 rounded-xl hover:bg-rose-50 transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-rose-500 focus-visible:ring-offset-2 text-sm"
+            className="inline-block w-full sm:w-auto bg-white text-rose-500 font-semibold px-6 py-3 rounded-xl hover:bg-rose-50 transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-rose-500 focus-visible:ring-offset-2 text-sm"
           >
             Find My Product
           </Link>
         </div>
 
         {/* Main Axes */}
-        <h2 className="text-2xl font-bold text-slate-950 mb-6">
+        <h2 className="text-xl sm:text-2xl font-bold text-slate-950 mb-4 sm:mb-6">
           Our Evaluation Axes
         </h2>
-        <div className="grid sm:grid-cols-2 xl:grid-cols-5 gap-6 mb-16">
+        <div className="grid sm:grid-cols-2 xl:grid-cols-5 gap-4 sm:gap-6 mb-10 sm:mb-16">
           {(() => {
             const axisSlug: Record<string, string> = {
               safety: "/sciences/biology",
@@ -105,20 +105,20 @@ export default function Home() {
               <Link
                 key={key}
                 to={axisSlug[key] || "/sciences"}
-                className="border border-slate-200 rounded-xl p-6 shadow-sm hover:border-rose-300 hover:bg-rose-50/40 hover:-translate-y-0.5 hover:shadow-md transition-all duration-200 block focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-rose-500 focus-visible:ring-offset-2"
+                className="border border-slate-200 rounded-xl p-5 sm:p-6 shadow-sm hover:border-rose-300 hover:bg-rose-50/40 hover:-translate-y-0.5 hover:shadow-md transition-all duration-200 block focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-rose-500 focus-visible:ring-offset-2"
               >
-                <h3 className="text-lg font-bold text-slate-950 mb-1">
+                <h3 className="text-base sm:text-lg font-bold text-slate-950 mb-1">
                   {label}
                 </h3>
-                <p className="text-base text-slate-700">{description}</p>
+                <p className="text-sm sm:text-base text-slate-700">{description}</p>
               </Link>
             ));
           })()}
         </div>
 
         {/* Gallery */}
-        <div className="mb-20 mt-24 relative left-1/2 right-1/2 -ml-[50vw] -mr-[50vw] w-screen px-6">
-          <h2 className="text-3xl sm:text-4xl font-bold text-slate-900 mb-8 max-w-5xl mx-auto text-center">
+        <div className="mb-16 sm:mb-20 mt-16 sm:mt-24 relative left-1/2 right-1/2 -ml-[50vw] -mr-[50vw] w-screen px-4 sm:px-6">
+          <h2 className="text-2xl sm:text-4xl font-bold text-slate-900 mb-6 sm:mb-8 max-w-5xl mx-auto text-center">
             From the Lab
           </h2>
           <div style={{ columns: "4 320px", columnGap: "12px" }}>
