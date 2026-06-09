@@ -6,7 +6,7 @@ const team = [
     image: "/pictures/anicka.jpeg",
   },
   { name: "Ela Sabolová", subject: "Biology", image: "/pictures/ela.jpeg" },
-  { name: "Milana Golubková", subject: "Environmental Systems and Societies" },
+  { name: "Milana Golubková", subject: "Environmental Systems and Societies", image: "/pictures/milana.jpeg" },
   {
     name: "Alexander Hvezdoň Štefko",
     subject: "Computer Science",

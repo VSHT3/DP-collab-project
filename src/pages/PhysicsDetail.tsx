@@ -36,6 +36,17 @@ function rankBadge(rank: number) {
   return <span className="inline-flex items-center justify-center w-6 h-6 rounded-full bg-slate-100 text-slate-500 text-xs font-medium">{rank}</span>
 }
 
+function ProcedureCard({ title, steps }: { title: string; steps: string[] }) {
+  return (
+    <div className="border border-slate-200 rounded-2xl p-6 sm:p-8 shadow-sm">
+      <h2 className="text-xs sm:text-sm font-bold text-slate-700 uppercase tracking-wider mb-3 sm:mb-4">{title}</h2>
+      <ol className="list-decimal list-inside space-y-2 text-sm sm:text-base text-slate-700">
+        {steps.map((step, i) => <li key={i}>{step}</li>)}
+      </ol>
+    </div>
+  )
+}
+
 export default function PhysicsDetail() {
   return (
     <div className="px-4 sm:px-8 lg:px-16 py-10 sm:py-16">
@@ -58,33 +69,68 @@ export default function PhysicsDetail() {
 
         <div className="space-y-6 sm:space-y-8">
 
-          {/* Key Metric */}
           <div className="border border-slate-200 rounded-2xl p-6 sm:p-8 shadow-sm">
             <h2 className="text-xs sm:text-sm font-bold text-slate-700 uppercase tracking-wider mb-2 sm:mb-3">Key Metric</h2>
             <p className="text-sm sm:text-base text-slate-800">{subject.metric}</p>
           </div>
 
-          {/* Experiment Overview */}
+          {/* Materials */}
           <div className="border border-slate-200 rounded-2xl p-6 sm:p-8 shadow-sm">
-            <h2 className="text-xs sm:text-sm font-bold text-slate-700 uppercase tracking-wider mb-2 sm:mb-3">Experiment Overview</h2>
-            <p className="text-sm sm:text-base text-slate-700 leading-relaxed">{subject.details}</p>
+            <h2 className="text-xs sm:text-sm font-bold text-slate-700 uppercase tracking-wider mb-3 sm:mb-4">Materials</h2>
+            <ul className="list-disc list-inside space-y-1 text-sm sm:text-base text-slate-700">
+              <li>4 product types (7 products total: 3 commercial pads, 1 organic pad, 1 reusable cloth pad, 2 tampons)</li>
+              <li>Digital scale (±0.01 g)</li>
+              <li>Stopwatch (phone)</li>
+              <li>Paper towels / A4 paper</li>
+              <li>Stirring rod</li>
+              <li>100 mL measuring cylinder</li>
+              <li>Beaker</li>
+              <li>Syringe</li>
+              <li>Tap water</li>
+              <li>Glycerol</li>
+              <li>Red food colouring</li>
+            </ul>
           </div>
 
-          {/* Procedure */}
+          {/* Fluid Preparation */}
           <div className="border border-slate-200 rounded-2xl p-6 sm:p-8 shadow-sm">
-            <h2 className="text-xs sm:text-sm font-bold text-slate-700 uppercase tracking-wider mb-3 sm:mb-4">Procedure</h2>
+            <h2 className="text-xs sm:text-sm font-bold text-slate-700 uppercase tracking-wider mb-3 sm:mb-4">Fluid Preparation</h2>
+            <p className="text-xs sm:text-sm text-slate-500 mb-3">Blood-mimicking fluid based on published viscosity research (water + glycerol, 6:4 ratio).</p>
             <ol className="list-decimal list-inside space-y-2 text-sm sm:text-base text-slate-700">
-              {subject.methodology.map((step, i) => (
-                <li key={i}>{step}</li>
-              ))}
+              <li>Pour 60 mL water into the measuring cylinder</li>
+              <li>Add 40 mL glycerol (ratio 6:4)</li>
+              <li>Add 2–3 drops of red food colouring</li>
+              <li>Stir with stirring rod until well mixed</li>
+              <li>Pour the prepared fluid from the measuring cylinder into the beaker</li>
             </ol>
           </div>
 
-          {/* Capacity Table */}
+          {/* Experiment 1: Capacity */}
+          <ProcedureCard
+            title="Experiment 1 — Absorption Capacity"
+            steps={[
+              "Place a paper towel on your workspace",
+              "Weigh the dry product and record as Dry mass (g)",
+              "Place the product flat on the paper towel",
+              "Slowly pour simulated fluid using syringe onto the centre of the product",
+              "Stop pouring when fully saturated (fluid starts to pool on surface or run off edges)",
+              "Record total volume poured in mL (1 mL fluid ≈ 1 g)",
+              "Carefully lift the wet product — let excess drip for 5 seconds",
+              "Weigh the wet product and record as Wet mass (g)",
+              "Repeat for all 7 products; clean workspace",
+            ]}
+          />
+
+          <div className="border border-slate-200 rounded-2xl p-6 sm:p-8 shadow-sm bg-rose-50/30">
+            <h2 className="text-xs sm:text-sm font-bold text-slate-700 uppercase tracking-wider mb-2 sm:mb-3">Calculation</h2>
+            <p className="text-sm sm:text-base text-slate-700 font-mono mb-1">Fluid absorbed (g) = Wet mass (g) − Dry mass (g)</p>
+            <p className="text-sm sm:text-base text-slate-700 font-mono">Absorption capacity (g/g) = Fluid absorbed (g) ÷ Dry mass (g)</p>
+          </div>
+
           <div className="border border-slate-200 rounded-2xl overflow-hidden shadow-sm">
             <div className="px-6 sm:px-8 py-4 sm:py-5 bg-rose-50">
-              <h2 className="text-xs sm:text-sm font-bold text-slate-700 uppercase tracking-wider">Experiment 1 — Absorption Capacity</h2>
-              <p className="text-xs sm:text-sm text-slate-600 mt-1">Capacity = (wet mass − dry mass) / dry mass. Higher is better.</p>
+              <h2 className="text-xs sm:text-sm font-bold text-slate-700 uppercase tracking-wider">Capacity Data</h2>
+              <p className="text-xs sm:text-sm text-slate-600 mt-1">Higher capacity (g/g) is better — more fluid per gram of product.</p>
             </div>
             <div className="overflow-x-auto">
               <table className="w-full text-xs sm:text-sm">
@@ -124,7 +170,6 @@ export default function PhysicsDetail() {
             </div>
           </div>
 
-          {/* Product Type Ranking */}
           <div className="border border-slate-200 rounded-2xl overflow-hidden shadow-sm">
             <div className="px-6 sm:px-8 py-4 sm:py-5 bg-rose-50">
               <h2 className="text-xs sm:text-sm font-bold text-slate-700 uppercase tracking-wider">Product Type Ranking — Average Capacity</h2>
@@ -149,11 +194,29 @@ export default function PhysicsDetail() {
             </div>
           </div>
 
-          {/* Absorption Rate Table */}
+          {/* Experiment 2: Rate */}
+          <ProcedureCard
+            title="Experiment 2 — Absorption Rate"
+            steps={[
+              "Place the product flat on a paper towel",
+              "Measure exactly 5 mL of simulated fluid in the measuring cylinder",
+              "Pour simulated fluid using syringe onto the centre of the product",
+              "Start stopwatch immediately upon pouring",
+              "Stop stopwatch when fluid is fully absorbed (no shiny/wet surface visible)",
+              "Record time in seconds",
+              "Repeat 3 times per product for an average; clean workspace",
+            ]}
+          />
+
+          <div className="border border-slate-200 rounded-2xl p-6 sm:p-8 shadow-sm bg-rose-50/30">
+            <h2 className="text-xs sm:text-sm font-bold text-slate-700 uppercase tracking-wider mb-2 sm:mb-3">Calculation</h2>
+            <p className="text-sm sm:text-base text-slate-700 font-mono">Average time (s) = (Trial 1 + Trial 2 + Trial 3) ÷ 3</p>
+          </div>
+
           <div className="border border-slate-200 rounded-2xl overflow-hidden shadow-sm">
             <div className="px-6 sm:px-8 py-4 sm:py-5 bg-rose-50">
-              <h2 className="text-xs sm:text-sm font-bold text-slate-700 uppercase tracking-wider">Experiment 2 — Absorption Rate</h2>
-              <p className="text-xs sm:text-sm text-slate-600 mt-1">Time for 5 mL of simulated fluid to fully absorb. Lower is better.</p>
+              <h2 className="text-xs sm:text-sm font-bold text-slate-700 uppercase tracking-wider">Absorption Rate Data</h2>
+              <p className="text-xs sm:text-sm text-slate-600 mt-1">Time for 5 mL of simulated fluid to fully absorb. Lower time is better.</p>
             </div>
             <div className="overflow-x-auto">
               <table className="w-full text-xs sm:text-sm">
@@ -193,7 +256,28 @@ export default function PhysicsDetail() {
             </div>
           </div>
 
-          {/* Summary note */}
+          {/* Experiment 3: Leakage Pressure */}
+          <div className="border border-slate-200 rounded-2xl p-6 sm:p-8 shadow-sm">
+            <h2 className="text-xs sm:text-sm font-bold text-slate-700 uppercase tracking-wider mb-2 sm:mb-3">Experiment 3 — Leakage Pressure</h2>
+            <p className="text-xs sm:text-sm text-slate-500 mb-3 sm:mb-4 italic">Optional — for stronger analysis. Data not yet collected.</p>
+            <p className="text-sm sm:text-base text-slate-700 mb-3 sm:mb-4">
+              Measures how much weight a saturated product can withstand before leaking — simulating real-world pressure during wear.
+            </p>
+            <ol className="list-decimal list-inside space-y-2 text-sm sm:text-base text-slate-700">
+              <li>Put on gloves</li>
+              <li>Saturate product with 10 mL of simulated fluid (pour onto centre)</li>
+              <li>Place flat board on the desk; put a book under one edge (tilt ~10–15°)</li>
+              <li>Place dry paper towels at the lower edge of the board</li>
+              <li>Place saturated product on board, with its lower edge touching the paper towel</li>
+              <li>Add a small weight (e.g. 100–200 g) gently onto the centre of the product</li>
+              <li>Wait 5 seconds; check if fluid has reached the paper towel</li>
+              <li>If no leak, add more weight (increase by 100–200 g each time)</li>
+              <li>Repeat until fluid first appears on the paper towel</li>
+              <li>Record total mass (g) of all weights added at that moment</li>
+              <li>Repeat 3 times per product with a new saturated pad; skip tampons (not applicable)</li>
+            </ol>
+          </div>
+
           <div className="bg-slate-50 border border-slate-200 rounded-2xl p-6 sm:p-8">
             <h2 className="text-xs sm:text-sm font-bold text-slate-700 uppercase tracking-wider mb-2 sm:mb-3">Key Insight</h2>
             <p className="text-sm sm:text-base text-slate-700 leading-relaxed">

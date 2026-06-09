@@ -50,7 +50,7 @@ export const subjects: Subject[] = [
     rq: 'Which product type absorbs the most fluid per gram of dry mass, and how quickly?',
     methodology: [
       'Weighed each product dry (digital scale, ±0.01 g precision)',
-      'Prepared simulated fluid: 90 mL water + 10 mL corn syrup + food colouring (9:1 ratio)',
+      'Prepared simulated fluid: 60 mL water + 40 mL glycerol + red food colouring (6:4 ratio, blood-mimicking viscosity)',
       'Slowly poured fluid until saturation, recorded total volume',
       'Let excess drip for 5 seconds, then weighed wet product',
       'Calculated absorption capacity = (wet mass − dry mass) / dry mass',
