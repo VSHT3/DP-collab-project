@@ -147,7 +147,7 @@ export default function BiologyDetail() {
             </span>
           </div>
           <h1 className="text-5xl font-bold text-slate-950 mb-3">Biology</h1>
-          <p className="text-xl text-rose-500 font-medium italic max-w-5xl whitespace-nowrap">
+          <p className="text-xl text-rose-500 font-medium italic max-w-5xl">
             How do menstrual products compare across bacterial growth, chemical
             exposure, TSS risk, and skin irritation?
           </p>
@@ -229,7 +229,7 @@ export default function BiologyDetail() {
             </div>
           </div>
           <div className="border-t border-slate-200 px-8 py-5">
-            <div className="flex items-start gap-4">
+            <div className="flex flex-col sm:flex-row sm:items-start gap-2 sm:gap-4">
               <span className="font-bold text-base text-black whitespace-nowrap">
                 Practical safety conclusion
               </span>

@@ -87,7 +87,7 @@ export default function ESSDetail() {
           <h1 className="text-4xl font-bold text-slate-950 mb-3">
             {subject.label}
           </h1>
-          <p className="text-lg text-rose-500 font-medium italic whitespace-nowrap">
+          <p className="text-lg text-rose-500 font-medium italic">
             {subject.rq}
           </p>
         </div>
@@ -182,16 +182,17 @@ export default function ESSDetail() {
                 Environmental Issues by Product
               </h2>
             </div>
+            <div className="overflow-x-auto">
             <table className="w-full text-sm">
               <thead>
                 <tr className="bg-slate-50 border-b border-slate-200">
-                  <th className="px-5 py-3 text-left font-semibold text-slate-600">
+                  <th className="px-3 sm:px-5 py-3 text-left font-semibold text-slate-600 whitespace-nowrap">
                     Product
                   </th>
-                  <th className="px-4 py-3 text-left font-semibold text-slate-600">
+                  <th className="px-3 sm:px-4 py-3 text-left font-semibold text-slate-600 whitespace-nowrap">
                     Type
                   </th>
-                  <th className="px-4 py-3 text-left font-semibold text-slate-600">
+                  <th className="px-3 sm:px-4 py-3 text-left font-semibold text-slate-600">
                     Main Environmental Issues
                   </th>
                 </tr>
@@ -204,7 +205,7 @@ export default function ESSDetail() {
                       key={p.key}
                       className={i % 2 === 0 ? "" : "bg-slate-50/50"}
                     >
-                      <td className="px-5 py-3">
+                      <td className="px-3 sm:px-5 py-3 whitespace-nowrap">
                         <Link
                           to={`/products/${p.key}`}
                           className="flex items-center gap-2 text-slate-900 font-medium hover:text-rose-500 transition-colors"
@@ -216,8 +217,8 @@ export default function ESSDetail() {
                           {p.label}
                         </Link>
                       </td>
-                      <td className="px-4 py-3 text-slate-600">{p.type}</td>
-                      <td className="px-4 py-3 text-slate-700 leading-relaxed">
+                      <td className="px-3 sm:px-4 py-3 text-slate-600 whitespace-nowrap">{p.type}</td>
+                      <td className="px-3 sm:px-4 py-3 text-slate-700 leading-relaxed">
                         {p.issue}
                       </td>
                     </tr>
@@ -225,6 +226,7 @@ export default function ESSDetail() {
                 })}
               </tbody>
             </table>
+            </div>
           </div>
 
           {/* Where It Goes + Solutions side by side */}

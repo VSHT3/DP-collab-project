@@ -72,12 +72,12 @@ export default function Conclusions() {
           ))}
         </div>
         <p className="text-sm sm:text-base text-slate-700 leading-relaxed">
-          The reusable cloth pad ranks highest overall due to strong safety (8.5)
-          and perfect environment (10.0) and cost (10.0) scores, outweighing its
-          lower physics performance. The organic cotton pad follows closely as the
-          best single-use option, with top chemistry (10.0) and solid safety (8.8).
-          Commercial pads and tampons are dragged down by poor environment and cost
-          scores despite competitive physics performance.
+          The reusable cloth pad ranks highest overall due to perfect environment
+          (10.0) and cost (10.0) scores plus strong safety (7.3) and comfort (7.5),
+          outweighing its lower performance (4.7). The organic cotton pad follows
+          closely as the best single-use option, with top safety (10.0) and high
+          comfort (7.5). Commercial pads and tampons are dragged down by poor
+          environment and cost scores despite competitive performance.
         </p>
       </div>
 
@@ -276,59 +276,6 @@ export default function Conclusions() {
         </ul>
       </div>
 
-      {/* Our Conceptual Product */}
-      <div className="border-2 border-slate-200 rounded-2xl p-6 sm:p-8 bg-slate-50/50 shadow-sm">
-        <h2 className="text-lg sm:text-xl font-bold text-slate-950 mb-1">
-          Our Conceptual Product
-        </h2>
-        <p className="text-sm sm:text-base text-slate-600 mb-3 sm:mb-4">
-          Brand name TBD, designed by our team
-        </p>
-        <p className="text-sm sm:text-base text-slate-700 leading-relaxed mb-4 sm:mb-6">
-          As part of this project, we are designing a conceptual menstrual
-          product brand that applies the insights from all four research axes.
-          Our product will prioritize:
-        </p>
-        <div className="grid sm:grid-cols-2 gap-4 mb-6">
-          {[
-            {
-              axis: "Biology",
-              detail:
-                "Minimize bacterial growth through breathable, natural-fibre materials. External pad design eliminates TSS risk entirely, unlike tampons which introduce oxygen and promote S. aureus proliferation.",
-            },
-            {
-              axis: "Chemistry",
-              detail:
-                "Neutral pH, zero harmful additives. No chlorine bleaching (avoids dioxins), no synthetic fragrances (avoids phthalates and VOCs), and no intentional PFAS in any waterproofing layer.",
-            },
-            {
-              axis: "Physics",
-              detail:
-                "Balance high absorption capacity (target: ≥12 g/g) with fast absorption rate (target: ≤15 s/5 mL). Commercial pads set the benchmark, but organic materials must compete.",
-            },
-            {
-              axis: "Environment",
-              detail:
-                "Biodegradable components targeting ≥40% mass loss in 14-day soil burial. Minimal packaging. Reusable option with PFAS-free waterproofing to avoid the 25–33% contamination rate found in current products.",
-            },
-          ].map(({ axis, detail }) => (
-            <div
-              key={axis}
-              className="border border-slate-200 rounded-xl p-5 bg-white"
-            >
-              <p className="text-sm font-bold text-rose-500 uppercase tracking-wider mb-1">
-                {axis}
-              </p>
-               <p className="text-sm sm:text-base text-slate-700">{detail}</p>
-            </div>
-          ))}
-        </div>
-        <p className="text-sm sm:text-base text-slate-700 leading-relaxed">
-          Details, including branding, materials sourcing, pricing strategy,
-          and product specifications, will be added once the team finalises the
-          concept.
-        </p>
-      </div>
     </div>
   </div>
   )
