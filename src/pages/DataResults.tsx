@@ -543,17 +543,6 @@ export default function DataResults() {
                     )}
                   </th>
                 ))}
-                <th
-                  onClick={() => handleSort("price")}
-                  className="px-5 py-4 text-center font-bold text-slate-800 cursor-pointer hover:text-rose-500 select-none transition-colors duration-200 hover:bg-rose-50/50"
-                >
-                  € Price
-                  {sortKey === "price" && (
-                    <span className="ml-1 text-rose-500">
-                      {sortDir === "desc" ? "↓" : "↑"}
-                    </span>
-                  )}
-                </th>
               </tr>
             </thead>
             <tbody>
@@ -575,12 +564,7 @@ export default function DataResults() {
                     >
                       {fmt(products[k].scores[a.key])}
                     </td>
-                  ))}
-                  <td className={`px-5 py-4 text-center ${sortKey === "price" ? "font-bold text-slate-950" : "text-slate-700"}`}>
-                    {products[k].price !== null
-                      ? `€${products[k].price.toFixed(2)}`
-                      : "—"}
-                  </td>
+                    ))}
                 </tr>
               ))}
             </tbody>
