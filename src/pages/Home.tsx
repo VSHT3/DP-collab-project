@@ -104,6 +104,19 @@ export default function Home() {
           </p>
         </div>
 
+        {/* QR Code */}
+        <div className="flex justify-center mb-10 sm:mb-16">
+          <div className="border border-slate-200 rounded-2xl p-6 shadow-sm text-center">
+            <p className="text-sm font-semibold text-slate-700 mb-3">Scan to visit</p>
+            <img
+              src={`https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=https://dp-collab-project.vercel.app/`}
+              alt="QR code to project site"
+              className="w-60 h-60 sm:w-72 sm:h-72 mx-auto"
+            />
+            <p className="text-xs text-slate-500 mt-2">dp-collab-project.vercel.app</p>
+          </div>
+        </div>
+
         {/* CTA Banner */}
         <div className="bg-rose-500 rounded-2xl p-8 sm:p-10 text-center text-white mb-10 sm:mb-16">
           <h2 className="text-xl sm:text-2xl font-bold mb-2 sm:mb-3">
@@ -119,19 +132,6 @@ export default function Home() {
           >
             Find My Product
           </Link>
-        </div>
-
-        {/* QR Code */}
-        <div className="flex justify-center mb-10 sm:mb-16">
-          <div className="border border-slate-200 rounded-2xl p-6 shadow-sm text-center">
-            <p className="text-sm font-semibold text-slate-700 mb-3">Scan to visit</p>
-            <img
-              src={`https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=https://dp-collab-project.vercel.app/`}
-              alt="QR code to project site"
-              className="w-60 h-60 sm:w-72 sm:h-72 mx-auto"
-            />
-            <p className="text-xs text-slate-500 mt-2">dp-collab-project.vercel.app</p>
-          </div>
         </div>
 
         {/* Main Axes */}
